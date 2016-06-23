@@ -44,8 +44,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>Auth0ClientId</key>
-	<string>JFdo5PXfjp3Z0aVPzeOyA2XxBjVc52XS</string>
+	<string>{CLIENT_ID}</string>
 	<key>Auth0Domain</key>
-	<string>sebacancinos.auth0.com</string>
+	<string>{DOMAIN}</string>
 </dict>
 </plist>
