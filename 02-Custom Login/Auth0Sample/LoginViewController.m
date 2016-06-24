@@ -112,41 +112,6 @@
 
 }
 
-- (IBAction)loginFacebook:(id)sender
-{
-    A0WebAuth *webAuth = [[A0WebAuth alloc]  initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
-    
-    [self.spinner startAnimating];
-
-    [webAuth setConnection:@"facebook"];
-    [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
-      
-        if(error)
-        {
-            NSLog(error.localizedDescription);
-        }
-        else
-        {
-            [self getUserFromCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self.spinner stopAnimating];
-                    
-
-                    if(error)
-                    {
-                        NSLog(error.localizedDescription);
-                    }
-                    else
-                    {
-                            [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                    }
-                });
-            }];
-        }
-    }];
-}
-
 - (IBAction)unwindToLogin:(id)sender
 {
     if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]])
