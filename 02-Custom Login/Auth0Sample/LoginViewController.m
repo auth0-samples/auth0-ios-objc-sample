@@ -43,7 +43,7 @@
 
 @implementation LoginViewController
 
-- (void) getUserFromCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback
+- (void) loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback
 {
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId: [Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
 
@@ -62,7 +62,7 @@
         }
         else
         {
-            [self getUserFromCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
+            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -126,7 +126,7 @@
             A0Credentials* credentials = source.retrievedCredentials;
             
             segue.completion = ^{
-            [self getUserFromCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
+            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     [self.spinner stopAnimating];

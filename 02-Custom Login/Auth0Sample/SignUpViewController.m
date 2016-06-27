@@ -71,7 +71,7 @@
     
 }
 
-- (IBAction)signupAction:(id)sender
+- (IBAction)signUpAction:(id)sender
 {
     [self.spinner startAnimating];
     

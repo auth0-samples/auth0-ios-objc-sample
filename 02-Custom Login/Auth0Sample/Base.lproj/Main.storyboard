@@ -288,7 +288,7 @@
                                 <rect key="frame" x="272" y="160" width="57" height="30"/>
                                 <state key="normal" title="Register"/>
                                 <connections>
-                                    <action selector="signupAction:" destination="hEH-eC-nKs" eventType="touchUpInside" id="8OK-n0-kub"/>
+                                    <action selector="signUpAction:" destination="hEH-eC-nKs" eventType="touchUpInside" id="UAo-lo-JJC"/>
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9RC-Xz-BZY">
