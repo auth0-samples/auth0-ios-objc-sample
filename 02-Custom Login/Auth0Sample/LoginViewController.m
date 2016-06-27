@@ -27,7 +27,6 @@
 #import "ProfileViewController.h"
 #import "Auth0-Swift.h"
 #import "Auth0InfoHelper.h"
-#import "NSString_EmailValidation.h"
 #import "UIViewController_Dismiss.h"
 #import "SignUpViewController.h"
 #import "UIStoryboardSegueWithCompletion.h"
@@ -99,13 +98,6 @@
     if(!self.loginEmailText.hasText)
     {
         return NO;
-    }
-    else
-    {
-        if(![self.loginEmailText.text isValidEmail])
-        {
-            return NO;
-        }
     }
     
     return YES;
