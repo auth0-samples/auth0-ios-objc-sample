@@ -29,20 +29,17 @@
 
 @implementation Auth0InfoHelper
 
-+ (NSDictionary*) readAuth0Plist
-{
++ (NSDictionary*) readAuth0Plist {
     NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Auth0" ofType:@"plist"]];
 
     return dict;
 }
 
-+ (NSString*) Auth0ClientID
-{
++ (NSString*) Auth0ClientID {
     return [[Auth0InfoHelper readAuth0Plist] objectForKey:@"ClientId"];
 }
 
-+ (NSURL*) Auth0Domain
-{
++ (NSURL*) Auth0Domain {
     return [NSURL a0_URLWithDomain: [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"]];
 }
 

@@ -42,76 +42,60 @@
 
 @implementation LoginViewController
 
-- (void) loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback
-{
+- (void) loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback {
+    
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId: [Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
 
     [authApi userInfoWithToken:credentials.accessToken callback:callback];
 }
 
-- (IBAction)performLogin:(id)sender
-{
+- (IBAction)performLogin:(id)sender {
+    
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
     
     [self.spinner startAnimating];
-    [authApi loginWithUsername:self.loginEmailText.text password:self.loginPasswordText.text connection:@"Username-Password-Authentication" scope:@"openid" parameters:[NSDictionary new] callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
-        if(error)
-        {
+    [authApi loginWithUsername:self.loginEmailText.text password:self.loginPasswordText.text connection:@"Username-Password-Authentication" scope:@"openid" parameters:@{} callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+        if(error) {
             NSLog(error.localizedDescription);
-        }
-        else
-        {
+        } else {
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
 
                     [self.spinner stopAnimating];
 
-                    if(error)
-                    {
+                    if(error) {
                         NSLog(error.localizedDescription);
-                    }
-                    else
-                    {
+                    } else {
                         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                     }
                 });
-
             }];
         }
     }];
 }
 
-- (IBAction)textFieldEditingChanged:(id)sender
-{
+- (IBAction)textFieldEditingChanged:(id)sender {
     self.loginButton.enabled = [self validateForm];
-    
 }
 
-- (BOOL) validateForm
-{
-    if(![self.loginPasswordText hasText])
-    {
+- (BOOL) validateForm {
+    if(![self.loginPasswordText hasText]) {
         return NO;
     }
     
-    if(!self.loginEmailText.hasText)
-    {
+    if(!self.loginEmailText.hasText) {
         return NO;
     }
     
     return YES;
-
 }
 
-- (IBAction)unwindToLogin:(id)sender
-{
-    if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]])
-    {
+- (IBAction)unwindToLogin:(id)sender {
+    if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]]) {
         UIStoryboardSegueWithCompletion* segue = sender;
         
-        if([segue.sourceViewController isKindOfClass:[SignUpViewController class]])
-        {
+        if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
             [self.spinner startAnimating];
 
             SignUpViewController* source = segue.sourceViewController;
@@ -119,33 +103,27 @@
             
             segue.completion = ^{
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self.spinner stopAnimating];
-                    
-                    if(error)
-                    {
-                        NSLog(error.localizedDescription);
-                    }
-                    else
-                    {
-                        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                    }
-                });
-            }];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        [self.spinner stopAnimating];
+                        
+                        if(error) {
+                            NSLog(error.localizedDescription);
+                        } else {
+                            [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                        }
+                    });
+                }];
             };
         }
     }
 }
 
-
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"ShowProfile"])
-    {
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"ShowProfile"]) {
         ProfileViewController* vc = segue.destinationViewController;
         vc.userProfile = sender;
     }
 }
+
 @end

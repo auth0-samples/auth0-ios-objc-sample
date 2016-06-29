@@ -27,10 +27,8 @@
 
 @implementation UIViewController(Dismiss)
 
-- (IBAction)dismiss:(id)sender
-{
+- (IBAction)dismiss:(id)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-
 }
 
 @end

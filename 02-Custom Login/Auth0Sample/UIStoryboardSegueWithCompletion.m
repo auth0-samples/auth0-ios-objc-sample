@@ -28,12 +28,10 @@
 
 @implementation UIStoryboardSegueWithCompletion
 
-- (void) perform
-{
+- (void) perform {
     [super perform];
     
     self.completion();
-    
 }
 
 @end
