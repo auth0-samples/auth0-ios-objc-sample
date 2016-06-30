@@ -26,10 +26,7 @@
 #import "ProfileViewController.h"
 #import <Lock/Lock.h>
 #import "SimpleKeychain.h"
-
-@interface HomeViewController ()
-
-@end
+#import "UIAlertController_LoadingAlert.h"
 
 @implementation HomeViewController
 
@@ -37,11 +34,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    UIAlertController* loadingAlert = [UIAlertController loadingAlert];
+    [loadingAlert presentInViewController:self];
+    
     [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
+        [loadingAlert dismiss];
         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
     } failure:^(NSError * _Nonnull error) {
         A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
         [keychain clearAll];
+        [loadingAlert dismiss];
     }];
 }
 
@@ -57,6 +59,9 @@
                 [self loadCredentialsSuccess:success failure:failure];
             } failure:failure];
         }];
+    }
+    else{
+        failure([[NSError alloc] initWithDomain:@"NoError" code:0 userInfo:nil]);
     }
 }
 
@@ -96,6 +101,12 @@
         ProfileViewController *destViewController = segue.destinationViewController;
         destViewController.userProfile = sender;
     }
+}
+
+- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue
+{
+    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    [keychain clearAll];
 }
 
 @end

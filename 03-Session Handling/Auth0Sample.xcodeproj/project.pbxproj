@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D3298011D255EBA007795AB /* UIAlertController_LoadingAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3298001D255EBA007795AB /* UIAlertController_LoadingAlert.m */; };
 		7D57F0681D1B20AA0015BFC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F0671D1B20AA0015BFC1 /* main.m */; };
 		7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */; };
 		7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06D1D1B20AA0015BFC1 /* HomeViewController.m */; };
@@ -20,6 +21,8 @@
 /* Begin PBXFileReference section */
 		2C9597BD19377362DD707565 /* libPods-Auth0Sample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Auth0Sample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57266D207C0C23C99D8F3C32 /* Pods-Auth0Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.release.xcconfig"; sourceTree = "<group>"; };
+		7D3297FF1D255E99007795AB /* UIAlertController_LoadingAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAlertController_LoadingAlert.h; sourceTree = "<group>"; };
+		7D3298001D255EBA007795AB /* UIAlertController_LoadingAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAlertController_LoadingAlert.m; sourceTree = "<group>"; };
 		7D57F0631D1B20AA0015BFC1 /* Auth0Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auth0Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D57F0671D1B20AA0015BFC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7D57F0691D1B20AA0015BFC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -87,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				7D57F0671D1B20AA0015BFC1 /* main.m */,
+				7D3297FF1D255E99007795AB /* UIAlertController_LoadingAlert.h */,
+				7D3298001D255EBA007795AB /* UIAlertController_LoadingAlert.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -232,6 +237,7 @@
 				7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */,
 				7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */,
 				7D57F07F1D1B269A0015BFC1 /* ProfileViewController.m in Sources */,
+				7D3298011D255EBA007795AB /* UIAlertController_LoadingAlert.m in Sources */,
 				7D57F0681D1B20AA0015BFC1 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
