@@ -41,16 +41,19 @@ PODS:
     - CocoaLumberjack (~> 2.0)
     - Lock/CoreUI
   - Masonry (0.6.4)
+  - SimpleKeychain (0.7.0)
 
 DEPENDENCIES:
   - Lock (~> 1.24)
+  - SimpleKeychain (~> 0.7)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   Lock: d863c3aebe57d2e8f3e5f40c9c5ba695ec2f1162
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
+  SimpleKeychain: b50cef3b87939d480ea1143425c00f5b4b70fe21
 
-PODFILE CHECKSUM: 0d3cbb9b27c74ddfe9558b3d8bdf17b57a97d956
+PODFILE CHECKSUM: 599e4b614c79f5eb989e10859d744f5633d9ca35
 
 COCOAPODS: 1.0.0

@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '69E08D171566CBCDCC3E75418D13FF3B'
-               BlueprintName = 'Pods-Auth0Sample'
+               BlueprintIdentifier = '523395B70435A32DCE0483546B00DF60'
+               BlueprintName = 'SimpleKeychain'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libPods-Auth0Sample.a'>
+               BuildableName = 'libSimpleKeychain.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

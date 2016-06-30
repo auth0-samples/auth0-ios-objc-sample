@@ -25,6 +25,7 @@
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
 #import <Lock/Lock.h>
+#import "SimpleKeychain.h"
 
 @interface HomeViewController ()
 
@@ -35,11 +36,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
+        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+    } failure:^(NSError * _Nonnull error) {
+        A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+        [keychain clearAll];
+    }];
+}
+
+- (void) loadCredentialsSuccess:(A0APIClientUserProfileSuccess)success failure: (A0APIClientError)failure{
+    
+    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    
+    if([keychain stringForKey:@"id_token"]){
+        A0Lock *lock = [A0Lock sharedLock];
+        [lock.apiClient fetchUserProfileWithIdToken:[keychain stringForKey:@"id_token"] success:success         failure:^(NSError * _Nonnull error) {
+            [lock.apiClient fetchNewIdTokenWithRefreshToken:[keychain stringForKey:@"refresh_token"] parameters:nil success:^(A0Token * _Nonnull token) {
+                [self saveCredentials:token];
+                [self loadCredentialsSuccess:success failure:failure];
+            } failure:failure];
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) saveCredentials:(A0Token* ) token
+{
+    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    [keychain setString:token.idToken forKey:@"id_token"];
+    [keychain setString:token.refreshToken forKey:@"refresh_token"];
 }
 
 - (IBAction)showLoginController:(id)sender
@@ -50,6 +80,7 @@
     controller.onAuthenticationBlock = ^(A0UserProfile *profile, A0Token *token) {
         // Do something with token & profile. e.g.: save them.
         // And dismiss the ViewController
+        [self saveCredentials:token];
         [self dismissViewControllerAnimated:YES completion:nil];
         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
     };
