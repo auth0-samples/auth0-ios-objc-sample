@@ -53,7 +53,8 @@
     
     if([keychain stringForKey:@"id_token"]){
         A0Lock *lock = [A0Lock sharedLock];
-        [lock.apiClient fetchUserProfileWithIdToken:[keychain stringForKey:@"id_token"] success:success         failure:^(NSError * _Nonnull error) {
+        
+        [lock.apiClient fetchUserProfileWithIdToken:[keychain stringForKey:@"id_token"] success:success failure:^(NSError * _Nonnull error) {
             [lock.apiClient fetchNewIdTokenWithRefreshToken:[keychain stringForKey:@"refresh_token"] parameters:nil success:^(A0Token * _Nonnull token) {
                 [self saveCredentials:token];
                 [self loadCredentialsSuccess:success failure:failure];
