@@ -38,6 +38,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.hidesBackButton = YES;
     self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.pictureURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
