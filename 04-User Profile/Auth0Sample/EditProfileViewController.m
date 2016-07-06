@@ -49,55 +49,49 @@
     [self.userCountryField setText:[self.userProfile.userMetadata objectForKey:@"country"]];
 }
 
-- (NSMutableDictionary*) setFieldText:(UITextField*) textField forKey:(NSString*) keyName inDictionary:(NSMutableDictionary*) mDict
+- (NSDictionary*) fieldsToDictionary
 {
-    if([textField hasText]){
-        [mDict setObject:textField.text forKey:keyName];
-    }else{
-        [mDict removeObjectForKey:keyName];
-    }
-
-    return mDict;
+    NSDictionary* dictionary = [[NSDictionary alloc]
+                                initWithObjects:@[self.userFirstNameField.text,self.userLastNameField.text,self.userCountryField.text]
+                                forKeys:@[@"firstName",@"lastName",@"country"]];
+    
+    return dictionary;
 }
 
-- (IBAction)saveProfile:(id)sender
-{
-    NSMutableDictionary *profileMetadata = [NSMutableDictionary dictionaryWithDictionary: self.userProfile.userMetadata ];
-    
-    profileMetadata = [self setFieldText:self.userFirstNameField forKey:@"firstName" inDictionary:profileMetadata];
-    profileMetadata = [self setFieldText:self.userLastNameField forKey:@"lastName" inDictionary:profileMetadata];
-    profileMetadata = [self setFieldText:self.userCountryField forKey:@"country" inDictionary:profileMetadata];
+- (IBAction)saveProfile:(id)sender{
 
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     
-    if([keychain stringForKey:@"id_token"]){
-        NSDictionary *dict = [[NSBundle mainBundle] infoDictionary];
-
-        NSURL *domain =  [NSURL a0_URLWithDomain: [dict objectForKey:@"Auth0Domain"]];
-
-        A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
-        
-        [authApi patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                if(error)
-                {
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                    [self presentViewController:alert animated:true completion:nil];
-                } else {
-                    
-                    self.userProfile = [[A0UserProfile alloc] initWithDictionary:data];
-                    [self.navigationController popViewControllerAnimated:YES];
-                    UIViewController* view = [self.navigationController topViewController];
-                    
-                    
-                    if([view respondsToSelector:@selector(setUserProfile:)])
-                    {
-                        [view performSelector:@selector(setUserProfile:) withObject:self.userProfile afterDelay:0];
-                    }
-                }
-            });
-        }];
+    if(![keychain stringForKey:@"id_token"]){
+        return;
     }
+    
+    NSDictionary *profileMetadata = [self fieldsToDictionary];
+
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+
+    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+
+    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+    
+    [authApi patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            if(error) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+                [self presentViewController:alert animated:true completion:nil];
+            } else {
+                
+                self.userProfile = [[A0UserProfile alloc] initWithDictionary:data];
+                [self.navigationController popViewControllerAnimated:YES];
+                
+                UIViewController* controller = [self.navigationController topViewController];
+                
+                if([controller respondsToSelector:@selector(setUserProfile:)]){
+                    [controller performSelector:@selector(setUserProfile:) withObject:self.userProfile afterDelay:0];
+                }
+            }
+        });
+    }];
 }
 
 @end

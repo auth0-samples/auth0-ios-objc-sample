@@ -36,9 +36,11 @@
 
 @implementation ProfileViewController
 
-- (void) viewDidLoad
-{
+- (void) viewDidLoad{
     [super viewDidLoad];
+    
+    self.navigationItem.hidesBackButton = YES;
+
     self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -49,12 +51,10 @@
     }] resume];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"EditUserSegue"])
-    {
-        if ([segue.destinationViewController isKindOfClass:[EditProfileViewController class]])
-        {
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    
+    if([segue.identifier isEqualToString:@"EditUserSegue"]){
+        if ([segue.destinationViewController isKindOfClass:[EditProfileViewController class]]){
             EditProfileViewController* destination = segue.destinationViewController;
             
             destination.userProfile = self.userProfile;

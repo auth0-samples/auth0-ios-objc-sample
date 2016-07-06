@@ -71,15 +71,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) saveCredentials:(A0Token* ) token
-{
+- (void) saveCredentials:(A0Token* ) token{
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain setString:token.idToken forKey:@"id_token"];
     [keychain setString:token.refreshToken forKey:@"refresh_token"];
 }
 
-- (IBAction)showLoginController:(id)sender
-{
+- (IBAction)showLoginController:(id)sender{
     A0Lock *lock = [A0Lock sharedLock];
     
     A0LockViewController *controller = [lock newLockViewController];
@@ -95,17 +93,14 @@
     
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"ShowProfile"])
-    {
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([segue.identifier isEqualToString:@"ShowProfile"]){
         ProfileViewController *destViewController = segue.destinationViewController;
         destViewController.userProfile = sender;
     }
 }
 
-- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue
-{
+- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue{
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain clearAll];
 }
