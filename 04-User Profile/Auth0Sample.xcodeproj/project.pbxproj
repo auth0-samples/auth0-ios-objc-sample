@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4840B4A2FF7FA4FC4AB64BEA /* Pods_Auth0Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF6F1EFA01B271D94697C5C /* Pods_Auth0Sample.framework */; };
 		7D3298011D255EBA007795AB /* UIAlertController_LoadingAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3298001D255EBA007795AB /* UIAlertController_LoadingAlert.m */; };
 		7D57F0681D1B20AA0015BFC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F0671D1B20AA0015BFC1 /* main.m */; };
 		7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */; };
@@ -15,11 +16,10 @@
 		7D57F0731D1B20AA0015BFC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D57F0721D1B20AA0015BFC1 /* Assets.xcassets */; };
 		7D57F0761D1B20AA0015BFC1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D57F0741D1B20AA0015BFC1 /* LaunchScreen.storyboard */; };
 		7D57F07F1D1B269A0015BFC1 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F07E1D1B269A0015BFC1 /* ProfileViewController.m */; };
-		FEF35431994B16D4A1253474 /* libPods-Auth0Sample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C9597BD19377362DD707565 /* libPods-Auth0Sample.a */; };
+		7DAC04EF1D2AF23E00D456B2 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAC04EE1D2AF23E00D456B2 /* EditProfileViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C9597BD19377362DD707565 /* libPods-Auth0Sample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Auth0Sample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		57266D207C0C23C99D8F3C32 /* Pods-Auth0Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.release.xcconfig"; sourceTree = "<group>"; };
 		7D3297FF1D255E99007795AB /* UIAlertController_LoadingAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAlertController_LoadingAlert.h; sourceTree = "<group>"; };
 		7D3298001D255EBA007795AB /* UIAlertController_LoadingAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAlertController_LoadingAlert.m; sourceTree = "<group>"; };
@@ -35,7 +35,10 @@
 		7D57F0771D1B20AA0015BFC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D57F07D1D1B268E0015BFC1 /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		7D57F07E1D1B269A0015BFC1 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		7DAC04EE1D2AF23E00D456B2 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		7DAC04F01D2AF24700D456B2 /* EditProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
 		9727271E496A6BFA8507C5A8 /* Pods-Auth0Sample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.debug.xcconfig"; sourceTree = "<group>"; };
+		CFF6F1EFA01B271D94697C5C /* Pods_Auth0Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Auth0Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,7 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF35431994B16D4A1253474 /* libPods-Auth0Sample.a in Frameworks */,
+				4840B4A2FF7FA4FC4AB64BEA /* Pods_Auth0Sample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +80,8 @@
 				7D57F06D1D1B20AA0015BFC1 /* HomeViewController.m */,
 				7D57F07D1D1B268E0015BFC1 /* ProfileViewController.h */,
 				7D57F07E1D1B269A0015BFC1 /* ProfileViewController.m */,
+				7DAC04EE1D2AF23E00D456B2 /* EditProfileViewController.m */,
+				7DAC04F01D2AF24700D456B2 /* EditProfileViewController.h */,
 				7D57F06F1D1B20AA0015BFC1 /* Main.storyboard */,
 				7D57F0721D1B20AA0015BFC1 /* Assets.xcassets */,
 				7D57F0741D1B20AA0015BFC1 /* LaunchScreen.storyboard */,
@@ -108,7 +113,7 @@
 		D040FB3B7729780B9FB5D302 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C9597BD19377362DD707565 /* libPods-Auth0Sample.a */,
+				CFF6F1EFA01B271D94697C5C /* Pods_Auth0Sample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -236,6 +241,7 @@
 			files = (
 				7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */,
 				7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */,
+				7DAC04EF1D2AF23E00D456B2 /* EditProfileViewController.m in Sources */,
 				7D57F07F1D1B269A0015BFC1 /* ProfileViewController.m in Sources */,
 				7D3298011D255EBA007795AB /* UIAlertController_LoadingAlert.m in Sources */,
 				7D57F0681D1B20AA0015BFC1 /* main.m in Sources */,

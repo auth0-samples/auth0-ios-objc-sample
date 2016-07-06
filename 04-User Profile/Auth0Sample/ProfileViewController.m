@@ -25,6 +25,7 @@
 #import <Foundation/Foundation.h>
 #import <Lock/Lock.h>
 #import "ProfileViewController.h"
+#import "EditProfileViewController.h"
 
 @interface ProfileViewController()
 
@@ -47,4 +48,18 @@
 
     }] resume];
 }
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"EditUserSegue"])
+    {
+        if ([segue.destinationViewController isKindOfClass:[EditProfileViewController class]])
+        {
+            EditProfileViewController* destination = segue.destinationViewController;
+            
+            destination.userProfile = self.userProfile;
+        }
+    }
+}
+
 @end

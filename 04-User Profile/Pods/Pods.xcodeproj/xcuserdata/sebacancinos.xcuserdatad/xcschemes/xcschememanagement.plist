@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Auth0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CocoaLumberjack.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>12E2BC28C62976C425F4B71C2723F0B1</key>
+		<key>1668610B43FA9159077CCB1C4B5CFD6C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>523395B70435A32DCE0483546B00DF60</key>
+		<key>1C3436CEA5C3D39764C5F54374794ECB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>69E08D171566CBCDCC3E75418D13FF3B</key>
+		<key>25C4DCE9DCEA16C6D470F1BFAA90EDD7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>87282A68B272C8329BEC07657E61189A</key>
+		<key>46EC3F04BC63975552C472E950D97F3D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8765DA2D230DCDF762D0FEC381D8ADBD</key>
+		<key>799AAEC5AEA65844C04E98A6451B7AC0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>928353533005A4198EBDA5B700D37B64</key>
+		<key>7E057F39F15BAE9D27EFC5AB5C39AC31</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E1C8436CA534538C04841DE77599DF07</key>
+		<key>8A2E8FED01C8A6BC8ADFCF3C3B78368F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CFABCF590B06C0F9D4CC041CBE9421FE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
