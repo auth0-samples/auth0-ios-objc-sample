@@ -24,6 +24,8 @@
 
 #import <Foundation/Foundation.h>
 #import <Lock/Lock.h>
+#import "Auth0-Swift.h"
+#import "SimpleKeychain.h"
 #import "ProfileViewController.h"
 #import "EditProfileViewController.h"
 
@@ -31,7 +33,9 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
 @property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
-
+@property (nonatomic, strong) IBOutlet UIButton* linkFacebookButton;
+@property (nonatomic, strong) IBOutlet UIButton* linkTwitterButton;
+@property (nonatomic, strong) IBOutlet UIButton* linkGoogleButton;
 @end
 
 @implementation ProfileViewController
@@ -49,7 +53,60 @@
         });
 
     }] resume];
+    
+    for (A0UserIdentity* identity in self.userProfile.identities) {
+        if([identity.connection isEqualToString:@"facebook"]) {
+            [self.linkFacebookButton setHighlighted:YES];
+        } else if ([identity.connection isEqualToString:@"google-oauth2"]) {
+            [self.linkGoogleButton setHighlighted:YES];
+        } else if ([identity.connection isEqualToString:@"twitter"]) {
+            [self.linkTwitterButton setHighlighted:YES];
+        }
+    }
 }
+
+- (IBAction)linkAccount:(id)sender
+{
+    NSString* connection;
+    
+    if(sender == self.linkGoogleButton) {
+        connection = @"google-oauth2";
+    } else if (sender == self.linkTwitterButton) {
+        connection = @"twitter";
+    } else if (sender == self.linkFacebookButton) {
+        connection = @"facebook";
+    } else {
+        return;
+    }
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    
+
+    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
+    
+    [webAuth setConnection:connection];
+    
+    [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+       if(error) {
+           NSLog(error.localizedDescription);
+       }
+       else {
+           A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+
+           A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+           
+           [authApi linkUserWithIdentifier:self.userProfile.userId  withUserUsingToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+               
+               if(error){
+                   NSLog(error.localizedDescription);
+               }
+           }];
+       }
+    }];
+}
+
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     

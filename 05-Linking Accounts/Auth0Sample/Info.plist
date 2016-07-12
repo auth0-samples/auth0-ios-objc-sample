@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>Auth0ClientId</key>
-	<string>{CLIENT_ID}</string>
+	<string>JFdo5PXfjp3Z0aVPzeOyA2XxBjVc52XS</string>
 	<key>Auth0Domain</key>
-	<string>{DOMAIN}</string>
+	<string>sebacancinos.auth0.com</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -22,6 +22,19 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>auth0</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>auth0.samples.Auth0Sample</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>

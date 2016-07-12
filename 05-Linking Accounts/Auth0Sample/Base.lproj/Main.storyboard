@@ -123,19 +123,66 @@
                                     <segue destination="Rcp-ry-qvg" kind="unwind" unwindAction="unwindToThisViewController:" id="kal-qD-dBs"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link other accounts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okA-nm-zz8">
+                                <rect key="frame" x="20" y="433" width="151" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pge-zu-zMF">
+                                <rect key="frame" x="20" y="462" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="d7G-r1-1Mh"/>
+                                    <constraint firstAttribute="height" constant="50" id="g35-ee-aNE"/>
+                                </constraints>
+                                <state key="normal" image="Twitter"/>
+                                <connections>
+                                    <action selector="linkAccount:" destination="Wx9-md-nxp" eventType="touchUpInside" id="Vxk-8j-R8P"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n0Y-9D-n1J">
+                                <rect key="frame" x="78" y="462" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="61s-xp-idM"/>
+                                    <constraint firstAttribute="width" constant="50" id="Eg5-8Z-8Gp"/>
+                                </constraints>
+                                <state key="normal" image="Facebook"/>
+                                <connections>
+                                    <action selector="linkAccount:" destination="Wx9-md-nxp" eventType="touchUpInside" id="wda-kA-U4c"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oyy-CD-8TQ">
+                                <rect key="frame" x="136" y="462" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="J0u-6B-JTQ"/>
+                                    <constraint firstAttribute="height" constant="50" id="Pt9-Pd-Qif"/>
+                                </constraints>
+                                <state key="normal" image="Google"/>
+                                <connections>
+                                    <action selector="linkAccount:" destination="Wx9-md-nxp" eventType="touchUpInside" id="cE5-AL-1Ne"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Pge-zu-zMF" firstAttribute="top" secondItem="okA-nm-zz8" secondAttribute="bottom" constant="8" id="1W0-HQ-NqG"/>
+                            <constraint firstItem="okA-nm-zz8" firstAttribute="top" secondItem="lV6-Ob-gUG" secondAttribute="bottom" constant="8" id="ASE-Pg-DfC"/>
                             <constraint firstItem="xwZ-6c-NXu" firstAttribute="top" secondItem="jCS-K6-j0o" secondAttribute="bottom" constant="8" id="EJc-En-hDl"/>
+                            <constraint firstItem="oyy-CD-8TQ" firstAttribute="leading" secondItem="n0Y-9D-n1J" secondAttribute="trailing" constant="8" id="EMZ-nY-Sgb"/>
                             <constraint firstItem="lV6-Ob-gUG" firstAttribute="centerX" secondItem="vd7-Qy-c6C" secondAttribute="centerX" id="EgB-PU-nPl"/>
                             <constraint firstItem="VVg-sp-234" firstAttribute="top" secondItem="tYw-v0-XcE" secondAttribute="bottom" constant="24" id="F1W-Ml-UCj"/>
                             <constraint firstItem="jCS-K6-j0o" firstAttribute="trailing" secondItem="vd7-Qy-c6C" secondAttribute="trailingMargin" id="FMO-6Y-Zfl"/>
+                            <constraint firstItem="Pge-zu-zMF" firstAttribute="leading" secondItem="okA-nm-zz8" secondAttribute="leading" id="GBU-wa-ZF2"/>
                             <constraint firstItem="lV6-Ob-gUG" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vd7-Qy-c6C" secondAttribute="leadingMargin" constant="20" id="Pa7-cy-CL2"/>
                             <constraint firstItem="xwZ-6c-NXu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="lV6-Ob-gUG" secondAttribute="bottom" constant="20" id="c36-aA-la4"/>
                             <constraint firstItem="FTD-W9-f7s" firstAttribute="centerX" secondItem="vd7-Qy-c6C" secondAttribute="centerX" id="f1d-Ar-BPc"/>
                             <constraint firstItem="VVg-sp-234" firstAttribute="width" secondItem="VVg-sp-234" secondAttribute="height" multiplier="51:55" id="hNb-sc-vNe"/>
+                            <constraint firstItem="okA-nm-zz8" firstAttribute="leading" secondItem="vd7-Qy-c6C" secondAttribute="leadingMargin" id="mc1-73-H8v"/>
                             <constraint firstItem="VVg-sp-234" firstAttribute="centerX" secondItem="vd7-Qy-c6C" secondAttribute="centerX" id="oNO-1B-AZc"/>
+                            <constraint firstItem="oyy-CD-8TQ" firstAttribute="top" secondItem="okA-nm-zz8" secondAttribute="bottom" constant="8" id="oR1-TH-CrC"/>
+                            <constraint firstItem="n0Y-9D-n1J" firstAttribute="leading" secondItem="Pge-zu-zMF" secondAttribute="trailing" constant="8" id="qCV-ib-duV"/>
                             <constraint firstItem="FTD-W9-f7s" firstAttribute="centerY" secondItem="vd7-Qy-c6C" secondAttribute="centerY" id="qk5-cs-DrD"/>
+                            <constraint firstItem="n0Y-9D-n1J" firstAttribute="top" secondItem="okA-nm-zz8" secondAttribute="bottom" constant="8" id="tkZ-EI-yFD"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="lV6-Ob-gUG" secondAttribute="trailing" constant="20" id="vIT-QM-lPI"/>
                             <constraint firstItem="lV6-Ob-gUG" firstAttribute="top" secondItem="FTD-W9-f7s" secondAttribute="bottom" constant="40" id="wUi-nt-Ler"/>
                         </constraints>
@@ -149,6 +196,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="avatarImageView" destination="FTD-W9-f7s" id="YmF-R4-laT"/>
+                        <outlet property="linkFacebookButton" destination="n0Y-9D-n1J" id="rvb-TL-n1X"/>
+                        <outlet property="linkGoogleButton" destination="oyy-CD-8TQ" id="zUy-gf-NeM"/>
+                        <outlet property="linkTwitterButton" destination="Pge-zu-zMF" id="fz0-Cq-y44"/>
                         <outlet property="welcomeLabel" destination="lV6-Ob-gUG" id="6Fw-El-fuf"/>
                     </connections>
                 </viewController>
@@ -268,6 +318,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Facebook" width="93" height="93"/>
+        <image name="Google" width="80" height="80"/>
+        <image name="Twitter" width="300" height="300"/>
         <image name="badge" width="152" height="168"/>
     </resources>
 </document>
