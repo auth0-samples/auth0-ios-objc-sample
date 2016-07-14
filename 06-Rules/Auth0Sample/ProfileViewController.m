@@ -40,7 +40,13 @@
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
-    self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
+    NSString* welcomeText = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
+    if(self.userProfile.extraInfo[@"country"])
+    {
+        welcomeText = [welcomeText stringByAppendingFormat:@" from %@", self.userProfile.extraInfo[@"country"]];
+    }
+    
+    self.welcomeLabel.text = welcomeText;
     
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
