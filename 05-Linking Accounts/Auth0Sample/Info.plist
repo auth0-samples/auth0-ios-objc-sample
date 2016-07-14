@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Auth0ClientId</key>
-	<string>JFdo5PXfjp3Z0aVPzeOyA2XxBjVc52XS</string>
+	<string>{CLIENT_ID}</string>
 	<key>Auth0Domain</key>
 	<string>sebacancinos.auth0.com</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>04-User-Profile</string>
+	<string>05-Linking Profiles</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
