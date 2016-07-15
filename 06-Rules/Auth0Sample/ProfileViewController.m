@@ -35,14 +35,13 @@
 
 @implementation ProfileViewController
 
-- (void) viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
     NSString* welcomeText = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
-    if(self.userProfile.extraInfo[@"country"])
-    {
+    
+    if(self.userProfile.extraInfo[@"country"]) {
         welcomeText = [welcomeText stringByAppendingFormat:@" from %@", self.userProfile.extraInfo[@"country"]];
     }
     
@@ -55,4 +54,5 @@
 
     }] resume];
 }
+
 @end
