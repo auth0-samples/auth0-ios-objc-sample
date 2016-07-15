@@ -71,8 +71,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)saveCredentials:(A0Token *)token
-{
+- (void)saveCredentials:(A0Token *)token{
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain setString:token.idToken forKey:@"id_token"];
     [keychain setString:token.refreshToken forKey:@"refresh_token"];
