@@ -30,8 +30,8 @@
 
 @implementation HomeViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     // Do any additional setup after loading the view, typically from a nib.
     
     UIAlertController* loadingAlert = [UIAlertController loadingAlert];

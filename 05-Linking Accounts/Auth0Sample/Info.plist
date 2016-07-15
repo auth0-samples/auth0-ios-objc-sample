@@ -5,7 +5,7 @@
 	<key>Auth0ClientId</key>
 	<string>{CLIENT_ID}</string>
 	<key>Auth0Domain</key>
-	<string>sebacancinos.auth0.com</string>
+	<string>{DOMAIN}</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

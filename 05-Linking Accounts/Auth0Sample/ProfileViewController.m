@@ -27,15 +27,25 @@
 #import "Auth0-Swift.h"
 #import "SimpleKeychain.h"
 #import "ProfileViewController.h"
-#import "EditProfileViewController.h"
+#import "UIAlertController_LoadingAlert.h"
 
 @interface ProfileViewController()
 
 @property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
-@property (nonatomic, strong) IBOutlet UIButton* linkFacebookButton;
-@property (nonatomic, strong) IBOutlet UIButton* linkTwitterButton;
-@property (nonatomic, strong) IBOutlet UIButton* linkGoogleButton;
+@property (nonatomic, strong) IBOutlet UILabel*  nameLabel;
+@property (nonatomic, strong) IBOutlet UIButton* facebookLinkButton;
+@property (nonatomic, strong) IBOutlet UIButton* facebookUnlinkButton;
+@property (nonatomic, strong) IBOutlet UILabel*  facebookNameLabel;
+
+@property (nonatomic, strong) IBOutlet UIButton* twitterLinkButton;
+@property (nonatomic, strong) IBOutlet UIButton* twitterUnlinkButton;
+@property (nonatomic, strong) IBOutlet UILabel*  twitterNameLabel;
+
+@property (nonatomic, strong) IBOutlet UIButton* googleLinkButton;
+@property (nonatomic, strong) IBOutlet UIButton* googleUnlinkButton;
+@property (nonatomic, strong) IBOutlet UILabel*  googleNameLabel;
+
+@property (nonnull, strong) NSArray* identities;
 @end
 
 @implementation ProfileViewController
@@ -45,7 +55,7 @@
     
     self.navigationItem.hidesBackButton = YES;
 
-    self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
+    self.nameLabel.text = self.userProfile.name;
     
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -54,26 +64,71 @@
 
     }] resume];
     
-    for (A0UserIdentity* identity in self.userProfile.identities) {
-        if([identity.connection isEqualToString:@"facebook"]) {
-            [self.linkFacebookButton setHighlighted:YES];
-        } else if ([identity.connection isEqualToString:@"google-oauth2"]) {
-            [self.linkGoogleButton setHighlighted:YES];
-        } else if ([identity.connection isEqualToString:@"twitter"]) {
-            [self.linkTwitterButton setHighlighted:YES];
+    self.identities= self.userProfile.identities;
+    
+    [self updateSocialAccounts];
+}
+
+- (void) updateSocialAccounts
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.facebookLinkButton setEnabled:YES];
+        [self.facebookNameLabel setHidden:YES];
+        [self.facebookUnlinkButton setHidden:YES];
+
+        [self.googleLinkButton setEnabled:YES];
+        [self.googleNameLabel setHidden:YES];
+        [self.googleUnlinkButton setHidden:YES];
+        
+        [self.twitterLinkButton setEnabled:YES];
+        [self.twitterNameLabel setHidden:YES];
+        [self.twitterUnlinkButton setHidden:YES];
+        
+        for (A0UserIdentity* identity in self.identities) {
+            if([identity.connection isEqualToString:@"facebook"]) {
+                [self.facebookLinkButton setEnabled:NO];
+                [self.facebookNameLabel setHidden:NO];
+                [self.facebookUnlinkButton setHidden:NO];
+                [self.facebookNameLabel setText:identity.profileData[@"name"]];
+            } else if ([identity.connection isEqualToString:@"google-oauth2"]) {
+                [self.googleLinkButton setEnabled:NO];
+                [self.googleNameLabel setHidden:NO];
+                [self.googleUnlinkButton setHidden:NO];
+                [self.googleNameLabel setText:identity.profileData[@"email"]];
+            } else if ([identity.connection isEqualToString:@"twitter"]) {
+                [self.twitterLinkButton setEnabled:NO];
+                [self.twitterNameLabel setHidden:NO];
+                [self.twitterUnlinkButton setHidden:NO];
+                [self.twitterNameLabel setText:[NSString stringWithFormat:@"@%@",identity.profileData[@"screen_name"]]];
+            }
         }
+    });
+}
+
+- (void) updateIdentitiesWithArray:(NSArray*) jsonIdentities
+{
+    NSArray* identities = [[NSArray alloc] init];
+    
+    for (NSDictionary* identity in jsonIdentities)
+    {
+        identities= [identities arrayByAddingObject:[[A0UserIdentity alloc] initWithJSONDictionary:identity]];
     }
+    
+    self.identities = identities;
+    [self updateSocialAccounts];
+
+    return;
 }
 
 - (IBAction)linkAccount:(id)sender
 {
     NSString* connection;
     
-    if(sender == self.linkGoogleButton) {
+    if(sender == self.googleLinkButton) {
         connection = @"google-oauth2";
-    } else if (sender == self.linkTwitterButton) {
+    } else if (sender == self.twitterLinkButton) {
         connection = @"twitter";
-    } else if (sender == self.linkFacebookButton) {
+    } else if (sender == self.facebookLinkButton) {
         connection = @"facebook";
     } else {
         return;
@@ -82,41 +137,90 @@
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
     NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
-    
 
     A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
     
     [webAuth setConnection:connection];
+    [webAuth setScope:@"openid"];
     
     [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
        if(error) {
-           NSLog(error.localizedDescription);
-       }
-       else {
+           [self showErrorAlertWithMessage:error.localizedDescription];
+       } else {
            A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-
+           
            A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
            
            [authApi linkUserWithIdentifier:self.userProfile.userId  withUserUsingToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
                
                if(error){
-                   NSLog(error.localizedDescription);
+                   [self showErrorAlertWithMessage:error.localizedDescription];
+               } else {
+                   [self updateIdentitiesWithArray: payload];
                }
            }];
        }
     }];
 }
 
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+- (IBAction)unlinkAccount:(id)sender
+{
+    NSString* connection;
+    A0UserIdentity* identity;
     
-    if([segue.identifier isEqualToString:@"EditUserSegue"]){
-        if ([segue.destinationViewController isKindOfClass:[EditProfileViewController class]]){
-            EditProfileViewController* destination = segue.destinationViewController;
-            
-            destination.userProfile = self.userProfile;
+    if(sender == self.googleUnlinkButton) {
+        connection = @"google-oauth2";
+    } else if (sender == self.twitterUnlinkButton) {
+        connection = @"twitter";
+    } else if (sender == self.facebookUnlinkButton) {
+        connection = @"facebook";
+    } else {
+        return;
+    }
+    
+    for (A0UserIdentity* userId in self.userProfile.identities) {
+        if([userId.connection isEqualToString:connection]) {
+            identity = userId;
         }
     }
+    
+    if(!identity)
+        return;
+    
+    UIAlertController* loadingAlert = [UIAlertController loadingAlert];
+    [loadingAlert presentInViewController:self];
+
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    
+    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    
+    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+    
+    [authApi unlinkUserWithIdentifier:identity.userId withProvider:identity.provider fromUserId:self.userProfile.userId callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+        [loadingAlert dismiss];
+        if(error){
+            [self showErrorAlertWithMessage:error.localizedDescription];
+        } else {
+            [self updateIdentitiesWithArray: payload];
+        }
+    }];
+}
+
+- (void) showErrorAlertWithMessage:(NSString*) errorMessage
+{
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 @end
