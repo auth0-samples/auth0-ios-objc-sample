@@ -51,18 +51,18 @@
 }
 
 - (IBAction)callAPIWithAuthentication:(id)sender{
-    [self callAPIshouldAuthenticate:YES];
+    [self callAPIAuthenticated:YES];
 }
 
 - (IBAction)callAPIWithoutAuthentication:(id)sender{
-    [self callAPIshouldAuthenticate:NO];
+    [self callAPIAuthenticated:NO];
 }
 
--(void) callAPIshouldAuthenticate: (BOOL) authenticated {
+-(void) callAPIAuthenticated: (BOOL) shouldAuthenticate {
     NSString* url =  @"change to your API URL";
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
     
-    if(authenticated){
+    if(shouldAuthenticate){
         NSString *token = self.token.idToken;
         [request addValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
     }
