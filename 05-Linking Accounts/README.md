@@ -1,74 +1,19 @@
-//
-//  ProfileViewController.m
-//  Auth0Sample
-//
-// Copyright (c) 2016 Auth0 (http://auth0.com)
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+# Linking Accounts 
 
-#import <Foundation/Foundation.h>
-#import <Lock/Lock.h>
-#import "Auth0-Swift.h"
-#import "SimpleKeychain.h"
-#import "ProfileViewController.h"
-#import "UIAlertController_LoadingAlert.h"
+- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/05-linking-accounts)
 
-@interface ProfileViewController()
+This sample exposes how to manage accounts linking for an Auth0 user. 
 
-@property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel*  nameLabel;
-@property (nonatomic, strong) IBOutlet UIButton* facebookLinkButton;
-@property (nonatomic, strong) IBOutlet UIButton* facebookUnlinkButton;
-@property (nonatomic, strong) IBOutlet UILabel*  facebookNameLabel;
+We'll show one button for each third party authentication method, a label that shows how that system calls the user and an unlink button. In our Sample use Google, Twitter and Facebook. But you can set up your app to use a large number of methods you can set up on Auth0 dashboard
 
-@property (nonatomic, strong) IBOutlet UIButton* twitterLinkButton;
-@property (nonatomic, strong) IBOutlet UIButton* twitterUnlinkButton;
-@property (nonatomic, strong) IBOutlet UILabel*  twitterNameLabel;
+#### Important Snippets
 
-@property (nonatomic, strong) IBOutlet UIButton* googleLinkButton;
-@property (nonatomic, strong) IBOutlet UIButton* googleUnlinkButton;
-@property (nonatomic, strong) IBOutlet UILabel*  googleNameLabel;
+##### 1. Retain all user's identities
 
-@property (nonnull, strong) NSArray* identities;
-@end
+User's identities (main account + linked accounts) can be found in the `identities` array from the `A0UserProfile` instance. We are storing the array as a property of the view controller, so we can later update it without having to update the whole profile instance.
 
-@implementation ProfileViewController
-
-- (void) viewDidLoad{
-    [super viewDidLoad];
-    
-    self.navigationItem.hidesBackButton = YES;
-
-    self.nameLabel.text = self.userProfile.name;
-    
-    [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.avatarImageView.image = [UIImage imageWithData:data];
-        });
-
-    }] resume];
-    
-    self.identities= self.userProfile.identities;
-    
-    [self updateSocialAccounts];
-}
-
+To show the linked/unlinked status we call:
+```objc
 - (void) updateSocialAccounts
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -104,22 +49,24 @@
         }
     });
 }
+```
 
-- (void) updateIdentitiesWithArray:(NSArray*) jsonIdentities
-{
-    NSArray* identities = [[NSArray alloc] init];
-    
-    for (NSDictionary* identity in jsonIdentities)
-    {
-        identities= [identities arrayByAddingObject:[[A0UserIdentity alloc] initWithJSONDictionary:identity]];
-    }
-    
-    self.identities = identities;
-    [self updateSocialAccounts];
+Here we set all our view elements to an 'off' state and then we iterate over the profiles setting them as we find them.
 
-    return;
+##### 2. Link an account
+
+First, the user is asked for the credentials of the account he wants to link. For this we will use the `A0WebAuth` class from `Auth0.Swift` toolkit, we set up the connection we want to link to, and we need to set up the scope to 'openid' in order to get the full token information we'll need to link the account. 
+Another thing worth mentioning is that we'll need to set up a URL Type using our bundle identifier as the URL Scheme, and set up on the `AppDelegate` class
+
+```objc
+- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
+    return [A0WebAuth resumeAuthWithURL:url options:options];
 }
+```
 
+Once the login callback returns, if everything went ok, we'll have the users credentials, we can do the actual linking of the profiles. 
+
+```objc
 - (IBAction)linkAccount:(id)sender
 {
     NSString* connection;
@@ -162,7 +109,15 @@
        }
     }];
 }
+```
 
+Notice that once the account is linked, the `updateIdentitiesWithArray:` method gets called, which will iterate the returned array of identites and parse them into `A0UserIdentity` instances. And then calling `updateSocialAccounts` we described in the first step.
+
+##### 3. Unlink an account
+
+The operation for unlinking the profiles is pretty similar. This time we'll already have the user identity, wich we'll need to find in the `identities` array by it's connection type. Then we call `unlinkUserWithIdentifier` to do the actual unlinking.
+
+```objc
 - (IBAction)unlinkAccount:(id)sender
 {
     NSString* connection;
@@ -206,21 +161,4 @@
         }
     }];
 }
-
-- (void) showErrorAlertWithMessage:(NSString*) errorMessage
-{
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error" message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        
-        [alert addAction:defaultAction];
-
-        [self presentViewController:alert animated:YES completion:nil];
-    });
-}
-
-@end
+```
