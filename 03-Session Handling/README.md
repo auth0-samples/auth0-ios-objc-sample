@@ -104,12 +104,3 @@ Once the user wants to close the session, we'll just clear the stored tokens fro
 }
 ```
 
-In `SessionManager.swift`:
-
-```swift
-func logout() {
-    self.keychain.clearAll()
-}
-```
-
-where `self.keychain` is always equal to `A0SimpleKeychain(service: "Auth0")`.
