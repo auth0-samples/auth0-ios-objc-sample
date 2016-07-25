@@ -1,6 +1,6 @@
 # Starter Seed 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/00-Starter-Seed)
+- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/00-introduction)
 
 This is the very beginning of a serie of sample projects that demonstrate how to achieve goals showed on each tutorial in the serie of the iOS-Swift quickstarts.
 
