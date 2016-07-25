@@ -4,7 +4,7 @@
 
 This sample exposes how to manage accounts linking for an Auth0 user. 
 
-We'll show one button for each third party authentication method, a label that shows how that system calls the user and an unlink button. In our Sample use Google, Twitter and Facebook. But you can set up your app to use a large number of methods you can set up on Auth0 dashboard
+We'll show one button for each third party authentication method, a label that shows how that system calls the user and an unlink button. In our sample we use Google, Twitter and Facebook, but, you can set up your app to use a large number of methods you can set up on Auth0 dashboard.
 
 #### Important Snippets
 
@@ -14,8 +14,7 @@ User's identities (main account + linked accounts) can be found in the `identiti
 
 To show the linked/unlinked status we call:
 ```objc
-- (void) updateSocialAccounts
-{
+- (void) updateSocialAccounts {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.facebookLinkButton setEnabled:YES];
         [self.facebookNameLabel setHidden:YES];
@@ -55,11 +54,11 @@ Here we set all our view elements to an 'off' state and then we iterate over the
 
 ##### 2. Link an account
 
-First, the user is asked for the credentials of the account he wants to link. For this we will use the `A0WebAuth` class from `Auth0.Swift` toolkit, we set up the connection we want to link to, and we need to set up the scope to 'openid' in order to get the full token information we'll need to link the account. 
-Another thing worth mentioning is that we'll need to set up a URL Type using our bundle identifier as the URL Scheme, and set up on the `AppDelegate` class
+First, the user is asked for the credentials of the account he wants to link. For this, we will use the `A0WebAuth` class from `Auth0.Swift` toolkit, we set up the connection we want to link to, and we need to set up the scope to 'openid' in order to get the full token information we'll need to link the account. 
+Another thing worth mentioning is that we'll need to set up a URL Type using our bundle identifier as the URL Scheme, and set up on the `AppDelegate` class.
 
 ```objc
-- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
+- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     return [A0WebAuth resumeAuthWithURL:url options:options];
 }
 ```
@@ -67,8 +66,7 @@ Another thing worth mentioning is that we'll need to set up a URL Type using our
 Once the login callback returns, if everything went ok, we'll have the users credentials, we can do the actual linking of the profiles. 
 
 ```objc
-- (IBAction)linkAccount:(id)sender
-{
+- (IBAction)linkAccount:(id)sender {
     NSString* connection;
     
     if(sender == self.googleLinkButton) {
@@ -118,8 +116,7 @@ Notice that once the account is linked, the `updateIdentitiesWithArray:` method 
 The operation for unlinking the profiles is pretty similar. This time we'll already have the user identity, wich we'll need to find in the `identities` array by it's connection type. Then we call `unlinkUserWithIdentifier` to do the actual unlinking.
 
 ```objc
-- (IBAction)unlinkAccount:(id)sender
-{
+- (IBAction)unlinkAccount:(id)sender {
     NSString* connection;
     A0UserIdentity* identity;
     
