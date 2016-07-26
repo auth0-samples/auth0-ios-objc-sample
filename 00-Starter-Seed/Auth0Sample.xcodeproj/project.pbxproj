@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51076EC01D468D04000A247A /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51076EBF1D468D04000A247A /* Auth0.plist */; };
+		734C00C40A555339186F0C5D /* Pods_Auth0Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC386A2004F566D19D748A51 /* Pods_Auth0Sample.framework */; };
 		7D57F0681D1B20AA0015BFC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F0671D1B20AA0015BFC1 /* main.m */; };
 		7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */; };
 		7D57F06E1D1B20AA0015BFC1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06D1D1B20AA0015BFC1 /* ViewController.m */; };
@@ -16,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		51076EBF1D468D04000A247A /* Auth0.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
 		7D57F0631D1B20AA0015BFC1 /* Auth0Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auth0Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D57F0671D1B20AA0015BFC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7D57F0691D1B20AA0015BFC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -26,6 +29,9 @@
 		7D57F0721D1B20AA0015BFC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7D57F0751D1B20AA0015BFC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D57F0771D1B20AA0015BFC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BC386A2004F566D19D748A51 /* Pods_Auth0Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Auth0Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3770F3AC4049DFDBA66B65A /* Pods-Auth0Sample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.debug.xcconfig"; sourceTree = "<group>"; };
+		FFE5D44E64E50CDD701D05D5 /* Pods-Auth0Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +39,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				734C00C40A555339186F0C5D /* Pods_Auth0Sample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26B30BB4467301FF00F7E823 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BC386A2004F566D19D748A51 /* Pods_Auth0Sample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6D3FF939904C22BE423B2F5F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C3770F3AC4049DFDBA66B65A /* Pods-Auth0Sample.debug.xcconfig */,
+				FFE5D44E64E50CDD701D05D5 /* Pods-Auth0Sample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		7D57F05A1D1B20AA0015BFC1 = {
 			isa = PBXGroup;
 			children = (
 				7D57F0651D1B20AA0015BFC1 /* Auth0Sample */,
 				7D57F0641D1B20AA0015BFC1 /* Products */,
+				6D3FF939904C22BE423B2F5F /* Pods */,
+				26B30BB4467301FF00F7E823 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +93,7 @@
 				7D57F0741D1B20AA0015BFC1 /* LaunchScreen.storyboard */,
 				7D57F0771D1B20AA0015BFC1 /* Info.plist */,
 				7D57F0661D1B20AA0015BFC1 /* Supporting Files */,
+				51076EBF1D468D04000A247A /* Auth0.plist */,
 			);
 			path = Auth0Sample;
 			sourceTree = "<group>";
@@ -86,9 +113,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D57F07A1D1B20AA0015BFC1 /* Build configuration list for PBXNativeTarget "Auth0Sample" */;
 			buildPhases = (
+				7769FD94E2D3D880114C1A98 /* [CP] Check Pods Manifest.lock */,
 				7D57F05F1D1B20AA0015BFC1 /* Sources */,
 				7D57F0601D1B20AA0015BFC1 /* Frameworks */,
 				7D57F0611D1B20AA0015BFC1 /* Resources */,
+				F2B21953E6F93ABBC4A1A58D /* [CP] Embed Pods Frameworks */,
+				DC2C6A7EE8358E7FC6AC0519 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -139,10 +169,59 @@
 				7D57F0761D1B20AA0015BFC1 /* LaunchScreen.storyboard in Resources */,
 				7D57F0731D1B20AA0015BFC1 /* Assets.xcassets in Resources */,
 				7D57F0711D1B20AA0015BFC1 /* Main.storyboard in Resources */,
+				51076EC01D468D04000A247A /* Auth0.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7769FD94E2D3D880114C1A98 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DC2C6A7EE8358E7FC6AC0519 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2B21953E6F93ABBC4A1A58D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7D57F05F1D1B20AA0015BFC1 /* Sources */ = {
@@ -263,6 +342,7 @@
 		};
 		7D57F07B1D1B20AA0015BFC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C3770F3AC4049DFDBA66B65A /* Pods-Auth0Sample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Auth0Sample/Info.plist;
@@ -274,6 +354,7 @@
 		};
 		7D57F07C1D1B20AA0015BFC1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FFE5D44E64E50CDD701D05D5 /* Pods-Auth0Sample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Auth0Sample/Info.plist;
@@ -302,6 +383,7 @@
 				7D57F07C1D1B20AA0015BFC1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
