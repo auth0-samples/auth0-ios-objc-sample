@@ -1,5 +1,4 @@
-//
-//  UIViewController_Dismiss.m
+// UIStoryboardSegueWithCompletion.m
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -22,15 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "UIViewController_Dismiss.h"
 
-@implementation UIViewController(Dismiss)
+#import <UIKit/UIKit.h>
+#import "UIStoryboardSegueWithCompletion.h"
 
-- (IBAction)dismiss:(id)sender
-{
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 
+@implementation UIStoryboardSegueWithCompletion
+
+- (void) perform {
+    [super perform];
+    
+    self.completion();
 }
 
 @end

@@ -41,30 +41,23 @@
 
 @implementation SignUpViewController
 
-- (IBAction)textFieldEditingChanged:(id)sender
-{
+- (IBAction)textFieldEditingChanged:(id)sender {
     self.signUpButton.enabled = [self validateForm];
-    
 }
 
-- (BOOL) validateForm
-{
-    if(![self.passwordTextField hasText])
-    {
+- (BOOL) validateForm {
+    if(![self.passwordTextField hasText]) {
         return NO;
     }
     
-    if(!self.emailTextField.hasText)
-    {
+    if(!self.emailTextField.hasText) {
         return NO;
     }
     
     return YES;
-    
 }
 
-- (IBAction)signUpAction:(id)sender
-{
+- (IBAction)signUpAction:(id)sender {
     [self.spinner startAnimating];
     
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
@@ -76,17 +69,13 @@
                 userMetadata:nil
                        scope:@"openid"
                   parameters:nil
-                    callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials)
-    {
+                    callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [self.spinner stopAnimating];
-                if(error)
-                {
+                if(error) {
                     NSLog(error.localizedDescription);
-                }
-                else
-                {
+                } else {
                     self.retrievedCredentials = credentials;
                     [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
                 }

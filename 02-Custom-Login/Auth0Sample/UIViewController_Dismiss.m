@@ -1,5 +1,5 @@
 //
-//  Auth0InfoHelper.m
+//  UIViewController_Dismiss.m
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -23,27 +23,12 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "Auth0InfoHelper.h"
-#import "Auth0-Swift.h"
+#import "UIViewController_Dismiss.h"
 
+@implementation UIViewController(Dismiss)
 
-@implementation Auth0InfoHelper
-
-+ (NSDictionary*) readAuth0Plist
-{
-    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Auth0" ofType:@"plist"]];
-
-    return dict;
-}
-
-+ (NSString*) Auth0ClientID
-{
-    return [[Auth0InfoHelper readAuth0Plist] objectForKey:@"ClientId"];
-}
-
-+ (NSURL*) Auth0Domain
-{
-    return [NSURL a0_URLWithDomain: [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"]];
+- (IBAction)dismiss:(id)sender {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

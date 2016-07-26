@@ -1,4 +1,5 @@
-// UIStoryboardSegueWithCompletion.m
+//
+//  Auth0InfoHelper.m
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -21,19 +22,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Foundation/Foundation.h>
+#import "Auth0InfoHelper.h"
+#import "Auth0-Swift.h"
 
-#import <UIKit/UIKit.h>
-#import "UIStoryboardSegueWithCompletion.h"
 
+@implementation Auth0InfoHelper
 
-@implementation UIStoryboardSegueWithCompletion
++ (NSDictionary*) readAuth0Plist {
+    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Auth0" ofType:@"plist"]];
 
-- (void) perform
-{
-    [super perform];
-    
-    self.completion();
-    
+    return dict;
+}
+
++ (NSString*) Auth0ClientID {
+    return [[Auth0InfoHelper readAuth0Plist] objectForKey:@"ClientId"];
+}
+
++ (NSURL*) Auth0Domain {
+    return [NSURL a0_URLWithDomain: [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"]];
 }
 
 @end
