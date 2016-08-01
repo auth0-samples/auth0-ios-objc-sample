@@ -1,5 +1,5 @@
 //
-//  LoginViewController.h
+// LoginViewController.h
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -24,6 +24,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController: UIViewController
 
 @end

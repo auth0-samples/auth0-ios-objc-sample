@@ -1,5 +1,5 @@
 //
-//  LoginViewController.m
+// LoginViewController.m
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -33,19 +33,17 @@
 
 @interface LoginViewController()
 
-@property (nonatomic, weak) IBOutlet UITextField *loginEmailText;
-@property (nonatomic, weak) IBOutlet UITextField *loginPasswordText;
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+@property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *spinner;
-@property (nonatomic, weak) IBOutlet UIButton* loginButton;
+@property (nonatomic, weak) IBOutlet UIButton *loginButton;
 
 @end
 
 @implementation LoginViewController
 
-- (void) loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback {
-    
+- (void)loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback {
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId: [Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
-
     [authApi userInfoWithToken:credentials.accessToken callback:callback];
 }
 
@@ -54,18 +52,19 @@
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
     
     [self.spinner startAnimating];
-    [authApi loginWithUsername:self.loginEmailText.text password:self.loginPasswordText.text connection:@"Username-Password-Authentication" scope:@"openid" parameters:@{} callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+    [authApi loginWithUsername:self.emailTextField.text
+                      password:self.passwordTextField.text
+                    connection:@"Username-Password-Authentication"
+                         scope:@"openid" parameters:@{}
+                      callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if(error) {
-            NSLog(error.localizedDescription);
+            NSLog(@"%@", error.localizedDescription);
         } else {
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                
                 dispatch_async(dispatch_get_main_queue(), ^{
-
                     [self.spinner stopAnimating];
-
                     if(error) {
-                        NSLog(error.localizedDescription);
+                        NSLog(@"%@", error.localizedDescription);
                     } else {
                         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                     }
@@ -79,36 +78,26 @@
     self.loginButton.enabled = [self validateForm];
 }
 
-- (BOOL) validateForm {
-    if(![self.loginPasswordText hasText]) {
-        return NO;
-    }
-    
-    if(!self.loginEmailText.hasText) {
-        return NO;
-    }
-    
-    return YES;
+- (BOOL)validateForm {
+    return self.emailTextField.hasText && self.passwordTextField.hasText;
 }
 
 - (IBAction)unwindToLogin:(id)sender {
     if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]]) {
-        UIStoryboardSegueWithCompletion* segue = sender;
+        UIStoryboardSegueWithCompletion *segue = sender;
         
         if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
             [self.spinner startAnimating];
 
-            SignUpViewController* source = segue.sourceViewController;
-            A0Credentials* credentials = source.retrievedCredentials;
+            SignUpViewController *source = segue.sourceViewController;
+            A0Credentials *credentials = source.retrievedCredentials;
             
             segue.completion = ^{
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        
                         [self.spinner stopAnimating];
-                        
                         if(error) {
-                            NSLog(error.localizedDescription);
+                            NSLog(@"%@", error.localizedDescription);
                         } else {
                             [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                         }
@@ -119,10 +108,10 @@
     }
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"ShowProfile"]) {
-        ProfileViewController* vc = segue.destinationViewController;
-        vc.userProfile = sender;
+        ProfileViewController *controller = segue.destinationViewController;
+        controller.userProfile = sender;
     }
 }
 

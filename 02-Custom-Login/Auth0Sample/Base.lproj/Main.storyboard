@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="o2u-JV-6ys">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="o2u-JV-6ys">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -227,9 +227,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="emailTextField" destination="lo5-Fm-w6P" id="7Kt-oJ-bOT"/>
                         <outlet property="loginButton" destination="QS3-X9-9BV" id="1sJ-td-NdG"/>
-                        <outlet property="loginEmailText" destination="lo5-Fm-w6P" id="73U-gQ-f5k"/>
-                        <outlet property="loginPasswordText" destination="d7X-LJ-bNN" id="UEg-sd-LOf"/>
+                        <outlet property="passwordTextField" destination="d7X-LJ-bNN" id="A60-aB-8T7"/>
                         <outlet property="spinner" destination="t7b-BG-JdF" id="XnL-sa-hih"/>
                         <segue destination="Wx9-md-nxp" kind="show" identifier="ShowProfile" id="MaZ-5b-K6y"/>
                     </connections>

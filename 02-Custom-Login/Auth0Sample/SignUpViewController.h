@@ -1,5 +1,5 @@
 //
-//  SignUpViewController.h
+// SignUpViewController.h
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -22,17 +22,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SignUpViewController_h
-#define SignUpViewController_h
 #import <UIKit/UIKit.h>
 
 @class A0Credentials;
 
-@interface SignUpViewController : UIViewController
+@interface SignUpViewController: UIViewController
 
-@property (nonatomic, strong) A0Credentials* retrievedCredentials;
+@property (nonatomic, strong) A0Credentials *retrievedCredentials;
 
 @end
-
-
-#endif /* SignUpViewController_h */
