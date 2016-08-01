@@ -13,8 +13,8 @@ We'll show one button for each third party authentication method, a label that s
 User's identities (main account + linked accounts) can be found in the `identities` array from the `A0UserProfile` instance. We are storing the array as a property of the view controller, so we can later update it without having to update the whole profile instance.
 
 To show the linked/unlinked status we call:
-```objc
-- (void) updateSocialAccounts {
+```objective-c
+- (void)updateSocialAccounts {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.facebookLinkButton setEnabled:YES];
         [self.facebookNameLabel setHidden:YES];
@@ -28,8 +28,8 @@ To show the linked/unlinked status we call:
         [self.twitterNameLabel setHidden:YES];
         [self.twitterUnlinkButton setHidden:YES];
         
-        for (A0UserIdentity* identity in self.identities) {
-            if([identity.connection isEqualToString:@"facebook"]) {
+        for (A0UserIdentity *identity in self.identities) {
+            if ([identity.connection isEqualToString:@"facebook"]) {
                 [self.facebookLinkButton setEnabled:NO];
                 [self.facebookNameLabel setHidden:NO];
                 [self.facebookUnlinkButton setHidden:NO];
@@ -43,7 +43,7 @@ To show the linked/unlinked status we call:
                 [self.twitterLinkButton setEnabled:NO];
                 [self.twitterNameLabel setHidden:NO];
                 [self.twitterUnlinkButton setHidden:NO];
-                [self.twitterNameLabel setText:[NSString stringWithFormat:@"@%@",identity.profileData[@"screen_name"]]];
+                [self.twitterNameLabel setText:[NSString stringWithFormat:@"@%@", identity.profileData[@"screen_name"]]];
             }
         }
     });
@@ -58,18 +58,17 @@ First, the user is asked for the credentials of the account he wants to link. Fo
 Another thing worth mentioning is that we'll need to set up a URL Type using our bundle identifier as the URL Scheme, and set up on the `AppDelegate` class.
 
 ```objc
-- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     return [A0WebAuth resumeAuthWithURL:url options:options];
 }
 ```
 
 Once the login callback returns, if everything went ok, we'll have the users credentials, we can do the actual linking of the profiles. 
 
-```objc
+```objective-c
 - (IBAction)linkAccount:(id)sender {
-    NSString* connection;
-    
-    if(sender == self.googleLinkButton) {
+    NSString *connection;
+    if (sender == self.googleLinkButton) {
         connection = @"google-oauth2";
     } else if (sender == self.twitterLinkButton) {
         connection = @"twitter";
@@ -80,7 +79,7 @@ Once the login callback returns, if everything went ok, we'll have the users cre
     }
     
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
     NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
 
     A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
@@ -89,19 +88,17 @@ Once the login callback returns, if everything went ok, we'll have the users cre
     [webAuth setScope:@"openid"];
     
     [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
-       if(error) {
+       if (error) {
            [self showErrorAlertWithMessage:error.localizedDescription];
        } else {
-           A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+           A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+           A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
            
-           A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
-           
-           [authApi linkUserWithIdentifier:self.userProfile.userId  withUserUsingToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
-               
-               if(error){
+           [authAPI linkUserWithIdentifier:self.userProfile.userId  withUserUsingToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+               if (error) {
                    [self showErrorAlertWithMessage:error.localizedDescription];
                } else {
-                   [self updateIdentitiesWithArray: payload];
+                   [self updateIdentitiesWithArray:payload];
                }
            }];
        }
@@ -115,12 +112,12 @@ Notice that once the account is linked, the `updateIdentitiesWithArray:` method 
 
 The operation for unlinking the profiles is pretty similar. This time we'll already have the user identity, wich we'll need to find in the `identities` array by it's connection type. Then we call `unlinkUserWithIdentifier` to do the actual unlinking.
 
-```objc
+```objective-c
 - (IBAction)unlinkAccount:(id)sender {
-    NSString* connection;
-    A0UserIdentity* identity;
+    NSString *connection;
+    A0UserIdentity *identity;
     
-    if(sender == self.googleUnlinkButton) {
+    if (sender == self.googleUnlinkButton) {
         connection = @"google-oauth2";
     } else if (sender == self.twitterUnlinkButton) {
         connection = @"twitter";
@@ -136,14 +133,15 @@ The operation for unlinking the profiles is pretty similar. This time we'll alre
         }
     }
     
-    if(!identity)
+    if (!identity) {
         return;
+    }
     
-    UIAlertController* loadingAlert = [UIAlertController loadingAlert];
+    UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
 
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
     
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     
@@ -151,10 +149,10 @@ The operation for unlinking the profiles is pretty similar. This time we'll alre
     
     [authApi unlinkUserWithIdentifier:identity.userId withProvider:identity.provider fromUserId:self.userProfile.userId callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
         [loadingAlert dismiss];
-        if(error){
+        if (error) {
             [self showErrorAlertWithMessage:error.localizedDescription];
         } else {
-            [self updateIdentitiesWithArray: payload];
+            [self updateIdentitiesWithArray:payload];
         }
     }];
 }
