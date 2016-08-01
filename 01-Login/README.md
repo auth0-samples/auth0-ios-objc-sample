@@ -10,7 +10,7 @@ This sample project shows how to present a login dialog using the Lock widget in
 
 In `HomeViewController.m`:
 
-```objc
+```objective-c
 - (IBAction)showLoginController:(id)sender {
     A0Lock *lock = [A0Lock sharedLock];
     
@@ -28,7 +28,7 @@ In `HomeViewController.m`:
 
 In this sample, the `profile` object is passed to the next screen through a variable, in the `prepareForSegue` method, as follows:
 
-```objc
+```objective-c
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"ShowProfile"]) {
         ProfileViewController *destViewController = segue.destinationViewController;
@@ -41,7 +41,7 @@ In this sample, the `profile` object is passed to the next screen through a vari
 
 In `ProfileViewController.m` we update the text label with the user's name, and load the profile image into the image view:
 
-```swift
+```objective-c
 - (void) viewDidLoad {
     [super viewDidLoad];
     

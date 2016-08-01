@@ -1,6 +1,6 @@
 //
-//  AppDelegate.h
-//  Auth0Sample
+// AppDelegate.h
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -28,6 +28,4 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-
 @end
-
