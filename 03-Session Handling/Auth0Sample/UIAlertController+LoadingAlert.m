@@ -1,5 +1,5 @@
 //
-// ProfileViewController.h
+// UIAlertController+LoadingAlert.m
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -22,12 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "UIAlertController+LoadingAlert.h"
 
-@class A0UserProfile;
+@implementation UIAlertController(LoadingAlert)
 
-@interface ProfileViewController: UIViewController
++ (UIAlertController *)loadingAlert{
+    return [UIAlertController alertControllerWithTitle:@"Loading"
+                                               message:@"Please, wait..."
+                                        preferredStyle:UIAlertControllerStyleAlert];
+}
 
-@property (nonatomic, strong) A0UserProfile *userProfile;
+- (void)presentInViewController:(UIViewController*)viewController {
+    [viewController presentViewController:self animated:true completion:nil];
+}
+
+- (void)dismiss {
+    [self dismissViewControllerAnimated:true completion:nil];
+}
 
 @end

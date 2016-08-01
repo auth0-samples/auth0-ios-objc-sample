@@ -14,23 +14,23 @@ Upon app's launch, you'd want to check if a user has already logged in, in order
 
 So, in `HomeViewController.m` as soon as the view controller loads, we try to load the credentials, in case of success the callback will dismiss the loading alert and show the next view, in case of failure, clean up the keychain of any possible invalid token and leave the user to login:
 
-```objc
+```objective-c
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
-    UIAlertController* loadingAlert = [UIAlertController loadingAlert];
+    UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
     
     [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
         [loadingAlert dismiss];
         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
     } failure:^(NSError * _Nonnull error) {
-        A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+        A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
         [keychain clearAll];
         [loadingAlert dismiss];
     }];
 }
+
 ```
 
 First of all, we check that the keychain efectively has an `id_token` stored, if not, it means the user isn't logged in and there is no session to mantain.
@@ -38,22 +38,23 @@ Then we'll get the user profile from the server usign the stored token. On succe
 So what do we do? We store the new token in the keychain and recursivelly call the method itself. 
 On this new iteration, the keychain will for sure have a token (we just stored it), it will call the server for the profile with the new token, and being a new token, it should succeed every time and continue. If this new token were to fail it will keep getting new tokens until one succeeds, or it crashes. Something that'd never happen, or in any case, would be a server side error.
 
-```objc
-- (void) loadCredentialsSuccess:(A0APIClientUserProfileSuccess)success failure: (A0APIClientError)failure{
+```objective-c
+- (void)loadCredentialsSuccess:(A0APIClientUserProfileSuccess)success
+                       failure:(A0APIClientError)failure {
     
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     
-    if([keychain stringForKey:@"id_token"]){
+    if ([keychain stringForKey:@"id_token"]) {
         A0Lock *lock = [A0Lock sharedLock];
-        
-        [lock.apiClient fetchUserProfileWithIdToken:[keychain stringForKey:@"id_token"] success:success failure:^(NSError * _Nonnull error) {
+        [lock.apiClient fetchUserProfileWithIdToken:[keychain stringForKey:@"id_token"]
+                                            success:success
+                                            failure:^(NSError * _Nonnull error) {
             [lock.apiClient fetchNewIdTokenWithRefreshToken:[keychain stringForKey:@"refresh_token"] parameters:nil success:^(A0Token * _Nonnull token) {
                 [self saveCredentials:token];
                 [self loadCredentialsSuccess:success failure:failure];
             } failure:failure];
         }];
-    }
-    else{
+    } else {
         failure([[NSError alloc] initWithDomain:@"NoError" code:0 userInfo:nil]);
     }
 }
@@ -62,11 +63,10 @@ On this new iteration, the keychain will for sure have a token (we just stored i
 ##### 2. Getting that first token
 
 So if there's no session to maintain, we'll use Lock to handle the Login process like we used on previous samples. 
-```objc
-- (IBAction)showLoginController:(id)sender
-{
+```objective-c
+- (IBAction)showLoginController:(id)sender {
     A0Lock *lock = [A0Lock sharedLock];
-    
+
     A0LockViewController *controller = [lock newLockViewController];
     controller.onAuthenticationBlock = ^(A0UserProfile *profile, A0Token *token) {
         // Do something with token & profile. e.g.: save them.
@@ -77,16 +77,14 @@ So if there's no session to maintain, we'll use Lock to handle the Login process
     };
     
     [self presentViewController:controller animated:YES completion:nil];
-    
 }
 ```
 
 The only difference being that now, when the user logs in, we'll save the id token and refresh token for later use, using `A0SimpleKeychain`:
 
-```objc
-- (void) saveCredentials:(A0Token* ) token
-{
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+```objective-c
+- (void)saveCredentials:(A0Token *)token {
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain setString:token.idToken forKey:@"id_token"];
     [keychain setString:token.refreshToken forKey:@"refresh_token"];
 }
@@ -96,10 +94,9 @@ The only difference being that now, when the user logs in, we'll save the id tok
 
 Once the user wants to close the session, we'll just clear the stored tokens from the keychain and send him back to `HomeViewController` via the unwind segue.
 
-```objc
-- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue
-{
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+```objective-c
+- (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue {
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain clearAll];
 }
 ```

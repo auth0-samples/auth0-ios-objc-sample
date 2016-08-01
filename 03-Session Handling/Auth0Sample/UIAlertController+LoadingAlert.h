@@ -1,5 +1,5 @@
 //
-// ProfileViewController.h
+// UIAlertController+LoadingAlert.h
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -24,10 +24,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class A0UserProfile;
+@interface UIAlertController (LoadingAlert)
 
-@interface ProfileViewController: UIViewController
-
-@property (nonatomic, strong) A0UserProfile *userProfile;
++ (UIAlertController*) loadingAlert;
+- (void) presentInViewController:(UIViewController*) viewController;
+- (void) dismiss;
 
 @end
