@@ -1,6 +1,6 @@
 //
-//  EditProfileViewController.m
-//  Auth0Sample
+// EditProfileViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -23,46 +23,42 @@
 // THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "EditProfileViewController.h"
 #import <Lock/A0UserProfile.h>
+#import "EditProfileViewController.h"
 #import "Auth0-Swift.h"
 #import "SimpleKeychain.h"
 
 @interface EditProfileViewController()
 
-@property (nonatomic, weak) IBOutlet UITextField* userEmailField;
-@property (nonatomic, weak) IBOutlet UITextField* userFirstNameField;
-@property (nonatomic, weak) IBOutlet UITextField* userLastNameField;
-@property (nonatomic, weak) IBOutlet UITextField* userCountryField;
-
+@property (nonatomic, weak) IBOutlet UITextField *userEmailField;
+@property (nonatomic, weak) IBOutlet UITextField *userFirstNameField;
+@property (nonatomic, weak) IBOutlet UITextField *userLastNameField;
+@property (nonatomic, weak) IBOutlet UITextField *userCountryField;
 
 @end
 
 @implementation EditProfileViewController
 
-- (void) viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.userEmailField setText:self.userProfile.email];
-    [self.userFirstNameField setText:[self.userProfile.userMetadata objectForKey:@"firstName"]];
-    [self.userLastNameField setText:[self.userProfile.userMetadata objectForKey:@"lastName"]];
+    [self.userFirstNameField setText:[self.userProfile.userMetadata objectForKey:@"first_name"]];
+    [self.userLastNameField setText:[self.userProfile.userMetadata objectForKey:@"last_name"]];
     [self.userCountryField setText:[self.userProfile.userMetadata objectForKey:@"country"]];
 }
 
-- (NSDictionary*) fieldsToDictionary
-{
-    NSDictionary* dictionary = [[NSDictionary alloc]
-                                initWithObjects:@[self.userFirstNameField.text,self.userLastNameField.text,self.userCountryField.text]
-                                forKeys:@[@"firstName",@"lastName",@"country"]];
-    
-    return dictionary;
+- (NSDictionary*)fieldsToDictionary {
+    return @{@"first_name": self.userFirstNameField.text,
+             @"last_name": self.userLastNameField.text,
+             @"country": self.userCountryField.text};
 }
 
-- (IBAction)saveProfile:(id)sender{
+- (IBAction)saveProfile:(id)sender {
 
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     
-    if(![keychain stringForKey:@"id_token"]){
+    if (![keychain stringForKey:@"id_token"]) {
         return;
     }
     
@@ -70,22 +66,19 @@
 
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
 
-    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
 
-    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
     
-    [authApi patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
+    [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            if(error) {
+            if (error) {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
                 [self presentViewController:alert animated:true completion:nil];
             } else {
-                
                 self.userProfile = [[A0UserProfile alloc] initWithDictionary:data];
                 [self.navigationController popViewControllerAnimated:YES];
-                
-                UIViewController* controller = [self.navigationController topViewController];
-                
+                UIViewController *controller = [self.navigationController topViewController];
                 if([controller respondsToSelector:@selector(setUserProfile:)]){
                     [controller performSelector:@selector(setUserProfile:) withObject:self.userProfile afterDelay:0];
                 }

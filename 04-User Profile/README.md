@@ -12,47 +12,42 @@ The idea of this sample is to show how to modify and update that additional data
 
 In `EditProfileViewController.m` we put all the user's input data into a `NSDictionary` in `fieldsToDictionary`:
 
-```objc
-- (NSDictionary*) fieldsToDictionary
-{
-    NSDictionary* dictionary = [[NSDictionary alloc]
-                                initWithObjects:@[self.userFirstNameField.text,self.userLastNameField.text,self.userCountryField.text]
-                                forKeys:@[@"firstName",@"lastName",@"country"]];
-    
-    return dictionary;
+```objective-c
+- (NSDictionary*)fieldsToDictionary {
+    return @{@"first_name": self.userFirstNameField.text,
+             @"last_name": self.userLastNameField.text,
+             @"country": self.userCountryField.text};
 }
 ```
 
 When the user presses the save button, we send the dictionary of user metadata using the `patchUserWithIdentifier` call. Once we have the callback return and there was no error, we send the Navigation Controller to the previous view in the pile and send it the updated profile instance. 
 
-```objc
-- (IBAction)saveProfile:(id)sender{
+```objective-c
+- (IBAction)saveProfile:(id)sender {
 
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     
-    if(![keychain stringForKey:@"id_token"]){
+    if (![keychain stringForKey:@"id_token"]) {
         return;
     }
     
     NSDictionary *profileMetadata = [self fieldsToDictionary];
+
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
 
-    NSURL *domain =  [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
 
-    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
     
-    [authApi patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
+    [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            if(error) {
+            if (error) {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
                 [self presentViewController:alert animated:true completion:nil];
             } else {
-                
                 self.userProfile = [[A0UserProfile alloc] initWithDictionary:data];
                 [self.navigationController popViewControllerAnimated:YES];
-                
-                UIViewController* controller = [self.navigationController topViewController];
-                
+                UIViewController *controller = [self.navigationController topViewController];
                 if([controller respondsToSelector:@selector(setUserProfile:)]){
                     [controller performSelector:@selector(setUserProfile:) withObject:self.userProfile afterDelay:0];
                 }

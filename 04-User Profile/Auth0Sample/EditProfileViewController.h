@@ -1,7 +1,6 @@
-
 //
-//  EditProfileViewController.h
-//  Auth0Sample
+// EditProfileViewController.h
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -24,9 +23,10 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-@class  A0UserProfile;
 
-@interface EditProfileViewController : UIViewController
+@class A0UserProfile;
+
+@interface EditProfileViewController: UIViewController
 
 @property (nonatomic, strong) A0UserProfile *userProfile;
 

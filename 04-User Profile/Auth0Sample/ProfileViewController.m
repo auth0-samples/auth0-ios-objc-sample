@@ -1,6 +1,6 @@
 //
-//  ProfileViewController.m
-//  Auth0Sample
+// ProfileViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -29,18 +29,17 @@
 
 @interface ProfileViewController()
 
-@property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *avatarImageView;
+@property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
 
 @end
 
 @implementation ProfileViewController
 
-- (void) viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
-
     self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -51,13 +50,11 @@
     }] resume];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    
-    if([segue.identifier isEqualToString:@"EditUserSegue"]){
-        if ([segue.destinationViewController isKindOfClass:[EditProfileViewController class]]){
-            EditProfileViewController* destination = segue.destinationViewController;
-            
-            destination.userProfile = self.userProfile;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"EditUserSegue"]) {
+        if ([segue.destinationViewController isKindOfClass:[EditProfileViewController class]]) {
+            EditProfileViewController *controller = segue.destinationViewController;
+            controller.userProfile = self.userProfile;
         }
     }
 }
