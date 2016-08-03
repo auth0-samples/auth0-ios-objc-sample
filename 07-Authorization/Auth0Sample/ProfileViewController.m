@@ -1,6 +1,6 @@
 //
-//  ProfileViewController.m
-//  Auth0Sample
+// ProfileViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -28,14 +28,14 @@
 
 @interface ProfileViewController()
 
-@property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *avatarImageView;
+@property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
 
 @end
 
 @implementation ProfileViewController
 
-- (void) viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
@@ -49,23 +49,18 @@
     }] resume];
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
-    
-    if([identifier isEqualToString:@"AdminSegue"]){
-        if(![self.userProfile.appMetadata[@"roles"] containsObject:@"admin"]){
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Access denied" message:@"You do not have privileges to access the admin panel" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([identifier isEqualToString:@"AdminSegue"]) {
+        if (![self.userProfile.appMetadata[@"roles"] containsObject:@"admin"]) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Access denied" message:@"You do not have privileges to access the admin panel" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
                                                                     style:UIAlertActionStyleDefault
                                                                   handler:^(UIAlertAction * action) {}];
-            
             [alert addAction:defaultAction];
-
             [self presentViewController:alert animated:YES completion:nil];
-            
             return NO;
         }
     }
-    
     return YES;
 }
 
