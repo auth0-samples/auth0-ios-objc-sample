@@ -16,34 +16,26 @@ The only important snippet you need to be aware of: making up an authenticathed 
 
 Look at `ProfileViewController.m`:
 
-```objc
--(void) callAPIAuthenticated: (BOOL) shouldAuthenticate {
-    NSString* url =  @"change to your API URL";
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+```objective-c
+- (void)callAPIAuthenticated:(BOOL)shouldAuthenticate {
+    NSString *url = @"change to your API URL";
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
     
-    if(shouldAuthenticate){
+    if (shouldAuthenticate) {
         NSString *token = self.token.idToken;
-        [request addValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+        [request addValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     }
     
-    [[[NSURLSession sharedSession] dataTaskWithRequest: request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        NSInteger statusCode = ((NSHTTPURLResponse*) response).statusCode;
-        NSString* title;
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        NSString *title = statusCode < 400 ? @"Success" : @"Error";
+        NSString *message = [NSString stringWithFormat:@"Error Code: %li\n\nData:%@\n\nResponse:%@", (long)statusCode, (data == nil) ? @"nil" : @"(there is data)", response];
         
-        if(statusCode < 400) {
-            title = @"Success!!";
-        } else{
-            title = @"Error";
-        }
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         
-        NSString* message = [NSString stringWithFormat:@"Error Code: %li\n\nData:%@\n\nResponse:%@",(long)statusCode, (data == nil)?@"nil":@"(there is data)", response];
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* OKAction = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleDefault handler:nil];
-
-        [alert addAction:OKAction];
+        UIAlertAction *doneAction = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:doneAction];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentViewController:alert animated:YES completion:nil];
@@ -57,14 +49,14 @@ These are the specific lines of code that you have to configure:
 
 First, set your API url here:
 
-```objc
-NSString* url =  @"change to your API URL";
+```objective-c
+NSString *url = @"change to your API URL";
 ```
 
 Then, pay attention to how the header is made up:
 
-```objc
-[request addValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+```objective-c
+[request addValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
 ```
 
 That string interpolation might vary depending on the standards that your API follows. The one showed in the sample corresponds to OAuth2 standards.
