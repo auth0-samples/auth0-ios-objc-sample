@@ -1,6 +1,6 @@
 //
-//  HomeViewController.m
-//  Auth0Sample
+// HomeViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -22,10 +22,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Lock/Lock.h>
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
-#import <Lock/Lock.h>
-#import "UIAlertController_LoadingAlert.h"
+#import "UIAlertController+LoadingAlert.h"
 
 @implementation HomeViewController
 
@@ -41,13 +41,12 @@
     };
     
     [self presentViewController:controller animated:YES completion:nil];
-    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"ShowProfile"]){
-        ProfileViewController *destViewController = segue.destinationViewController;
-        destViewController.userProfile = sender;
+    if ([segue.identifier isEqualToString:@"ShowProfile"]) {
+        ProfileViewController *controller = segue.destinationViewController;
+        controller.userProfile = sender;
     }
 }
 

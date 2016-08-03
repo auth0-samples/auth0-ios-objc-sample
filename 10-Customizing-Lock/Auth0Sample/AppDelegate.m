@@ -1,4 +1,4 @@
-
+//
 // AppDelegate.m
 // Auth0Sample
 //
@@ -22,16 +22,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Lock/Lock.h>
 #import "AppDelegate.h"
 #import "Auth0-Swift.h"
-#import <Lock/Lock.h>
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
