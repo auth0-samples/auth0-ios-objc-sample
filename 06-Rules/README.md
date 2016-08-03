@@ -10,15 +10,14 @@ This sample on itself does not contain really valuable content; however, the onl
 
 Check out `ProfileViewController.m`:
 
-```objc
-
+```objective-c
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
     NSString* welcomeText = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
     
-    if(self.userProfile.extraInfo[@"country"]) {
+    if (self.userProfile.extraInfo[@"country"]) {
         welcomeText = [welcomeText stringByAppendingFormat:@" from %@", self.userProfile.extraInfo[@"country"]];
     }
     
@@ -31,13 +30,12 @@ Check out `ProfileViewController.m`:
 
     }] resume];
 }
-
 ```
 
 Mainly this part:
 
-```objc
-if(self.userProfile.extraInfo[@"country"]) {
+```objective-c
+if (self.userProfile.extraInfo[@"country"]) {
     welcomeText = [welcomeText stringByAppendingFormat:@" from %@", self.userProfile.extraInfo[@"country"]];
 }
 ```
