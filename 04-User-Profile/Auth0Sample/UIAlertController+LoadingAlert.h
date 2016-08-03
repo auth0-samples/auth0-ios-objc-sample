@@ -26,8 +26,8 @@
 
 @interface UIAlertController (LoadingAlert)
 
-+ (UIAlertController*) loadingAlert;
-- (void) presentInViewController:(UIViewController*) viewController;
-- (void) dismiss;
++ (UIAlertController*)loadingAlert;
+- (void)presentInViewController:(UIViewController*)viewController;
+- (void)dismiss;
 
 @end
