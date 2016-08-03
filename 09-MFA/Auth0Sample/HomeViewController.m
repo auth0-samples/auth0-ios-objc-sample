@@ -1,6 +1,6 @@
 //
-//  HomeViewController.m
-//  Auth0Sample
+// HomeViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -22,9 +22,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Lock/Lock.h>
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
-#import <Lock/Lock.h>
 
 @interface HomeViewController ()
 
@@ -32,18 +32,7 @@
 
 @implementation HomeViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)showLoginController:(id)sender
-{
+- (IBAction)showLoginController:(id)sender {
     A0Lock *lock = [A0Lock sharedLock];
     
     A0LockViewController *controller = [lock newLockViewController];
@@ -55,15 +44,12 @@
     };
     
     [self presentViewController:controller animated:YES completion:nil];
-    
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"ShowProfile"])
-    {
-        ProfileViewController *destViewController = segue.destinationViewController;
-        destViewController.userProfile = sender;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowProfile"]) {
+        ProfileViewController *controller = segue.destinationViewController;
+        controller.userProfile = sender;
     }
 }
 
