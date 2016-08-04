@@ -1,5 +1,5 @@
 //
-//  HomeViewController.h
+// HomeViewController.h
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -26,6 +26,4 @@
 
 @interface HomeViewController : UIViewController
 
-
 @end
-

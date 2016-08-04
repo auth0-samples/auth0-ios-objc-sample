@@ -1,6 +1,6 @@
 //
-//  ProfileViewController.h
-//  Auth0Sample
+// ProfileViewController.h
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -21,12 +21,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-#import <UIKit/UIKit.h>
-@class  A0UserProfile;
 
-@interface ProfileViewController : UIViewController
+#import <UIKit/UIKit.h>
+
+@class A0UserProfile;
+
+@interface ProfileViewController: UIViewController
 
 @property (nonatomic, strong) A0UserProfile *userProfile;
-
 
 @end

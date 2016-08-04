@@ -1,5 +1,5 @@
 //
-//  SignUpViewController.m
+// SignUpViewController.m
 // Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
@@ -22,7 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 #import <Foundation/Foundation.h>
 #import "SignUpViewController.h"
 #import "ProfileViewController.h"
@@ -32,10 +31,10 @@
 
 @interface SignUpViewController()
 
-@property (weak, nonatomic) IBOutlet UITextField* emailTextField;
-@property (weak, nonatomic) IBOutlet UITextField* passwordTextField;
-@property (weak, nonatomic) IBOutlet UIButton* signUpButton;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView* spinner;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIButton *signUpButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
 @end
 
@@ -45,16 +44,8 @@
     self.signUpButton.enabled = [self validateForm];
 }
 
-- (BOOL) validateForm {
-    if(![self.passwordTextField hasText]) {
-        return NO;
-    }
-    
-    if(!self.emailTextField.hasText) {
-        return NO;
-    }
-    
-    return YES;
+- (BOOL)validateForm {
+    return self.emailTextField.hasText && self.passwordTextField.hasText;
 }
 
 - (IBAction)signUpAction:(id)sender {
@@ -74,7 +65,7 @@
                 
                 [self.spinner stopAnimating];
                 if(error) {
-                    NSLog(error.localizedDescription);
+                    [self showErrorAlertWithMessage:error.localizedDescription];
                 } else {
                     self.retrievedCredentials = credentials;
                     [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
@@ -83,4 +74,17 @@
     }];
 }
 
+
+- (void)showErrorAlertWithMessage:(NSString*)message {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    });
+}
 @end

@@ -1,6 +1,6 @@
 //
-//  ProfileViewController.m
-//  Auth0Sample
+// ProfileViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -28,15 +28,14 @@
 
 @interface ProfileViewController()
 
-@property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *avatarImageView;
+@property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
 
 @end
 
 @implementation ProfileViewController
 
-- (void) viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
@@ -50,41 +49,33 @@
     }] resume];
 }
 
-- (IBAction)callAPIWithAuthentication:(id)sender{
+- (IBAction)callAPIWithAuthentication:(id)sender {
     [self callAPIAuthenticated:YES];
 }
 
-- (IBAction)callAPIWithoutAuthentication:(id)sender{
+- (IBAction)callAPIWithoutAuthentication:(id)sender {
     [self callAPIAuthenticated:NO];
 }
 
--(void) callAPIAuthenticated: (BOOL) shouldAuthenticate {
-    NSString* url =  @"change to your API URL";
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+- (void)callAPIAuthenticated:(BOOL)shouldAuthenticate {
+    NSString *url = @"change to your API URL";
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
     
-    if(shouldAuthenticate){
+    if (shouldAuthenticate) {
         NSString *token = self.token.idToken;
-        [request addValue:[NSString stringWithFormat:@"Bearer %@",token] forHTTPHeaderField:@"Authorization"];
+        [request addValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     }
     
-    [[[NSURLSession sharedSession] dataTaskWithRequest: request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        NSInteger statusCode = ((NSHTTPURLResponse*) response).statusCode;
-        NSString* title;
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        NSString *title = statusCode < 400 ? @"Success" : @"Error";
+        NSString *message = [NSString stringWithFormat:@"Error Code: %li\n\nData:%@\n\nResponse:%@", (long)statusCode, (data == nil) ? @"nil" : @"(there is data)", response];
         
-        if(statusCode < 400) {
-            title = @"Success!!";
-        } else{
-            title = @"Error";
-        }
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         
-        NSString* message = [NSString stringWithFormat:@"Error Code: %li\n\nData:%@\n\nResponse:%@",(long)statusCode, (data == nil)?@"nil":@"(there is data)", response];
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* OKAction = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleDefault handler:nil];
-
-        [alert addAction:OKAction];
+        UIAlertAction *doneAction = [UIAlertAction actionWithTitle:@"Done" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:doneAction];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentViewController:alert animated:YES completion:nil];

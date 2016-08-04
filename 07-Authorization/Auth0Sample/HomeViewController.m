@@ -1,6 +1,6 @@
 //
-//  HomeViewController.m
-//  Auth0Sample
+// HomeViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -22,57 +22,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#import <Lock/Lock.h>
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
-#import <Lock/Lock.h>
 #import "SimpleKeychain.h"
-#import "UIAlertController_LoadingAlert.h"
+#import "UIAlertController+LoadingAlert.h"
 
 @implementation HomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
-    UIAlertController* loadingAlert = [UIAlertController loadingAlert];
+    UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
     
     [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
         [loadingAlert dismiss];
         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
     } failure:^(NSError * _Nonnull error) {
-        A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+        A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
         [keychain clearAll];
         [loadingAlert dismiss];
     }];
 }
 
-- (void)loadCredentialsSuccess:(A0APIClientUserProfileSuccess)success failure:(A0APIClientError)failure {
+- (void)loadCredentialsSuccess:(A0APIClientUserProfileSuccess)success
+                       failure:(A0APIClientError)failure {
     
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     
-    if([keychain stringForKey:@"id_token"]){
+    if ([keychain stringForKey:@"id_token"]) {
         A0Lock *lock = [A0Lock sharedLock];
-        
         [lock.apiClient fetchUserProfileWithIdToken:[keychain stringForKey:@"id_token"] success:success failure:^(NSError * _Nonnull error) {
             [lock.apiClient fetchNewIdTokenWithRefreshToken:[keychain stringForKey:@"refresh_token"] parameters:nil success:^(A0Token * _Nonnull token) {
                 [self saveCredentials:token];
                 [self loadCredentialsSuccess:success failure:failure];
             } failure:failure];
         }];
-    }
-    else{
+    } else {
         failure([[NSError alloc] initWithDomain:@"NoError" code:0 userInfo:nil]);
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)saveCredentials:(A0Token *)token{
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain setString:token.idToken forKey:@"id_token"];
     [keychain setString:token.refreshToken forKey:@"refresh_token"];
 }
@@ -94,13 +87,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"ShowProfile"]) {
-        ProfileViewController *destViewController = segue.destinationViewController;
-        destViewController.userProfile = sender;
+        ProfileViewController *controller = segue.destinationViewController;
+        controller.userProfile = sender;
     }
 }
 
 - (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue {
-    A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
     [keychain clearAll];
 }
 

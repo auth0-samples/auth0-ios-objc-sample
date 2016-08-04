@@ -1,6 +1,6 @@
 //
-//  ViewController.h
-//  Auth0Sample
+// ViewController.h
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -22,11 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface ViewController: UIViewController
 
 @end
-

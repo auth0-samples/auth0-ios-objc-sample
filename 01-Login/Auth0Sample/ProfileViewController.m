@@ -28,15 +28,14 @@
 
 @interface ProfileViewController()
 
-@property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *avatarImageView;
+@property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
 
 @end
 
 @implementation ProfileViewController
 
-- (void) viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;

@@ -23,13 +23,10 @@ In `LoginViewController.m`:
             NSLog(error.localizedDescription);
         } else {
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                
                 dispatch_async(dispatch_get_main_queue(), ^{
-
                     [self.spinner stopAnimating];
-
                     if(error) {
-                        NSLog(error.localizedDescription);
+                        NSLog(@"%@", error.localizedDescription);
                     } else {
                         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                     }
@@ -38,7 +35,6 @@ In `LoginViewController.m`:
         }
     }];
 }
-
 ```
 
 ##### 2. Pass the user profile object
@@ -48,10 +44,10 @@ The `A0UserProfile` instance is passed to show the profile in the next screen, t
 So, in `LoginViewController.m`...
 
 ```objective-c
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"ShowProfile"]) {
-        ProfileViewController* vc = segue.destinationViewController;
-        vc.userProfile = sender;
+        ProfileViewController *controller = segue.destinationViewController;
+        controller.userProfile = sender;
     }
 }
 ```
@@ -61,7 +57,7 @@ So, in `LoginViewController.m`...
 In `ProfileViewController.m`:
 
 ```objective-c
-- (void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;
@@ -119,22 +115,20 @@ In `LoginViewController.m`:
 ```objective-c
 - (IBAction)unwindToLogin:(id)sender {
     if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]]) {
-        UIStoryboardSegueWithCompletion* segue = sender;
+        UIStoryboardSegueWithCompletion *segue = sender;
         
         if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
             [self.spinner startAnimating];
 
-            SignUpViewController* source = segue.sourceViewController;
-            A0Credentials* credentials = source.retrievedCredentials;
+            SignUpViewController *source = segue.sourceViewController;
+            A0Credentials *credentials = source.retrievedCredentials;
             
             segue.completion = ^{
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        
                         [self.spinner stopAnimating];
-                        
                         if(error) {
-                            NSLog(error.localizedDescription);
+                            NSLog(@"%@", error.localizedDescription);
                         } else {
                             [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                         }

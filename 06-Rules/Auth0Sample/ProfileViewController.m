@@ -1,6 +1,6 @@
 //
-//  ProfileViewController.m
-//  Auth0Sample
+// ProfileViewController.m
+// Auth0Sample
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -28,8 +28,8 @@
 
 @interface ProfileViewController()
 
-@property (nonatomic, strong) IBOutlet UIImageView* avatarImageView;
-@property (nonatomic, strong) IBOutlet UILabel* welcomeLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *avatarImageView;
+@property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
 
 @end
 
@@ -41,7 +41,7 @@
     self.navigationItem.hidesBackButton = YES;
     NSString* welcomeText = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
     
-    if(self.userProfile.extraInfo[@"country"]) {
+    if (self.userProfile.extraInfo[@"country"]) {
         welcomeText = [welcomeText stringByAppendingFormat:@" from %@", self.userProfile.extraInfo[@"country"]];
     }
     
