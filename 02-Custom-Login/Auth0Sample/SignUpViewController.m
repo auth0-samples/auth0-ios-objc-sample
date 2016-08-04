@@ -65,7 +65,7 @@
                 
                 [self.spinner stopAnimating];
                 if(error) {
-                    NSLog(@"%@", error.localizedDescription);
+                    [self showErrorAlertWithMessage:error.localizedDescription];
                 } else {
                     self.retrievedCredentials = credentials;
                     [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
@@ -74,4 +74,17 @@
     }];
 }
 
+
+- (void)showErrorAlertWithMessage:(NSString*)message {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    });
+}
 @end

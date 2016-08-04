@@ -58,13 +58,13 @@
                          scope:@"openid" parameters:@{}
                       callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if(error) {
-            NSLog(@"%@", error.localizedDescription);
+            [self showError:error.localizedDescription];
         } else {
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];
                     if(error) {
-                        NSLog(@"%@", error.localizedDescription);
+                        [self showErrorAlertWithMessage: error.localizedDescription];
                     } else {
                         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                     }
@@ -97,7 +97,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.spinner stopAnimating];
                         if(error) {
-                            NSLog(@"%@", error.localizedDescription);
+                            [self showErrorAlertWithMessage: error.localizedDescription];
                         } else {
                             [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
                         }
@@ -113,6 +113,19 @@
         ProfileViewController *controller = segue.destinationViewController;
         controller.userProfile = sender;
     }
+}
+
+- (void)showErrorAlertWithMessage:(NSString*)message {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 @end

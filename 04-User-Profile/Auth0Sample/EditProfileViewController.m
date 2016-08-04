@@ -73,8 +73,7 @@
     [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (error) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                [self presentViewController:alert animated:true completion:nil];
+                [self showErrorAlertWithMessage:error.localizedDescription];
             } else {
                 self.userProfile = [[A0UserProfile alloc] initWithDictionary:data];
                 [self.navigationController popViewControllerAnimated:YES];
@@ -85,6 +84,19 @@
             }
         });
     }];
+}
+
+- (void)showErrorAlertWithMessage:(NSString*)message {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                       message:message
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 @end
