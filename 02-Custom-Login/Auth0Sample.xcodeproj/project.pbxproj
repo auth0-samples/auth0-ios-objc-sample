@@ -20,6 +20,9 @@
 		7D57F0711D1B20AA0015BFC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D57F06F1D1B20AA0015BFC1 /* Main.storyboard */; };
 		7D57F0731D1B20AA0015BFC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D57F0721D1B20AA0015BFC1 /* Assets.xcassets */; };
 		7D57F0761D1B20AA0015BFC1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D57F0741D1B20AA0015BFC1 /* LaunchScreen.storyboard */; };
+		7D6CCE091D5E188F0047DCC7 /* UIView+roundCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CCE081D5E188F0047DCC7 /* UIView+roundCorners.m */; };
+		7D6CCE0C1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CCE0B1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.m */; };
+		7D6CCE0F1D5E20180047DCC7 /* UIColor+extraColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6CCE0E1D5E20180047DCC7 /* UIColor+extraColors.m */; };
 		C2003E1E4C2178086F55DB60 /* Pods_Auth0Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A2B4093E40FE2A21664BDA8 /* Pods_Auth0Sample.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +52,12 @@
 		7D57F0721D1B20AA0015BFC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7D57F0751D1B20AA0015BFC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D57F0771D1B20AA0015BFC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7D6CCE071D5E188F0047DCC7 /* UIView+roundCorners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+roundCorners.h"; sourceTree = "<group>"; };
+		7D6CCE081D5E188F0047DCC7 /* UIView+roundCorners.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+roundCorners.m"; sourceTree = "<group>"; };
+		7D6CCE0A1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+PlaceholderColor.h"; sourceTree = "<group>"; };
+		7D6CCE0B1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+PlaceholderColor.m"; sourceTree = "<group>"; };
+		7D6CCE0D1D5E20180047DCC7 /* UIColor+extraColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+extraColors.h"; sourceTree = "<group>"; };
+		7D6CCE0E1D5E20180047DCC7 /* UIColor+extraColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+extraColors.m"; sourceTree = "<group>"; };
 		C6207B570F23A52F6720AFD8 /* Pods-Auth0Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,6 +82,12 @@
 				7D2F86B21D1DCE240075C09B /* UIViewController_Dismiss.m */,
 				7D2F86B41D1DD26E0075C09B /* UIStoryboardSegueWithCompletion.m */,
 				7D2F86B61D1DD2780075C09B /* UIStoryboardSegueWithCompletion.h */,
+				7D6CCE071D5E188F0047DCC7 /* UIView+roundCorners.h */,
+				7D6CCE081D5E188F0047DCC7 /* UIView+roundCorners.m */,
+				7D6CCE0A1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.h */,
+				7D6CCE0B1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.m */,
+				7D6CCE0D1D5E20180047DCC7 /* UIColor+extraColors.h */,
+				7D6CCE0E1D5E20180047DCC7 /* UIColor+extraColors.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -272,8 +287,11 @@
 				7D2F86B01D1DC47E0075C09B /* ProfileViewController.m in Sources */,
 				7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */,
 				7D2F86B51D1DD26E0075C09B /* UIStoryboardSegueWithCompletion.m in Sources */,
+				7D6CCE0C1D5E1B2F0047DCC7 /* UITextField+PlaceholderColor.m in Sources */,
+				7D6CCE091D5E188F0047DCC7 /* UIView+roundCorners.m in Sources */,
 				7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */,
 				7D2F86AC1D1DC2FA0075C09B /* SignUpViewController.m in Sources */,
+				7D6CCE0F1D5E20180047DCC7 /* UIColor+extraColors.m in Sources */,
 				7D57F0681D1B20AA0015BFC1 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
