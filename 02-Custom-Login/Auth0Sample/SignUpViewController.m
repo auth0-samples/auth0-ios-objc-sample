@@ -28,17 +28,40 @@
 #import "Auth0-Swift.h"
 #import "Auth0InfoHelper.h"
 #import "UIViewController_Dismiss.h"
+#import "UIView+roundCorners.h"
+#import "UITextField+PlaceholderColor.h"
+#import "UIColor+extraColors.h"
 
 @interface SignUpViewController()
 
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 @property (weak, nonatomic) IBOutlet UIButton *signUpButton;
+@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+
+@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray* textFields;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray* actionButtons;
 
 @end
 
 @implementation SignUpViewController
+
+- (void) viewDidLoad{
+    
+    [super viewDidLoad];
+    
+    for (UIButton* button in self.actionButtons) {
+        [button setHasRoundLaterals:YES];
+    }
+    
+    for (UITextField* field in self.textFields) {
+        [field setPlaceholderTextColor:[UIColor lightVioletColor]];
+    }
+}
 
 - (IBAction)textFieldEditingChanged:(id)sender {
     self.signUpButton.enabled = [self validateForm];
@@ -57,7 +80,8 @@
                     username:nil
                     password:self.passwordTextField.text
                   connection:@"Username-Password-Authentication"
-                userMetadata:nil
+                userMetadata:@{@"first_name": self.firstNameTextField.text,
+                               @"last_name": self.lastNameTextField.text}
                        scope:@"openid"
                   parameters:nil
                     callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
@@ -74,6 +98,36 @@
     }];
 }
 
+- (IBAction)socialLogin:(id)sender {
+    
+    NSString *connection;
+    
+    if (sender == self.twitterButton) {
+        connection = @"twitter";
+    } else if (sender == self.facebookButton) {
+        connection = @"facebook";
+    } else {
+        return;
+    }
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    
+    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
+    
+    [webAuth setConnection:connection];
+    [webAuth setScope:@"openid"];
+    
+    [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+        if (error) {
+            [self showErrorAlertWithMessage:error.localizedDescription];
+        } else {
+            self.retrievedCredentials = credentials;
+            [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
+        }
+    }];
+}
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
     dispatch_sync(dispatch_get_main_queue(), ^{

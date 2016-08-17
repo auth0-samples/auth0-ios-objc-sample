@@ -31,16 +31,38 @@
 #import "SignUpViewController.h"
 #import "UIStoryboardSegueWithCompletion.h"
 
+#import "UIView+roundCorners.h"
+#import "UITextField+PlaceholderColor.h"
+#import "UIColor+extraColors.h"
+
 @interface LoginViewController()
 
 @property (nonatomic, weak) IBOutlet UITextField *emailTextField;
 @property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *spinner;
 @property (nonatomic, weak) IBOutlet UIButton *loginButton;
+@property (nonatomic, weak) IBOutlet UIButton *facebookButton;
+@property (nonatomic, weak) IBOutlet UIButton *twitterButton;
+
+@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray* textFields;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray* actionButtons;
 
 @end
 
 @implementation LoginViewController
+
+- (void) viewDidLoad{
+    
+    [super viewDidLoad];
+    
+    for (UIButton* button in self.actionButtons) {
+        [button setHasRoundLaterals:YES];
+    }
+
+    for (UITextField* field in self.textFields) {
+        [field setPlaceholderTextColor:[UIColor lightVioletColor]];
+    }
+}
 
 - (void)loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback {
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId: [Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
@@ -58,7 +80,46 @@
                          scope:@"openid" parameters:@{}
                       callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if(error) {
-            [self showError:error.localizedDescription];
+            [self showErrorAlertWithMessage:error.localizedDescription];
+        } else {
+            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.spinner stopAnimating];
+                    if(error) {
+                        [self showErrorAlertWithMessage: error.localizedDescription];
+                    } else {
+                        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                    }
+                });
+            }];
+        }
+    }];
+}
+
+- (IBAction)socialLogin:(id)sender {
+    
+    NSString *connection;
+    
+    if (sender == self.twitterButton) {
+        connection = @"twitter";
+    } else if (sender == self.facebookButton) {
+        connection = @"facebook";
+    } else {
+        return;
+    }
+    
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    
+    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
+    
+    [webAuth setConnection:connection];
+    [webAuth setScope:@"openid"];
+    
+    [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+        if (error) {
+            [self showErrorAlertWithMessage:error.localizedDescription];
         } else {
             [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -82,28 +143,30 @@
     return self.emailTextField.hasText && self.passwordTextField.hasText;
 }
 
-- (IBAction)unwindToLogin:(id)sender {
+- (IBAction)unwindToLogin:(UIStoryboardSegue*)sender {
     if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]]) {
-        UIStoryboardSegueWithCompletion *segue = sender;
+        UIStoryboardSegueWithCompletion *segue = (UIStoryboardSegueWithCompletion*) sender;
         
         if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
-            [self.spinner startAnimating];
-
             SignUpViewController *source = segue.sourceViewController;
             A0Credentials *credentials = source.retrievedCredentials;
             
-            segue.completion = ^{
-            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.spinner stopAnimating];
-                        if(error) {
-                            [self showErrorAlertWithMessage: error.localizedDescription];
-                        } else {
-                            [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                        }
-                    });
-                }];
-            };
+            if(credentials){
+                [self.spinner startAnimating];
+
+                segue.completion = ^{
+                [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.spinner stopAnimating];
+                            if(error) {
+                                [self showErrorAlertWithMessage: error.localizedDescription];
+                            } else {
+                                [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                            }
+                        });
+                    }];
+                };
+            }
         }
     }
 }
@@ -117,6 +180,8 @@
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
     dispatch_sync(dispatch_get_main_queue(), ^{
+        [self.spinner stopAnimating];
+
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                        message:message
                                                                 preferredStyle:UIAlertControllerStyleAlert];

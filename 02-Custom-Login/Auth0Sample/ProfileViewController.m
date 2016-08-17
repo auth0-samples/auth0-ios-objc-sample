@@ -30,6 +30,7 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView *avatarImageView;
 @property (nonatomic, strong) IBOutlet UILabel *welcomeLabel;
+@property (nonatomic, strong) IBOutlet UITextView *userMetadataTextView;
 
 @end
 
@@ -40,7 +41,8 @@
     
     self.navigationItem.hidesBackButton = YES;
     self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
-    
+    self.userMetadataTextView.text =  [self.userProfile.userMetadata description];
+
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.pictureURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.avatarImageView.image = [UIImage imageWithData:data];

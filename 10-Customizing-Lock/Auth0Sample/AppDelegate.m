@@ -66,22 +66,56 @@
 
 - (void)customizeLockTheme {
     A0Theme *theme = [[A0Theme alloc] init];
-    [theme registerImageWithName: @"badge"
+    // 1. Change the logo:
+    [theme registerImageWithName: @"custom-logo"
                           bundle: [NSBundle mainBundle]
                           forKey: A0ThemeIconImageName];
-    [theme registerColor: [UIColor yellowColor] forKey: A0ThemeTitleTextColor];
-    [theme registerFont: [UIFont boldSystemFontOfSize: 14] forKey: A0ThemeTitleFont];
+    
+    // 2. Customize the 'Login' text appearance:
+    [theme registerColor: [UIColor whiteColor] forKey: A0ThemeTitleTextColor];
+    [theme registerFont: [UIFont systemFontOfSize: 24] forKey: A0ThemeTitleFont];
+
+    // 3. Customize the 'OR' text appearance:
     [theme registerColor: [UIColor whiteColor] forKey: A0ThemeSeparatorTextColor];
-    [theme registerColor: [UIColor yellowColor] forKey: A0ThemeTextFieldIconColor];
-    [theme registerColor: [UIColor whiteColor] forKey: A0ThemeTextFieldPlaceholderTextColor];
-    [theme registerColor: [UIColor yellowColor] forKey: A0ThemeTextFieldTextColor];
-    [theme registerColor: [UIColor blackColor] forKey: A0ThemePrimaryButtonNormalColor];
-    [theme registerColor: [UIColor yellowColor] forKey: A0ThemePrimaryButtonHighlightedColor];
+    [theme registerFont: [UIFont systemFontOfSize: 18] forKey: A0ThemeSeparatorTextFont];
+
+    // 4. Customize the text fields:
+    [theme registerColor: [self lightVioletColor] forKey: A0ThemeTextFieldIconColor];
+    [theme registerColor: [self lightVioletColor] forKey: A0ThemeTextFieldPlaceholderTextColor];
+    [theme registerColor: [UIColor whiteColor] forKey: A0ThemeTextFieldTextColor];
+    [theme registerFont: [UIFont systemFontOfSize: 14] forKey: A0ThemeTextFieldFont];
+
+    // 5. Customize the primary button (ACCESS):
+    [theme registerColor: [UIColor whiteColor] forKey: A0ThemePrimaryButtonNormalColor];
+    [theme registerColor: [self lightVioletColor] forKey: A0ThemePrimaryButtonHighlightedColor];
+    [theme registerColor: [self darkVioletColor] forKey: A0ThemePrimaryButtonFont];
     [theme registerFont: [UIFont boldSystemFontOfSize: 20] forKey: A0ThemePrimaryButtonFont];
-    [theme registerColor: [UIColor redColor] forKey: A0ThemeSecondaryButtonBackgroundColor];
+    
+    // 6. Configure the secondary buttons (sign up / reset password):
+    [theme registerColor: [self lightVioletColor] forKey: A0ThemeSecondaryButtonBackgroundColor];
     [theme registerColor: [UIColor whiteColor] forKey: A0ThemeSecondaryButtonTextColor];
-    [theme registerColor: [UIColor orangeColor] forKey: A0ThemeScreenBackgroundColor];
+
+    // 7. Add a background image:
+    [theme registerImageWithName:@"custom-background"
+                          bundle:[NSBundle mainBundle]
+                          forKey:A0ThemeScreenBackgroundImageName];
+    
+    // 8. Configure the X button:
+    [theme registerColor:[self lightVioletColor] forKey: A0ThemeCloseButtonTintColor];
+    
+    // 9. Configure the status bar:
+    [theme setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    // Don't forget to register your theme!
     [[A0Theme sharedInstance] registerTheme: theme];
+}
+
+- (UIColor *) lightVioletColor {
+    return [UIColor colorWithRed:173./255 green:137./255 blue:188./255 alpha:1];
+}
+
+- (UIColor *) darkVioletColor {
+    return [UIColor colorWithRed:49./255 green:49./255 blue:80./255 alpha:1];
 }
 
 @end

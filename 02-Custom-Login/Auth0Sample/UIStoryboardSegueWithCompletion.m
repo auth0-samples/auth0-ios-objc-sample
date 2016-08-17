@@ -31,7 +31,8 @@
 - (void) perform {
     [super perform];
     
-    self.completion();
+    if(self.completion)
+        self.completion();
 }
 
 @end

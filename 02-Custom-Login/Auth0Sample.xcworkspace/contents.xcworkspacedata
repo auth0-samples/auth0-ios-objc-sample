@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Auth0Sample/UITextField+PlaceholderColor.h">
+   </FileRef>
+   <FileRef
+      location = "group:Auth0Sample/UITextField+PlaceholderColor.m">
+   </FileRef>
+   <FileRef
       location = "group:Auth0Sample.xcodeproj">
    </FileRef>
    <FileRef
