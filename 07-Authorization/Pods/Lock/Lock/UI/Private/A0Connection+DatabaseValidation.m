@@ -1,6 +1,6 @@
-// A0Logging.h
+// A0Connection+DatabaseValidation.m
 //
-// Copyright (c) 2014 Auth0 (http://auth0.com)
+// Copyright (c) 2015 Auth0 (http://auth0.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +20,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "A0Logger.h"
+#import "A0Connection+DatabaseValidation.h"
 
-#ifndef Auth0_Logging_h
-#define Auth0_Logging_h
+@implementation A0Connection (DatabaseValidation)
 
-#define A0LogError(frmt, ...)    [[A0Logger sharedLogger] error: [NSString stringWithFormat: frmt, ##__VA_ARGS__]]
-#define A0LogWarn(frmt, ...)     [[A0Logger sharedLogger] message: [NSString stringWithFormat: frmt, ##__VA_ARGS__]]
-#define A0LogInfo(frmt, ...)     [[A0Logger sharedLogger] message: [NSString stringWithFormat: frmt, ##__VA_ARGS__]]
-#define A0LogDebug(frmt, ...)    [[A0Logger sharedLogger] message: [NSString stringWithFormat: frmt, ##__VA_ARGS__]]
-#define A0LogVerbose(frmt, ...)  [[A0Logger sharedLogger] message: [NSString stringWithFormat: frmt, ##__VA_ARGS__]]
+- (A0UsernameValidationInfo)usernameValidation {
+    A0UsernameValidationInfo info;
+    info.min = 1;
+    info.max = 15;
+    NSDictionary *validation = self.values[@"validation"][@"username"];
+    info.min = MAX(1, [validation[@"min"] integerValue]);
+    info.max = [validation[@"max"] integerValue] <= 0 ? 15 : [validation[@"max"] integerValue];
+    if (info.min > info.max) {
+        info.min = 1;
+    }
+    return info;
+}
 
-#endif
+@end
