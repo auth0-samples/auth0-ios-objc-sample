@@ -120,12 +120,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D57F07A1D1B20AA0015BFC1 /* Build configuration list for PBXNativeTarget "Auth0Sample" */;
 			buildPhases = (
-				328565DD6117D70C0DBFEA1F /* 📦 Check Pods Manifest.lock */,
+				328565DD6117D70C0DBFEA1F /* [CP] Check Pods Manifest.lock */,
 				7D57F05F1D1B20AA0015BFC1 /* Sources */,
 				7D57F0601D1B20AA0015BFC1 /* Frameworks */,
 				7D57F0611D1B20AA0015BFC1 /* Resources */,
-				D9FCFE8574C7DC019E4126AC /* 📦 Embed Pods Frameworks */,
-				215922C645FCDAA81D48B30C /* 📦 Copy Pods Resources */,
+				D9FCFE8574C7DC019E4126AC /* [CP] Embed Pods Frameworks */,
+				215922C645FCDAA81D48B30C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -142,11 +142,12 @@
 		7D57F05B1D1B20AA0015BFC1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Auth0;
 				TargetAttributes = {
 					7D57F0621D1B20AA0015BFC1 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -182,14 +183,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		215922C645FCDAA81D48B30C /* 📦 Copy Pods Resources */ = {
+		215922C645FCDAA81D48B30C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,29 +198,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		328565DD6117D70C0DBFEA1F /* 📦 Check Pods Manifest.lock */ = {
+		328565DD6117D70C0DBFEA1F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D9FCFE8574C7DC019E4126AC /* 📦 Embed Pods Frameworks */ = {
+		D9FCFE8574C7DC019E4126AC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,8 +279,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -323,8 +326,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -352,11 +357,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9727271E496A6BFA8507C5A8 /* Pods-Auth0Sample.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Auth0Sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = auth0.samples.Auth0Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -364,11 +371,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57266D207C0C23C99D8F3C32 /* Pods-Auth0Sample.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Auth0Sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = auth0.samples.Auth0Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
