@@ -22,10 +22,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "LoginViewController.h"
 #import "ProfileViewController.h"
-#import "Auth0-Swift.h"
 #import "Auth0InfoHelper.h"
 #import "UIViewController_Dismiss.h"
 #import "SignUpViewController.h"
@@ -34,6 +33,7 @@
 #import "UIView+roundCorners.h"
 #import "UITextField+PlaceholderColor.h"
 #import "UIColor+extraColors.h"
+@import Auth0;
 
 @interface LoginViewController()
 
@@ -64,7 +64,7 @@
     }
 }
 
-- (void)loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0UserProfile * _Nullable))callback {
+- (void)loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0Profile * _Nullable))callback {
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId: [Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
     [authApi userInfoWithToken:credentials.accessToken callback:callback];
 }
@@ -74,25 +74,26 @@
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
     
     [self.spinner startAnimating];
-    [authApi loginWithUsername:self.emailTextField.text
-                      password:self.passwordTextField.text
-                    connection:@"Username-Password-Authentication"
-                         scope:@"openid" parameters:@{}
-                      callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
-        if(error) {
-            [self showErrorAlertWithMessage:error.localizedDescription];
-        } else {
-            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.spinner stopAnimating];
-                    if(error) {
-                        [self showErrorAlertWithMessage: error.localizedDescription];
-                    } else {
-                        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                    }
-                });
-            }];
-        }
+    [authApi loginWithUsernameOrEmail:self.emailTextField.text
+                             password:self.passwordTextField.text
+                           connection:@"Username-Passsword-Authentication"
+                                scope:@"openid"
+                           parameters:nil
+                             callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+                                 if(error) {
+                                     [self showErrorAlertWithMessage:error.localizedDescription];
+                                 } else {
+                                     [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             [self.spinner stopAnimating];
+                                             if(error) {
+                                                 [self showErrorAlertWithMessage: error.localizedDescription];
+                                             } else {
+                                                 [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                                             }
+                                         });
+                                     }];
+                                 }
     }];
 }
 
@@ -108,9 +109,8 @@
         return;
     }
     
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
-    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    NSURL *domain = [Auth0InfoHelper Auth0Domain];
+    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
     
     A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
     
@@ -121,7 +121,7 @@
         if (error) {
             [self showErrorAlertWithMessage:error.localizedDescription];
         } else {
-            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
+            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.spinner stopAnimating];
                     if(error) {
@@ -155,7 +155,7 @@
                 [self.spinner startAnimating];
 
                 segue.completion = ^{
-                [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
+                [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [self.spinner stopAnimating];
                             if(error) {

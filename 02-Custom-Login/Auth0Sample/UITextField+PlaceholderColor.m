@@ -12,8 +12,7 @@
 
 @dynamic placeholderTextColor;
 
-- (void) setPlaceholderTextColor:(UIColor *)placeholderTextColor
-{
+- (void) setPlaceholderTextColor:(UIColor *)placeholderTextColor {
     self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName: placeholderTextColor}];
 }
 

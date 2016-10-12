@@ -24,10 +24,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class A0UserProfile;
+@class A0Profile;
 
 @interface ProfileViewController: UIViewController
 
-@property (nonatomic, strong) A0UserProfile *userProfile;
+@property (nonatomic, strong) A0Profile *userProfile;
 
 @end

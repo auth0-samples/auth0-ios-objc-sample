@@ -110,9 +110,8 @@
         return;
     }
     
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
-    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    NSURL *domain = [Auth0InfoHelper Auth0Domain];
+    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
     
     A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
     
