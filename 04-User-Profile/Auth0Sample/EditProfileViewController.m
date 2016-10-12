@@ -27,6 +27,7 @@
 #import "EditProfileViewController.h"
 #import "Auth0-Swift.h"
 #import "SimpleKeychain.h"
+#import "Auth0InfoHelper.h"
 
 @interface EditProfileViewController()
 
@@ -64,12 +65,9 @@
     
     NSDictionary *profileMetadata = [self fieldsToDictionary];
 
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSURL *domain = [Auth0InfoHelper Auth0Domain];
 
-    NSString *domain = [infoDict objectForKey:@"Auth0Domain"];
-    NSURL *url = [domain hasPrefix:@"http"] ? [NSURL URLWithString:domain] : [NSURL URLWithString:[@"https://" stringByAppendingString:domain]];
-
-    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:url];
+    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
     
     [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{

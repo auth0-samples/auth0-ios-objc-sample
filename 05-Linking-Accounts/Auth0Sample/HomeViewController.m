@@ -28,8 +28,6 @@
 #import "SimpleKeychain.h"
 #import "UIAlertController+LoadingAlert.h"
 
-#import <LocalAuthentication/LocalAuthentication.h>
-
 @implementation HomeViewController
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -37,15 +35,6 @@
 
     UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
-
-    LAContext * context = [[LAContext alloc] init];
-    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"Must be you!" reply:^(BOOL success, NSError * _Nullable error) {
-        if(success) {
-            //VALID
-        } else {
-            //INVALID
-        }
-    }];
 
     [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
         [loadingAlert dismiss];

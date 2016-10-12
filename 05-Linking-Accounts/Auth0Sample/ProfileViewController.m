@@ -24,10 +24,11 @@
 
 #import <Foundation/Foundation.h>
 #import <Lock/Lock.h>
-#import "Auth0-Swift.h"
+@import Auth0;
 #import "SimpleKeychain.h"
 #import "ProfileViewController.h"
 #import "UIAlertController+LoadingAlert.h"
+#import "Auth0InfoHelper.h"
 
 @interface ProfileViewController()
 
@@ -126,10 +127,8 @@
         return;
     }
     
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSString *domain = [infoDict objectForKey:@"Auth0Domain"];
-    NSURL *url = [domain hasPrefix:@"http"] ? [NSURL URLWithString:domain] : [NSURL URLWithString:[@"https://" stringByAppendingString:domain]];
-    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    NSURL *url = [Auth0InfoHelper Auth0Domain];
+    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
 
     A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:url];
     
@@ -181,12 +180,9 @@
     UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
 
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSString *domain = [infoDict objectForKey:@"Auth0Domain"];
-    NSURL *url = [domain hasPrefix:@"http"] ? [NSURL URLWithString:domain] : [NSURL URLWithString:[@"https://" stringByAppendingString:domain]];
-
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
+
+    NSURL *url = [Auth0InfoHelper Auth0Domain];
     A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:url];
 
     [authApi unlinkUserWithIdentifier:identity.userId 

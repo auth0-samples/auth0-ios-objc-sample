@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 
 #import "AppDelegate.h"
-#import "Auth0-Swift.h"
+@import Auth0;
 
 @interface AppDelegate ()
 
