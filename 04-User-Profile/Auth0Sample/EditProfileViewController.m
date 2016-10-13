@@ -25,8 +25,9 @@
 #import <Foundation/Foundation.h>
 #import <Lock/A0UserProfile.h>
 #import "EditProfileViewController.h"
-#import "Auth0-Swift.h"
 #import "SimpleKeychain.h"
+#import "Auth0InfoHelper.h"
+@import Auth0;
 
 @interface EditProfileViewController()
 
@@ -64,9 +65,7 @@
     
     NSDictionary *profileMetadata = [self fieldsToDictionary];
 
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-
-    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
+    NSURL *domain = [Auth0InfoHelper Auth0Domain];
 
     A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
     

@@ -24,7 +24,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ProfileViewController.h"
-#import "Auth0-Swift.h"
+@import Auth0;
 
 @interface ProfileViewController()
 

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4840B4A2FF7FA4FC4AB64BEA /* Pods_Auth0Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF6F1EFA01B271D94697C5C /* Pods_Auth0Sample.framework */; };
 		51081F261D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 51081F251D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m */; };
+		5FA3B5951DAEF7F3000455DA /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5FA3B5941DAEF7F3000455DA /* Auth0.plist */; };
+		5FA3B5981DAEF83B000455DA /* Auth0InfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FA3B5961DAEF83B000455DA /* Auth0InfoHelper.m */; };
 		7D57F0681D1B20AA0015BFC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F0671D1B20AA0015BFC1 /* main.m */; };
 		7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */; };
 		7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06D1D1B20AA0015BFC1 /* HomeViewController.m */; };
@@ -23,6 +25,9 @@
 		51081F241D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+LoadingAlert.h"; sourceTree = "<group>"; };
 		51081F251D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+LoadingAlert.m"; sourceTree = "<group>"; };
 		57266D207C0C23C99D8F3C32 /* Pods-Auth0Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.release.xcconfig"; sourceTree = "<group>"; };
+		5FA3B5941DAEF7F3000455DA /* Auth0.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
+		5FA3B5961DAEF83B000455DA /* Auth0InfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Auth0InfoHelper.m; sourceTree = "<group>"; };
+		5FA3B5971DAEF83B000455DA /* Auth0InfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Auth0InfoHelper.h; sourceTree = "<group>"; };
 		7D57F0631D1B20AA0015BFC1 /* Auth0Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auth0Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D57F0671D1B20AA0015BFC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7D57F0691D1B20AA0015BFC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -74,6 +79,9 @@
 		7D57F0651D1B20AA0015BFC1 /* Auth0Sample */ = {
 			isa = PBXGroup;
 			children = (
+				5FA3B5961DAEF83B000455DA /* Auth0InfoHelper.m */,
+				5FA3B5971DAEF83B000455DA /* Auth0InfoHelper.h */,
+				5FA3B5941DAEF7F3000455DA /* Auth0.plist */,
 				7D57F0691D1B20AA0015BFC1 /* AppDelegate.h */,
 				7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */,
 				7D57F06C1D1B20AA0015BFC1 /* HomeViewController.h */,
@@ -125,12 +133,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D57F07A1D1B20AA0015BFC1 /* Build configuration list for PBXNativeTarget "Auth0Sample" */;
 			buildPhases = (
-				328565DD6117D70C0DBFEA1F /* 📦 Check Pods Manifest.lock */,
+				328565DD6117D70C0DBFEA1F /* [CP] Check Pods Manifest.lock */,
 				7D57F05F1D1B20AA0015BFC1 /* Sources */,
 				7D57F0601D1B20AA0015BFC1 /* Frameworks */,
 				7D57F0611D1B20AA0015BFC1 /* Resources */,
-				D9FCFE8574C7DC019E4126AC /* 📦 Embed Pods Frameworks */,
-				215922C645FCDAA81D48B30C /* 📦 Copy Pods Resources */,
+				D9FCFE8574C7DC019E4126AC /* [CP] Embed Pods Frameworks */,
+				215922C645FCDAA81D48B30C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -147,11 +155,13 @@
 		7D57F05B1D1B20AA0015BFC1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Auth0;
 				TargetAttributes = {
 					7D57F0621D1B20AA0015BFC1 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -181,20 +191,21 @@
 				7D57F0761D1B20AA0015BFC1 /* LaunchScreen.storyboard in Resources */,
 				7D57F0731D1B20AA0015BFC1 /* Assets.xcassets in Resources */,
 				7D57F0711D1B20AA0015BFC1 /* Main.storyboard in Resources */,
+				5FA3B5951DAEF7F3000455DA /* Auth0.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		215922C645FCDAA81D48B30C /* 📦 Copy Pods Resources */ = {
+		215922C645FCDAA81D48B30C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,29 +213,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		328565DD6117D70C0DBFEA1F /* 📦 Check Pods Manifest.lock */ = {
+		328565DD6117D70C0DBFEA1F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D9FCFE8574C7DC019E4126AC /* 📦 Embed Pods Frameworks */ = {
+		D9FCFE8574C7DC019E4126AC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +253,7 @@
 				7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */,
 				7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */,
 				7DAC04EF1D2AF23E00D456B2 /* EditProfileViewController.m in Sources */,
+				5FA3B5981DAEF83B000455DA /* Auth0InfoHelper.m in Sources */,
 				7D57F07F1D1B269A0015BFC1 /* ProfileViewController.m in Sources */,
 				51081F261D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m in Sources */,
 				7D57F0681D1B20AA0015BFC1 /* main.m in Sources */,
@@ -284,8 +296,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -329,8 +343,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -358,11 +374,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9727271E496A6BFA8507C5A8 /* Pods-Auth0Sample.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Auth0Sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = auth0.samples.Auth0Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -370,11 +390,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57266D207C0C23C99D8F3C32 /* Pods-Auth0Sample.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Auth0Sample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = auth0.samples.Auth0Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

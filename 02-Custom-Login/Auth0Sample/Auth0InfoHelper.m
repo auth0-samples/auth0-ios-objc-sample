@@ -24,7 +24,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Auth0InfoHelper.h"
-#import "Auth0-Swift.h"
+@import Auth0;
 
 
 @implementation Auth0InfoHelper
@@ -40,7 +40,11 @@
 }
 
 + (NSURL*) Auth0Domain {
-    return [NSURL a0_URLWithDomain: [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"]];
+    NSString *domain = [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"];
+    if (![domain hasPrefix:@"http"]) {
+        domain = [NSString stringWithFormat:@"https://%@", domain];
+    }
+    return [NSURL URLWithString:domain];
 }
 
 @end

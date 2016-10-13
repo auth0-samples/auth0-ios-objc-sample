@@ -24,10 +24,11 @@
 
 #import <Foundation/Foundation.h>
 #import <Lock/Lock.h>
-#import "Auth0-Swift.h"
+@import Auth0;
 #import "SimpleKeychain.h"
 #import "ProfileViewController.h"
 #import "UIAlertController+LoadingAlert.h"
+#import "Auth0InfoHelper.h"
 
 @interface ProfileViewController()
 
@@ -126,11 +127,10 @@
         return;
     }
     
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
-    NSString *clientId = [infoDict objectForKey:@"Auth0ClientId"];
+    NSURL *url = [Auth0InfoHelper Auth0Domain];
+    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
 
-    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
+    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:url];
     
     [webAuth setConnection:connection];
     [webAuth setScope:@"openid"];
@@ -140,7 +140,7 @@
            [self showErrorAlertWithMessage:error.localizedDescription];
        } else {
            A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-           A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+           A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:url];
            
            [authAPI linkUserWithIdentifier:self.userProfile.userId  withUserUsingToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
                if (error) {
@@ -180,21 +180,22 @@
     UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
 
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
-    
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
-    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
-    
-    [authApi unlinkUserWithIdentifier:identity.userId withProvider:identity.provider fromUserId:self.userProfile.userId callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
-        [loadingAlert dismiss];
-        if (error) {
-            [self showErrorAlertWithMessage:error.localizedDescription];
-        } else {
-            [self updateIdentitiesWithArray:payload];
-        }
-    }];
+
+    NSURL *url = [Auth0InfoHelper Auth0Domain];
+    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:url];
+
+    [authApi unlinkUserWithIdentifier:identity.userId 
+                             provider:identity.provider
+                           fromUserId:self.userProfile.userId 
+                             callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+                                 [loadingAlert dismiss];
+                                 if (error) {
+                                     [self showErrorAlertWithMessage:error.localizedDescription];
+                                 } else {
+                                     [self updateIdentitiesWithArray:payload];
+                                 }
+                             }];
 }
 
 - (void)showErrorAlertWithMessage:(NSString*)message {

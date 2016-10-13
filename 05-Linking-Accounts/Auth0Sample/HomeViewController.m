@@ -32,10 +32,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
-    
+
     [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
         [loadingAlert dismiss];
         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
