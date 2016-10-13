@@ -25,9 +25,9 @@
 #import <Foundation/Foundation.h>
 #import <Lock/A0UserProfile.h>
 #import "EditProfileViewController.h"
-#import "Auth0-Swift.h"
 #import "SimpleKeychain.h"
 #import "Auth0InfoHelper.h"
+@import Auth0;
 
 @interface EditProfileViewController()
 

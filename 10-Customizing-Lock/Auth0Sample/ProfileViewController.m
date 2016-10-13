@@ -24,7 +24,6 @@
 
 #import <Foundation/Foundation.h>
 #import <Lock/Lock.h>
-#import "Auth0-Swift.h"
 #import "ProfileViewController.h"
 
 @interface ProfileViewController()

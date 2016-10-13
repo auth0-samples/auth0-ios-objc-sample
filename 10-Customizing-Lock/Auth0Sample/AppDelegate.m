@@ -24,7 +24,6 @@
 
 #import <Lock/Lock.h>
 #import "AppDelegate.h"
-#import "Auth0-Swift.h"
 
 @interface AppDelegate ()
 
@@ -58,10 +57,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
-    return [A0WebAuth resumeAuthWithURL:url options:options];
 }
 
 - (void)customizeLockTheme {

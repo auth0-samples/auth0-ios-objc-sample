@@ -25,12 +25,12 @@
 #import <Foundation/Foundation.h>
 #import "SignUpViewController.h"
 #import "ProfileViewController.h"
-#import "Auth0-Swift.h"
 #import "Auth0InfoHelper.h"
 #import "UIViewController_Dismiss.h"
 #import "UIView+roundCorners.h"
 #import "UITextField+PlaceholderColor.h"
 #import "UIColor+extraColors.h"
+@import Auth0;
 
 @interface SignUpViewController()
 
