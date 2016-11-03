@@ -1,10 +1,12 @@
 # Linking Accounts 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/05-linking-accounts)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/05-linking-accounts)
 
 This sample exposes how to manage accounts linking for an Auth0 user. 
 
 We'll show one button for each third party authentication method, a label that shows how that system calls the user and an unlink button. In our sample we use Google, Twitter and Facebook, but, you can set up your app to use a large number of methods you can set up on Auth0 dashboard.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

@@ -1,8 +1,10 @@
 # Customizing Lock 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/10-customizing-lock)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/10-customizing-lock)
 
 This sample project exposes how to customize the [Lock](https://github.com/auth0/Lock.iOS-OSX) widget, by setting your own colors, icons, fonts, and more.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

@@ -1,10 +1,12 @@
 # User Profile 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/04-user-profile)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/04-user-profile)
 
 This sample demonstrates how to retrieve an Auth0 user's profile and how to update it using the [Auth0.swift](https://github.com/auth0/Auth0.swift) toolkit. Session management strategies implemented in this project are explained in the [session handling sample project](/03-Session-Handling).
 
 The idea of this sample is to show how to modify and update that additional data, which corresponds to the `userMetadata` dictionary in the `A0UserProfile` class.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

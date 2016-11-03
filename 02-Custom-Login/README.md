@@ -1,10 +1,12 @@
 # Custom Login 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/02-custom-login)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/02-custom-login)
 
 This sample project shows how to make up a login and a sign up dialog by your own, by connecting to Auth0 services through the [Auth0.swift](https://github.com/auth0/Auth0.swift) toolkit.
 
 You'll find two important view controllers here: The `LoginViewController` and the `SignUpViewController`, which contain text fields and buttons which are linked to actions that are described below.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

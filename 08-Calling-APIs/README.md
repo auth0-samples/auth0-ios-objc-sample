@@ -1,12 +1,14 @@
 # Calling APIs 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/08-calling-apis)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/08-calling-apis)
 
 The idea of this project is to perform authenticated requests by attaching the `idToken`, obtained upon login, into an authorization header.
 
 This sample can be seen as a template where you'll have to set your own stuff in order to get it working. Pay attention to the snippets where you have to do that.
 
 Also, you will need a server that accepts authenticated APIs with an endpoint capable of checking whether or not a request has been properly authenticated. You can use your own or [this nodeJS one](https://github.com/auth0-samples/auth0-angularjs2-systemjs-sample/tree/master/Server), whose setup is quite simple.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

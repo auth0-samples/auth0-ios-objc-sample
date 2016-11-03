@@ -1,8 +1,10 @@
 # Login 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/01-login)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/01-login)
 
 This sample project shows how to present a login dialog using the Lock widget interface. Once you log in, you're taken to a very basic profile screen, with some data about your user.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

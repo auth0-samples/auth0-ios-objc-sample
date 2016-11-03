@@ -1,10 +1,12 @@
 # Session Handling 
 
-- [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/03-session-handling)
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/03-session-handling)
 
 The idea of this sample is to keep the user logged after relaunching the app, to keep his profile up to date, and to clean everything up when he performs logout.
 
 In this sample we keep state with the aid of the `SingleKeychain` library, which is, in a way, something similar to the well-known `NSUserDefaults`.
+
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 

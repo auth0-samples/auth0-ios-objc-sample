@@ -1,8 +1,8 @@
 # Authorization 
 
-The guts of this topic is actually found in the [full tutorial](https://auth0.com/docs/quickstart/native/ios-objc/07-authorization), where it's exposed how to configure a rule from the Auth0 management website.
+[Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/07-authorization)
 
-However, this sample project does contain a snippet that might be of your interest.
+Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
 #### Important Snippets
 
