@@ -52,9 +52,9 @@
 @implementation LoginViewController
 
 - (void) viewDidLoad{
-    
+
     [super viewDidLoad];
-    
+
     for (UIButton* button in self.actionButtons) {
         [button setHasRoundLaterals:YES];
     }
@@ -70,13 +70,14 @@
 }
 
 - (IBAction)performLogin:(id)sender {
-    
+
     A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
-    
+
+
     [self.spinner startAnimating];
     [authApi loginWithUsernameOrEmail:self.emailTextField.text
                              password:self.passwordTextField.text
-                           connection:@"Username-Passsword-Authentication"
+                           connection:@"Username-Password-Authentication"
                                 scope:@"openid"
                            parameters:nil
                              callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
@@ -94,13 +95,14 @@
                                          });
                                      }];
                                  }
-    }];
+                             }];
+
 }
 
 - (IBAction)socialLogin:(id)sender {
-    
+
     NSString *connection;
-    
+
     if (sender == self.twitterButton) {
         connection = @"twitter";
     } else if (sender == self.facebookButton) {
@@ -108,15 +110,15 @@
     } else {
         return;
     }
-    
+
     NSURL *domain = [Auth0InfoHelper Auth0Domain];
     NSString *clientId = [Auth0InfoHelper Auth0ClientID];
-    
+
     A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
-    
+
     [webAuth setConnection:connection];
     [webAuth setScope:@"openid"];
-    
+
     [webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if (error) {
             [self showErrorAlertWithMessage:error.localizedDescription];
@@ -146,16 +148,16 @@
 - (IBAction)unwindToLogin:(UIStoryboardSegue*)sender {
     if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]]) {
         UIStoryboardSegueWithCompletion *segue = (UIStoryboardSegueWithCompletion*) sender;
-        
+
         if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
             SignUpViewController *source = segue.sourceViewController;
             A0Credentials *credentials = source.retrievedCredentials;
-            
+
             if(credentials){
                 [self.spinner startAnimating];
 
                 segue.completion = ^{
-                [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
+                    [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [self.spinner stopAnimating];
                             if(error) {

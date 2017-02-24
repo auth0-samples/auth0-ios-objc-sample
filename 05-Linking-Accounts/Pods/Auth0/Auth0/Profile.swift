@@ -22,9 +22,8 @@
 
 import Foundation
 
-
 /**
- Auth0 normalized user profile
+ Auth0 normalized user profile returned by Auth0
  
  - seeAlso: [Normalized User Profile](https://auth0.com/docs/user-profile/normalized)
  */
@@ -61,6 +60,7 @@ public class Profile: NSObject, JSONObjectPayload {
         return self["app_metadata"] as? [String: Any] ?? [:]
     }
 
+    // swiftlint:disable:next function_parameter_count
     required public init(id: String, name: String, nickname: String, pictureURL: URL, createdAt: Date, email: String?, emailVerified: Bool, givenName: String?, familyName: String?, attributes: [String: Any], identities: [Identity]) {
         self.id = id
         self.name = name
@@ -79,11 +79,11 @@ public class Profile: NSObject, JSONObjectPayload {
 
     convenience required public init?(json: [String: Any]) {
         guard
-            let id = json["user_id"] as? String,
+            let id = json["user_id"] as? String ?? json["sub"] as? String,
             let name = json["name"] as? String,
             let nickname = json["nickname"] as? String,
             let picture = json["picture"] as? String, let pictureURL = URL(string: picture),
-            let date = json["created_at"] as? String, let createdAt = fromSO8601(date)
+            let dateString = json["created_at"] as? String ?? json["updated_at"] as? String, let createdAt = date(from: dateString)
             else { return nil }
         let email = json["email"] as? String
         let emailVerified = json["email_verified"] as? Bool ?? false
@@ -103,10 +103,13 @@ public class Profile: NSObject, JSONObjectPayload {
 
 }
 
-private func fromSO8601(_ string: String) -> Date? {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    formatter.timeZone = TimeZone(identifier: "UTC")
-    return formatter.date(from: string)
+private func date(from string: String) -> Date? {
+    guard let interval = Double(string) else {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        return formatter.date(from: string)
+    }
+    return Date(timeIntervalSince1970: interval)
 }

@@ -72,7 +72,6 @@
 }
 
 - (void)updateSocialAccounts {
-    dispatch_async(dispatch_get_main_queue(), ^{
         [self.facebookLinkButton setEnabled:YES];
         [self.facebookNameLabel setHidden:YES];
         [self.facebookUnlinkButton setHidden:YES];
@@ -103,7 +102,6 @@
                 [self.twitterNameLabel setText:[NSString stringWithFormat:@"@%@", identity.profileData[@"screen_name"]]];
             }
         }
-    });
 }
 
 - (void)updateIdentitiesWithArray:(NSArray*)jsonIdentities {
@@ -199,7 +197,6 @@
 }
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
-    dispatch_sync(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                        message:message
                                                                 preferredStyle:UIAlertControllerStyleAlert];
@@ -208,7 +205,6 @@
                                                               handler:^(UIAlertAction * action) {}];
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
-    });
 }
 
 @end

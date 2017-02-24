@@ -14,32 +14,32 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - Auth0 (1.0.0)
-  - Lock (1.27.1):
-    - Lock/Core (= 1.27.1)
-    - Lock/UI (= 1.27.1)
-    - Lock/WebView (= 1.27.1)
-  - Lock/Core (1.27.1):
+  - Auth0 (1.2.0)
+  - Lock (1.28.2):
+    - Lock/Core (= 1.28.2)
+    - Lock/UI (= 1.28.2)
+    - Lock/WebView (= 1.28.2)
+  - Lock/Core (1.28.2):
     - AFNetworking (~> 3.0)
-  - Lock/CoreUI (1.27.1):
+  - Lock/CoreUI (1.28.2):
     - Lock/Core
     - Masonry (~> 0.6)
-  - Lock/UI (1.27.1):
+  - Lock/UI (1.28.2):
     - Lock/CoreUI
-  - Lock/WebView (1.27.1):
+  - Lock/WebView (1.28.2):
     - Lock/CoreUI
   - Masonry (0.6.4)
 
 DEPENDENCIES:
-  - Auth0 (~> 1.0)
-  - Lock (~> 1.27)
+  - Auth0 (~> 1.2)
+  - Lock (~> 1.28)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  Auth0: 3ff1a10fe8f6a323b171de883a8b9f08d29529b2
-  Lock: c8709bb9d798eb2824accd78170140faab1a3fc2
+  Auth0: c5719a587c4f5fd78d8c16a26a6f0976f1718add
+  Lock: 742c21d94c8a1805a3fb8d7e8a5d5e873b14ec47
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
 
-PODFILE CHECKSUM: 461bc01593cfd847642d8461e9b63769fbfb8dbd
+PODFILE CHECKSUM: 53db4c9cc8483ec28b283d17205ced1a9b1173bd
 
-COCOAPODS: 1.1.0.rc.3
+COCOAPODS: 1.2.0

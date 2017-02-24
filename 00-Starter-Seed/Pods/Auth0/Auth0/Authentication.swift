@@ -38,7 +38,7 @@ public protocol Authentication: Trackable, Loggable {
      ```
      Auth0
         .authentication(clientId: clientId, domain: "samples.auth0.com")
-        .login(emailOrUsername: "support@auth0.com", password: "a secret password", connection: "Username-Password-Authentication")
+        .login(usernameOrEmail: "support@auth0.com", password: "a secret password", connection: "Username-Password-Authentication")
         .start { result in
             switch result {
             case .Success(let credentials):
@@ -54,7 +54,7 @@ public protocol Authentication: Trackable, Loggable {
      ```
      Auth0
         .authentication(clientId: clientId, domain: "samples.auth0.com")
-        .login(emailOrUsername: "support@auth0.com", password:  "a secret password", connection: "Username-Password-Authentication", scope: "openid email", parameters: ["state": "a random state"])
+        .login(usernameOrEmail: "support@auth0.com", password:  "a secret password", connection: "Username-Password-Authentication", scope: "openid email", parameters: ["state": "a random state"])
         .start { print($0) }
      ```
 
@@ -81,7 +81,43 @@ public protocol Authentication: Trackable, Loggable {
      - returns: authentication request that will yield Auth0 User Credentials
      - seeAlso: Credentials
      */
+    // swiftlint:disable:next function_parameter_count
     func login(usernameOrEmail username: String, password: String, multifactorCode: String?, connection: String, scope: String, parameters: [String: Any]) -> Request<Credentials, AuthenticationError>
+
+    /**
+     Login using username and password in a realm.
+
+     ```
+     Auth0
+     .authentication(clientId: clientId, domain: "samples.auth0.com")
+     .login(
+         usernameOrEmail: "support@auth0.com",
+         password: "a secret password",
+         realm: "mydatabase")
+     ```
+
+     You can also specify audience and scope
+
+     ```
+     Auth0
+     .authentication(clientId: clientId, domain: "samples.auth0.com")
+     .login(
+         usernameOrEmail: "support@auth0.com",
+         password: "a secret password",
+         realm: "mydatabase",
+         audience: "https://myapi.com/api",
+         scope: "openid profile")
+     ```
+
+     - parameter username: username or email used of the user to authenticate
+     - parameter password: password of the user
+     - parameter realm: domain of the realm or connection name
+     - parameter audience: API Identifier that the client is requesting access to.
+     - parameter scope: scope value requested when authenticating the user.
+     - important: This only works if you have the OAuth 2.0 API Authorization flag on
+     - returns: authentication request that will yield Auth0 User Credentials
+     */
+    func login(usernameOrEmail username: String, password: String, realm: String, audience: String?, scope: String?) -> Request<Credentials, AuthenticationError>
 
     /**
      Creates a user in a Database connection
@@ -185,6 +221,7 @@ public protocol Authentication: Trackable, Loggable {
 
      - returns: an authentication request that will yield Auth0 user credentials after creating the user.
      */
+    // swiftlint:disable:next function_parameter_count
     func signUp(email: String, username: String?, password: String, connection: String, userMetadata: [String: Any]?, scope: String, parameters: [String: Any]) -> ConcatRequest<DatabaseUser, Credentials, AuthenticationError>
 
     /**
@@ -256,6 +293,7 @@ public protocol Authentication: Trackable, Loggable {
 
      - returns: a request that will yield token information
      */
+    @available(*, deprecated, message: "see userInfo(token: String)")
     func tokenInfo(token: String) -> Request<Profile, AuthenticationError>
 
     /**
@@ -339,6 +377,23 @@ public protocol Authentication: Trackable, Loggable {
      - seeAlso: https://tools.ietf.org/html/rfc7636
      */
     func tokenExchange(withCode code: String, codeVerifier: String, redirectURI: String) -> Request<Credentials, AuthenticationError>
+
+    /**
+     Renew user's credentials with a refresh_token.
+     If you are not using OAuth 2.0 API Authorization please use `delegation(payload:)`
+     - parameter refreshToken: the client's refresh token obtained on auth
+     - important: This method only works for a refresh token obtained after auth with OAuth 2.0 API Authorization.
+     - returns: a request that will yield Auth0 user's credentials
+     */
+    func renew(withRefreshToken refreshToken: String) -> Request<Credentials, AuthenticationError>
+
+    /**
+     Calls delegation endpoint with the given parameters.
+     The only parameters it adds by default are `grant_type` and `client_id`.
+     - parameter parametes: dictionary with delegation parameters to send in the request.
+     - returns: a request that will yield the result of delegation
+    */
+    func delegation(withParameters parameters: [String: Any]) -> Request<[String: Any], AuthenticationError>
 }
 
 /**
@@ -356,7 +411,7 @@ public enum PasswordlessType: String {
     case AndroidLink = "link_android"
 }
 
-extension Authentication {
+public extension Authentication {
 
     /**
      Logs in an user using email|username and password using a Database and Passwordless connection
@@ -364,7 +419,7 @@ extension Authentication {
      ```
      Auth0
         .authentication(clientId: clientId, domain: "samples.auth0.com")
-        .login(emailOrUsername: "support@auth0.com", password: "a secret password", connection: "Username-Password-Authentication")
+        .login(usernameOrEmail: "support@auth0.com", password: "a secret password", connection: "Username-Password-Authentication")
         .start { result in
             switch result {
             case .Success(let credentials):
@@ -380,7 +435,7 @@ extension Authentication {
      ```
      Auth0
         .authentication(clientId: clientId, domain: "samples.auth0.com")
-        .login(emailOrUsername: "support@auth0.com", password:  "a secret password", connection: "Username-Password-Authentication", scope: "openid email", parameters: ["state": "a random state"])
+        .login(usernameOrEmail: "support@auth0.com", password:  "a secret password", connection: "Username-Password-Authentication", scope: "openid email", parameters: ["state": "a random state"])
         .start { print($0) }
      ```
 
@@ -407,8 +462,44 @@ extension Authentication {
      - returns: authentication request that will yield Auth0 User Credentials
      - seeAlso: Credentials
      */
-    func login(usernameOrEmail username: String, password: String, multifactorCode: String? = nil, connection: String, scope: String = "openid", parameters: [String: Any] = [:]) -> Request<Credentials, AuthenticationError> {
+    public func login(usernameOrEmail username: String, password: String, multifactorCode: String? = nil, connection: String, scope: String = "openid", parameters: [String: Any] = [:]) -> Request<Credentials, AuthenticationError> {
         return self.login(usernameOrEmail: username, password: password, multifactorCode: multifactorCode, connection: connection, scope: scope, parameters: parameters)
+    }
+
+    /**
+     Login using username and password in a realm.
+
+     ```
+     Auth0
+         .authentication(clientId: clientId, domain: "samples.auth0.com")
+         .login(
+             usernameOrEmail: "support@auth0.com",
+             password: "a secret password",
+             realm: "mydatabase")
+     ```
+
+     You can also specify audience and scope
+
+     ```
+     Auth0
+         .authentication(clientId: clientId, domain: "samples.auth0.com")
+         .login(
+             usernameOrEmail: "support@auth0.com",
+             password: "a secret password",
+             realm: "mydatabase",
+             audience: "https://myapi.com/api",
+             scope: "openid profile")
+     ```
+
+     - parameter username: username or email used of the user to authenticate
+     - parameter password: password of the user
+     - parameter realm: domain realm or connection name
+     - parameter audience: API Identifier that the client is requesting access to.
+     - parameter scope: scope value requested when authenticating the user.
+     - Returns: authentication request that will yield Auth0 User Credentials
+     */
+    public func login(usernameOrEmail username: String, password: String, realm: String, audience: String? = nil, scope: String? = nil) -> Request<Credentials, AuthenticationError> {
+        return self.login(usernameOrEmail: username, password: password, realm: realm, audience: audience, scope: scope)
     }
 
     /**
@@ -447,7 +538,7 @@ extension Authentication {
 
      - returns: request that will yield a created database user (just email, username and email verified flag)
      */
-    func createUser(email: String, username: String? = nil, password: String, connection: String, userMetadata: [String: Any]? = nil) -> Request<DatabaseUser, AuthenticationError> {
+    public func createUser(email: String, username: String? = nil, password: String, connection: String, userMetadata: [String: Any]? = nil) -> Request<DatabaseUser, AuthenticationError> {
         return self.createUser(email: email, username: username, password: password, connection: connection, userMetadata: userMetadata)
     }
 
@@ -550,7 +641,6 @@ extension Authentication {
         .startPasswordless(phoneNumber: "support@auth0.com", type: .iOSLink)
         .start { print($0) }
      ```
-
      - parameter phoneNumber:   phone number where to send the sms with code or link
      - parameter type:          type of passwordless authentication. By default is code
      - parameter connection:    name of the passwordless connection. By default is 'sms'

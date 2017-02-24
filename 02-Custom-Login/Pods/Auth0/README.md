@@ -16,15 +16,17 @@ iOS 9+ and Xcode 8 (Swift 3.0)
 
 > For Swift 2.3 you need to use [v1@swift-2.3](https://github.com/auth0/Auth0.swift/tree/v1@swift-2.3) branch
 
+If using CocoaPods we recommend version 1.1.0 or later.
+
 ## Installation
 
 ###CocoaPods
 
-Auth0.swift is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+Auth0.swift is available through [CocoaPods](http://cocoapods.org). 
+To install it, simply add the following line to your Podfile:
 
 ```ruby
-pod "Auth0", '1.0.0'
+pod "Auth0", '~> 1.2'
 ```
 
 ###Carthage
@@ -32,7 +34,7 @@ pod "Auth0", '1.0.0'
 In your Cartfile add this line
 
 ```
-github "auth0/Auth0.swift" "1.0.0"
+github "auth0/Auth0.swift" ~> 1.2
 ```
 
 ## Usage
@@ -64,7 +66,7 @@ To avoid specifying clientId & domain you can add a `Auth0.plist` file to your m
 Auth0
    .authentication()
    .login(
-       emailOrUsername: "support@auth0.com", 
+       usernameOrEmail: "support@auth0.com", 
        password: "a secret password", 
        connection: "Username-Password-Authentication"
        )
@@ -99,7 +101,7 @@ Auth0
 Auth0
    .authentication()
    .login(
-       emailOrUsername: "support@auth0.com", 
+       usernameOrEmail: "support@auth0.com", 
        password: "email OTP", 
        connection: "email"
        )

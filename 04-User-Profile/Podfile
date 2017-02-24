@@ -6,7 +6,7 @@ target 'Auth0Sample' do
   use_frameworks!
 
   # Pods for Auth0Sample
-  pod 'Lock', '~> 1.27'
+  pod 'Lock', '~> 1.28'
   pod 'SimpleKeychain', '~> 0.7'
-  pod 'Auth0', '~> 1.0'
+  pod 'Auth0', '~> 1.2'
 end

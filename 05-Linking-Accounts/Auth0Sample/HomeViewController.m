@@ -30,19 +30,21 @@
 
 @implementation HomeViewController
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+- (void)viewDidLoad {
 
     UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
 
     [self loadCredentialsSuccess:^(A0UserProfile * _Nonnull profile) {
-        [loadingAlert dismiss];
-        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+        [loadingAlert dismissViewControllerAnimated:YES completion:^{
+            [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+        }];
     } failure:^(NSError * _Nonnull error) {
         A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
         [keychain clearAll];
-        [loadingAlert dismiss];
+        [loadingAlert dismissViewControllerAnimated:YES completion:^{
+            [self showLoginController:nil];
+        }];
     }];
 }
 

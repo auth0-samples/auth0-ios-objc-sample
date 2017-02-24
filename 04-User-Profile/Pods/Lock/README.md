@@ -34,7 +34,7 @@ You'll need iOS 7 or later, if you need to use it with an older version please u
 The Lock is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile:
 
 ```ruby
-pod "Lock", "~> 1.27"
+pod "Lock", "~> 1.28"
 ```
 
 ## Before Getting Started
@@ -164,9 +164,48 @@ And you'll see our native login screen
 
 [![Lock.png](http://blog.auth0.com.s3.amazonaws.com/Lock-Widget-Screenshot.png)](https://auth0.com)
 
-> By default all social authentication will be done using Safari, if you want native integration please check this [docs page](https://auth0.com/docs/libraries/lock-ios/native-social-authentication).
+> By default all social authentication will be done using web based authentication, if you want native integration please check this [docs page](https://auth0.com/docs/libraries/lock-ios/native-social-authentication).
 
-Also you can check our [Swift](https://github.com/auth0/Lock.iOS-OSX/tree/master/Examples/basic-sample-swift) and [Objective-C](https://github.com/auth0/Lock.iOS-OSX/tree/master/Examples/basic-sample) example apps. For more information on how to use **Lock** with Swift please check [this guide](https://github.com/auth0/Lock.iOS-OSX/wiki/Lock-&-Swift)
+Also you can check our quickstart guides for:
+- [Swift](https://auth0.com/docs/quickstart/native/ios-swift)
+- [Objective-C](https://auth0.com/docs/quickstart/native/ios-objc)
+
+#### Important: Google Connections
+
+Google recently announced they will no longer support web-views, it is *highly recommended* you update your code to use Safari for web based authentication.
+
+##### Podfile
+
+Update your Podfile to include:
+
+```ruby
+pod 'Lock/Safari'
+```
+
+You should add the following code before you present Lock to the user. If you have multiple connections you wish to
+use with Safari you will need to specify each one manually as above.
+
+To use Safari for the default Google social connection, add the following:
+
+##### Objective-C
+
+```objc
+#import <Lock/A0SafariAuthenticator.h>
+```
+
+```objc
+A0Lock *lock = [A0Lock sharedLock];
+A0SafariAuthenticator *safari = [[A0SafariAuthenticator alloc] initWithLock:lock connectionName:@"google-oauth2"];
+[lock registerAuthenticators:@[safari]];   
+```
+
+##### Swift
+
+```swift
+let lock = A0Lock.shared()
+let safari = A0SafariAuthenticator(lock: lock, connectionName: "google-oauth2")
+lock.registerAuthenticators([safari])    
+```
 
 ### TouchID
 
@@ -175,7 +214,7 @@ Also you can check our [Swift](https://github.com/auth0/Lock.iOS-OSX/tree/master
 Add the following line to your Podfile:
 
 ```ruby
-pod "Lock/TouchID", "~> 1.27"
+pod "Lock/TouchID", "~> 1.28"
 ```
 
 First instantiate `A0TouchIDLockViewController` and register the authentication callback that will receive the authenticated user's credentials. Finally present it to the user:
@@ -216,7 +255,7 @@ And you'll see TouchID login screen
 Add the following line to your Podfile:
 
 ```ruby
-pod "Lock/SMS", "~> 1.27"
+pod "Lock/SMS", "~> 1.28"
 ```
 
 First instantiate `A0SMSLockViewController` and register the authentication callback that will receive the authenticated user's credentials.
@@ -259,7 +298,7 @@ And you'll see SMS login screen
 Add the following line to your Podfile:
 
 ```ruby
-pod "Lock/Email", "~> 1.27"
+pod "Lock/Email", "~> 1.28"
 ```
 
 First instantiate `A0EmailLockViewController` and register the authentication callback that will receive the authenticated user's credentials.

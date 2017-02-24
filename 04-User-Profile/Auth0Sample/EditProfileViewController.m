@@ -42,7 +42,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self.userEmailField setText:self.userProfile.email];
     [self.userFirstNameField setText:[self.userProfile.userMetadata objectForKey:@"first_name"]];
     [self.userLastNameField setText:[self.userProfile.userMetadata objectForKey:@"last_name"]];
@@ -58,17 +58,17 @@
 - (IBAction)saveProfile:(id)sender {
 
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
+
     if (![keychain stringForKey:@"id_token"]) {
         return;
     }
-    
+
     NSDictionary *profileMetadata = [self fieldsToDictionary];
 
     NSURL *domain = [Auth0InfoHelper Auth0Domain];
 
     A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
-    
+
     [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (error) {
