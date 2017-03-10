@@ -6,6 +6,8 @@ This sample project shows how to present a login dialog using the Lock widget in
 
 Start by renaming the `Auth0.plist.example` file in the `Auth0Sample` directory to `Auth0.plist` and provide the `CLIENT_ID` and `DOMAIN` for your app.
 
+After that run `pod install` in the project folder.
+
 #### Important Snippets
 
 ##### 1. Present the login widget
