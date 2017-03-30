@@ -23,6 +23,8 @@ PODS:
   - Lock/CoreUI (1.28.2):
     - Lock/Core
     - Masonry (~> 0.6)
+  - Lock/Safari (1.28.2):
+    - Lock/CoreUI
   - Lock/UI (1.28.2):
     - Lock/CoreUI
   - Lock/WebView (1.28.2):
@@ -31,12 +33,13 @@ PODS:
 
 DEPENDENCIES:
   - Lock (~> 1.28)
+  - Lock/Safari
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Lock: 742c21d94c8a1805a3fb8d7e8a5d5e873b14ec47
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
 
-PODFILE CHECKSUM: 21d358ed3298b20ce285fb3e5311e82529422296
+PODFILE CHECKSUM: 215d12035f341066eec994a954b9f577b045ce1d
 
 COCOAPODS: 1.2.0

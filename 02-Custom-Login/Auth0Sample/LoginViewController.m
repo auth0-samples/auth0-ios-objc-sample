@@ -25,7 +25,6 @@
 #import <UIKit/UIKit.h>
 #import "LoginViewController.h"
 #import "ProfileViewController.h"
-#import "Auth0InfoHelper.h"
 #import "UIViewController_Dismiss.h"
 #import "SignUpViewController.h"
 #import "UIStoryboardSegueWithCompletion.h"
@@ -65,14 +64,13 @@
 }
 
 - (void)loadUserWithCredentials:(A0Credentials*) credentials callback:(void (^ _Nonnull)(NSError * _Nullable, A0Profile * _Nullable))callback {
-    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId: [Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
+    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] init];
     [authApi userInfoWithToken:credentials.accessToken callback:callback];
 }
 
 - (IBAction)performLogin:(id)sender {
 
-    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
-
+    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] init];
 
     [self.spinner startAnimating];
     [authApi loginWithUsernameOrEmail:self.emailTextField.text
@@ -111,10 +109,7 @@
         return;
     }
 
-    NSURL *domain = [Auth0InfoHelper Auth0Domain];
-    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
-
-    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
+    A0WebAuth *webAuth = [[A0WebAuth alloc] init];
 
     [webAuth setConnection:connection];
     [webAuth setScope:@"openid"];
@@ -181,18 +176,16 @@
 }
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [self.spinner stopAnimating];
+    [self.spinner stopAnimating];
 
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
-    });
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

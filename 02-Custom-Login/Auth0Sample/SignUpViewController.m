@@ -25,7 +25,6 @@
 #import <Foundation/Foundation.h>
 #import "SignUpViewController.h"
 #import "ProfileViewController.h"
-#import "Auth0InfoHelper.h"
 #import "UIViewController_Dismiss.h"
 #import "UIView+roundCorners.h"
 #import "UITextField+PlaceholderColor.h"
@@ -74,7 +73,7 @@
 - (IBAction)signUpAction:(id)sender {
     [self.spinner startAnimating];
     
-    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
+    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] init];
 
     [authApi signUpWithEmail:self.emailTextField.text
                     username:nil
@@ -86,7 +85,6 @@
                   parameters:nil
                     callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                
                 [self.spinner stopAnimating];
                 if(error) {
                     [self showErrorAlertWithMessage:error.localizedDescription];
@@ -110,10 +108,7 @@
         return;
     }
     
-    NSURL *domain = [Auth0InfoHelper Auth0Domain];
-    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
-    
-    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:domain];
+    A0WebAuth *webAuth = [[A0WebAuth alloc] init];
     
     [webAuth setConnection:connection];
     [webAuth setScope:@"openid"];

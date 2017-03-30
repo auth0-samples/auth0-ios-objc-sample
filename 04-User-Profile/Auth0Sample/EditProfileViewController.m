@@ -26,7 +26,6 @@
 #import <Lock/A0UserProfile.h>
 #import "EditProfileViewController.h"
 #import "SimpleKeychain.h"
-#import "Auth0InfoHelper.h"
 @import Auth0;
 
 @interface EditProfileViewController()
@@ -65,9 +64,7 @@
 
     NSDictionary *profileMetadata = [self fieldsToDictionary];
 
-    NSURL *domain = [Auth0InfoHelper Auth0Domain];
-
-    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
+    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"]];
 
     [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -86,16 +83,14 @@
 }
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
-    });
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

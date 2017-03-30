@@ -28,7 +28,6 @@
 #import "SimpleKeychain.h"
 #import "ProfileViewController.h"
 #import "UIAlertController+LoadingAlert.h"
-#import "Auth0InfoHelper.h"
 
 @interface ProfileViewController()
 
@@ -124,11 +123,8 @@
     } else {
         return;
     }
-    
-    NSURL *url = [Auth0InfoHelper Auth0Domain];
-    NSString *clientId = [Auth0InfoHelper Auth0ClientID];
 
-    A0WebAuth *webAuth = [[A0WebAuth alloc] initWithClientId:clientId url:url];
+    A0WebAuth *webAuth = [[A0WebAuth alloc] init];
     
     [webAuth setConnection:connection];
     [webAuth setScope:@"openid"];
@@ -138,7 +134,7 @@
            [self showErrorAlertWithMessage:error.localizedDescription];
        } else {
            A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-           A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:url];
+           A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"]];
            
            [authAPI linkUserWithIdentifier:self.userProfile.userId  withUserUsingToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
                if (error) {
@@ -180,8 +176,7 @@
 
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
 
-    NSURL *url = [Auth0InfoHelper Auth0Domain];
-    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:url];
+    A0ManagementAPI *authApi = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"]];
 
     [authApi unlinkUserWithIdentifier:identity.userId 
                              provider:identity.provider
