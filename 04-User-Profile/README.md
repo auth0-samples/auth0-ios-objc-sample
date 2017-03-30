@@ -1,4 +1,4 @@
-# User Profile 
+# User Profile
 
 [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/04-user-profile)
 
@@ -22,30 +22,25 @@ In `EditProfileViewController.m` we put all the user's input data into a `NSDict
 }
 ```
 
-When the user presses the save button, we send the dictionary of user metadata using the `patchUserWithIdentifier` call. Once we have the callback return and there was no error, we send the Navigation Controller to the previous view in the pile and send it the updated profile instance. 
+When the user presses the save button, we send the dictionary of user metadata using the `patchUserWithIdentifier` call. Once we have the callback return and there was no error, we send the Navigation Controller to the previous view in the pile and send it the updated profile instance.
 
 ```objective-c
 - (IBAction)saveProfile:(id)sender {
 
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
+
     if (![keychain stringForKey:@"id_token"]) {
         return;
     }
-    
+
     NSDictionary *profileMetadata = [self fieldsToDictionary];
 
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"]];
 
-    NSURL *domain = [NSURL a0_URLWithDomain: [infoDict objectForKey:@"Auth0Domain"]];
-
-    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
-    
     [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (error) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                [self presentViewController:alert animated:true completion:nil];
+                [self showErrorAlertWithMessage:error.localizedDescription];
             } else {
                 self.userProfile = [[A0UserProfile alloc] initWithDictionary:data];
                 [self.navigationController popViewControllerAnimated:YES];

@@ -85,6 +85,7 @@
     [theme registerColor: [self lightVioletColor] forKey: A0ThemePrimaryButtonHighlightedColor];
     [theme registerColor: [self darkVioletColor] forKey: A0ThemePrimaryButtonFont];
     [theme registerFont: [UIFont boldSystemFontOfSize: 20] forKey: A0ThemePrimaryButtonFont];
+    [theme registerColor: [UIColor blackColor] forKey:A0ThemePrimaryButtonTextColor];
     
     // 6. Configure the secondary buttons (sign up / reset password):
     [theme registerColor: [self lightVioletColor] forKey: A0ThemeSecondaryButtonBackgroundColor];

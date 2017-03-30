@@ -1,6 +1,4 @@
-//
-//  Auth0InfoHelper.h
-// Auth0Sample
+// TransactionStore.swift
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -22,11 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
+import UIKit
 
-@interface Auth0InfoHelper : NSObject
+/// Keeps track of current Auth Transaction
+class TransactionStore {
+    static let shared = TransactionStore()
 
-+ (NSString*) Auth0ClientID;
-+ (NSURL*) Auth0Domain;
+    private(set) var current: AuthTransaction? = nil
 
-@end
+    func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+        let resumed = self.current?.resume(url, options: options) ?? false
+        if resumed {
+            self.current = nil
+        }
+        return resumed
+    }
+
+    func store(_ transaction: AuthTransaction) {
+        self.current?.cancel()
+        self.current = transaction
+    }
+
+    func cancel(_ transaction: AuthTransaction) {
+        transaction.cancel()
+        if self.current?.state == transaction.state {
+            self.current = nil
+        }
+    }
+}

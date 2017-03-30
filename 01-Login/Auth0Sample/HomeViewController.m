@@ -25,6 +25,7 @@
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
 #import <Lock/Lock.h>
+#import <Lock/A0SafariAuthenticator.h>
 
 @interface HomeViewController ()
 
@@ -34,17 +35,17 @@
 
 - (IBAction)showLoginController:(id)sender {
     A0Lock *lock = [A0Lock sharedLock];
+
+    A0SafariAuthenticator *safari = [[A0SafariAuthenticator alloc] initWithLock:lock connectionName:@"google-oauth2"];
+    [lock registerAuthenticators:@[safari]];
     
     A0LockViewController *controller = [lock newLockViewController];
     controller.onAuthenticationBlock = ^(A0UserProfile *profile, A0Token *token) {
-        // Do something with token & profile. e.g.: save them.
-        // And dismiss the ViewController
         [self dismissViewControllerAnimated:YES completion:nil];
         [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
     };
     
     [self presentViewController:controller animated:YES completion:nil];
-    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

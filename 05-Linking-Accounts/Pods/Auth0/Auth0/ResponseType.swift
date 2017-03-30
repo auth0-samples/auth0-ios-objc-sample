@@ -1,6 +1,4 @@
-//
-//  Auth0InfoHelper.m
-// Auth0Sample
+// ResponseType.swift
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -22,28 +20,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "Auth0InfoHelper.h"
+import Foundation
 
+///
+///  List of supported response_types
+///  ImplicitGrant
+///  [.token]
+///  [.idToken]
+///  [.token, .idToken]
+///
+///  PKCE
+///  [.code]
+///  [.code, token]
+///  [.code, idToken]
+///  [.code, token, .idToken]
+///
+public struct ResponseType: OptionSet {
+    public let rawValue: Int
 
-@implementation Auth0InfoHelper
-
-+ (NSDictionary*) readAuth0Plist {
-    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Auth0" ofType:@"plist"]];
-
-    return dict;
-}
-
-+ (NSString*) Auth0ClientID {
-    return [[Auth0InfoHelper readAuth0Plist] objectForKey:@"ClientId"];
-}
-
-+ (NSURL*) Auth0Domain {
-    NSString *domain = [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"];
-    if (![domain hasPrefix:@"http"]) {
-        domain = [NSString stringWithFormat:@"https://%@", domain];
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
-    return [NSURL URLWithString:domain];
-}
 
-@end
+    public static let token     = ResponseType(rawValue: 1 << 0)
+    public static let idToken   = ResponseType(rawValue: 1 << 1)
+    public static let code      = ResponseType(rawValue: 1 << 2)
+
+    var label: String? {
+        switch self.rawValue {
+        case ResponseType.token.rawValue:
+            return "token"
+        case ResponseType.idToken.rawValue:
+            return "id_token"
+        case ResponseType.code.rawValue:
+            return "code"
+        default:
+            return nil
+        }
+    }
+}

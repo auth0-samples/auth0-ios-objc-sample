@@ -10,7 +10,6 @@
 		4840B4A2FF7FA4FC4AB64BEA /* Pods_Auth0Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFF6F1EFA01B271D94697C5C /* Pods_Auth0Sample.framework */; };
 		51081F261D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 51081F251D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m */; };
 		5FA3B5951DAEF7F3000455DA /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5FA3B5941DAEF7F3000455DA /* Auth0.plist */; };
-		5FA3B5981DAEF83B000455DA /* Auth0InfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FA3B5961DAEF83B000455DA /* Auth0InfoHelper.m */; };
 		7D57F0681D1B20AA0015BFC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F0671D1B20AA0015BFC1 /* main.m */; };
 		7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */; };
 		7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D57F06D1D1B20AA0015BFC1 /* HomeViewController.m */; };
@@ -26,8 +25,6 @@
 		51081F251D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+LoadingAlert.m"; sourceTree = "<group>"; };
 		57266D207C0C23C99D8F3C32 /* Pods-Auth0Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auth0Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-Auth0Sample/Pods-Auth0Sample.release.xcconfig"; sourceTree = "<group>"; };
 		5FA3B5941DAEF7F3000455DA /* Auth0.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
-		5FA3B5961DAEF83B000455DA /* Auth0InfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Auth0InfoHelper.m; sourceTree = "<group>"; };
-		5FA3B5971DAEF83B000455DA /* Auth0InfoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Auth0InfoHelper.h; sourceTree = "<group>"; };
 		7D57F0631D1B20AA0015BFC1 /* Auth0Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Auth0Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D57F0671D1B20AA0015BFC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7D57F0691D1B20AA0015BFC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -79,8 +76,6 @@
 		7D57F0651D1B20AA0015BFC1 /* Auth0Sample */ = {
 			isa = PBXGroup;
 			children = (
-				5FA3B5961DAEF83B000455DA /* Auth0InfoHelper.m */,
-				5FA3B5971DAEF83B000455DA /* Auth0InfoHelper.h */,
 				5FA3B5941DAEF7F3000455DA /* Auth0.plist */,
 				7D57F0691D1B20AA0015BFC1 /* AppDelegate.h */,
 				7D57F06A1D1B20AA0015BFC1 /* AppDelegate.m */,
@@ -253,7 +248,6 @@
 				7D57F06E1D1B20AA0015BFC1 /* HomeViewController.m in Sources */,
 				7D57F06B1D1B20AA0015BFC1 /* AppDelegate.m in Sources */,
 				7DAC04EF1D2AF23E00D456B2 /* EditProfileViewController.m in Sources */,
-				5FA3B5981DAEF83B000455DA /* Auth0InfoHelper.m in Sources */,
 				7D57F07F1D1B269A0015BFC1 /* ProfileViewController.m in Sources */,
 				51081F261D4FC9A100DE92C4 /* UIAlertController+LoadingAlert.m in Sources */,
 				7D57F0681D1B20AA0015BFC1 /* main.m in Sources */,

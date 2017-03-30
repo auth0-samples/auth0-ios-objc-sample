@@ -32,18 +32,18 @@ class SafariWebAuth: WebAuth {
     var telemetry: Telemetry
 
     let presenter: ControllerModalPresenter
-    let storage: SessionStorage
+    let storage: TransactionStore
     var logger: Logger?
-    var state = generateDefaultState()
     var parameters: [String: String] = [:]
     var universalLink = false
-    var usePKCE = true
+    var responseType: [ResponseType] = [.code]
+    var nonce: String? = nil
 
     convenience init(clientId: String, url: URL, presenter: ControllerModalPresenter = ControllerModalPresenter(), telemetry: Telemetry = Telemetry()) {
-        self.init(clientId: clientId, url: url, presenter: presenter, storage: SessionStorage.sharedInstance, telemetry: telemetry)
+        self.init(clientId: clientId, url: url, presenter: presenter, storage: TransactionStore.shared, telemetry: telemetry)
     }
 
-    init(clientId: String, url: URL, presenter: ControllerModalPresenter, storage: SessionStorage, telemetry: Telemetry) {
+    init(clientId: String, url: URL, presenter: ControllerModalPresenter, storage: TransactionStore, telemetry: Telemetry) {
         self.clientId = clientId
         self.url = url
         self.presenter = presenter
@@ -67,7 +67,7 @@ class SafariWebAuth: WebAuth {
     }
 
     func state(_ state: String) -> Self {
-        self.state = state
+        self.parameters["state"] = state
         return self
     }
 
@@ -76,8 +76,22 @@ class SafariWebAuth: WebAuth {
         return self
     }
 
+    func responseType(_ responseType: [ResponseType]) -> Self {
+        self.responseType = responseType
+        return self
+    }
+
+    func nonce(_ nonce: String) -> Self {
+        self.nonce = nonce
+        return self
+    }
+
     func usingImplicitGrant() -> Self {
-        self.usePKCE = false
+        return self.responseType([.token])
+    }
+
+    func audience(_ audience: String) -> Self {
+        self.parameters["audience"] = audience
         return self
     }
 
@@ -88,10 +102,15 @@ class SafariWebAuth: WebAuth {
             else {
                 return callback(Result.failure(error: WebAuthError.noBundleIdentifierFound))
         }
+        if self.responseType.contains(.idToken) {
+            guard self.nonce != nil else { return callback(Result.failure(error: WebAuthError.noNonceProvided)) }
+        }
         let handler = self.handler(redirectURL)
-        let authorizeURL = self.buildAuthorizeURL(withRedirectURL: redirectURL, defaults: handler.defaults)
+        let state = self.parameters["state"] ?? generateDefaultState()
+        let authorizeURL = self.buildAuthorizeURL(withRedirectURL: redirectURL, defaults: handler.defaults, state: state)
         let (controller, finish) = newSafari(authorizeURL, callback: callback)
-        let session = SafariSession(controller: controller, redirectURL: redirectURL, state: self.state, handler: handler, finish: finish, logger: self.logger)
+
+        let session = SafariSession(controller: controller, redirectURL: redirectURL, state: state, handler: handler, finish: finish, logger: self.logger)
         controller.delegate = session
         logger?.trace(url: authorizeURL, source: "Safari")
         self.presenter.present(controller)
@@ -120,7 +139,7 @@ class SafariWebAuth: WebAuth {
         return (controller, finish)
     }
 
-    func buildAuthorizeURL(withRedirectURL redirectURL: URL, defaults: [String: String]) -> URL {
+    func buildAuthorizeURL(withRedirectURL redirectURL: URL, defaults: [String: String], state: String?) -> URL {
         let authorize = URL(string: "/authorize", relativeTo: self.url)!
         var components = URLComponents(url: authorize, resolvingAgainstBaseURL: true)!
         var items: [URLQueryItem] = []
@@ -128,7 +147,11 @@ class SafariWebAuth: WebAuth {
         entries["client_id"] = self.clientId
         entries["redirect_uri"] = redirectURL.absoluteString
         entries["scope"] = "openid"
-        entries["state"] = self.state
+        entries["state"] = state
+        entries["response_type"] = self.responseType.map { $0.label! }.joined(separator: " ")
+        if self.responseType.contains(.idToken) {
+            entries["nonce"] = self.nonce
+        }
         self.parameters.forEach { entries[$0] = $1 }
 
         entries.forEach { items.append(URLQueryItem(name: $0, value: $1)) }
@@ -137,12 +160,12 @@ class SafariWebAuth: WebAuth {
     }
 
     func handler(_ redirectURL: URL) -> OAuth2Grant {
-        if self.usePKCE {
+        if self.responseType.contains([.code]) {
             var authentication = Auth0Authentication(clientId: self.clientId, url: self.url, telemetry: self.telemetry)
             authentication.logger = self.logger
-            return PKCE(authentication: authentication, redirectURL: redirectURL)
+            return PKCE(authentication: authentication, redirectURL: redirectURL, reponseType: self.responseType, nonce: self.nonce)
         } else {
-            return ImplicitGrant()
+            return ImplicitGrant(responseType: self.responseType, nonce: self.nonce)
         }
     }
 

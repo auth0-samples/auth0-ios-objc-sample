@@ -26,7 +26,6 @@
 #import <Lock/A0UserProfile.h>
 #import "EditProfileViewController.h"
 #import "SimpleKeychain.h"
-#import "Auth0InfoHelper.h"
 @import Auth0;
 
 @interface EditProfileViewController()
@@ -42,7 +41,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self.userEmailField setText:self.userProfile.email];
     [self.userFirstNameField setText:[self.userProfile.userMetadata objectForKey:@"first_name"]];
     [self.userLastNameField setText:[self.userProfile.userMetadata objectForKey:@"last_name"]];
@@ -58,17 +57,15 @@
 - (IBAction)saveProfile:(id)sender {
 
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
+
     if (![keychain stringForKey:@"id_token"]) {
         return;
     }
-    
+
     NSDictionary *profileMetadata = [self fieldsToDictionary];
 
-    NSURL *domain = [Auth0InfoHelper Auth0Domain];
+    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"]];
 
-    A0ManagementAPI *authAPI = [[A0ManagementAPI alloc] initWithToken:[keychain stringForKey:@"id_token"] url:domain];
-    
     [authAPI patchUserWithIdentifier:self.userProfile.userId userMetadata:profileMetadata callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable data) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (error) {
@@ -86,16 +83,14 @@
 }
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
-    });
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

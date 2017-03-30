@@ -1,8 +1,6 @@
+// AuthProvider.swift
 //
-//  Auth0InfoHelper.m
-// Auth0Sample
-//
-// Copyright (c) 2016 Auth0 (http://auth0.com)
+// Copyright (c) 2017 Auth0 (http://auth0.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import "Auth0InfoHelper.h"
+import UIKit
 
+/**
+ The AuthProvider protocol is adopted by an objects that are to be used as Native Authentication
+ handlers. An object implementing this protocol is intended to superceed the default authentication
+ model for a given connection name with its own native implementation.
 
-@implementation Auth0InfoHelper
+ ```
+ struct Facebook: AuthProvider {
 
-+ (NSDictionary*) readAuth0Plist {
-    NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Auth0" ofType:@"plist"]];
-
-    return dict;
+     func login(withConnection connection: String, scope: String, parameters: [String : Any]) -> NativeAuthTransaction {
+         let transaction = FacebookNativeAuthTransaction()
+         ...
+         return transaction
+     }
+ ```
+ */
+public protocol AuthProvider {
+    func login(withConnection connection: String, scope: String, parameters: [String: Any]) -> NativeAuthTransaction
 }
-
-+ (NSString*) Auth0ClientID {
-    return [[Auth0InfoHelper readAuth0Plist] objectForKey:@"ClientId"];
-}
-
-+ (NSURL*) Auth0Domain {
-    NSString *domain = [[Auth0InfoHelper readAuth0Plist] objectForKey:@"Domain"];
-    if (![domain hasPrefix:@"http"]) {
-        domain = [NSString stringWithFormat:@"https://%@", domain];
-    }
-    return [NSURL URLWithString:domain];
-}
-
-@end

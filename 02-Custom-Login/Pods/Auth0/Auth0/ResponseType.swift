@@ -1,4 +1,4 @@
-// SessionStorage.swift
+// ResponseType.swift
 //
 // Copyright (c) 2016 Auth0 (http://auth0.com)
 //
@@ -20,31 +20,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
+import Foundation
 
-/// Keeps track of current Auth session (e.g. OAuth2)
-class SessionStorage {
-    static let sharedInstance = SessionStorage()
+///
+///  List of supported response_types
+///  ImplicitGrant
+///  [.token]
+///  [.idToken]
+///  [.token, .idToken]
+///
+///  PKCE
+///  [.code]
+///  [.code, token]
+///  [.code, idToken]
+///  [.code, token, .idToken]
+///
+public struct ResponseType: OptionSet {
+    public let rawValue: Int
 
-    fileprivate var current: OAuth2Session? = nil
-
-    func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
-        let resumed = self.current?.resume(url, options: options) ?? false
-        if resumed {
-            self.current = nil
-        }
-        return resumed
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
 
-    func store(_ session: OAuth2Session) {
-        self.current?.cancel()
-        self.current = session
-    }
+    public static let token     = ResponseType(rawValue: 1 << 0)
+    public static let idToken   = ResponseType(rawValue: 1 << 1)
+    public static let code      = ResponseType(rawValue: 1 << 2)
 
-    func cancel(_ session: OAuth2Session) {
-        session.cancel()
-        if self.current?.state == session.state {
-            self.current = nil
+    var label: String? {
+        switch self.rawValue {
+        case ResponseType.token.rawValue:
+            return "token"
+        case ResponseType.idToken.rawValue:
+            return "id_token"
+        case ResponseType.code.rawValue:
+            return "code"
+        default:
+            return nil
         }
     }
 }

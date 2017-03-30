@@ -23,29 +23,47 @@
 import Foundation
 
 /**
- Auth0 users' credentials
+ User's credentials obtained from Auth0.
+ What values are available depends on what type of Auth request you perfomed,
+ so if you used WebAuth (`/authorize` call) the `response_type` and `scope` will determine what tokens you get
  */
 @objc(A0Credentials)
 public class Credentials: NSObject, JSONObjectPayload {
 
-    public let accessToken: String
-    public let tokenType: String
-    public let idToken: String?
+    /// Token used that allows calling to the requested APIs (audience sent on Auth)
+    public let accessToken: String?
+    /// Type of the access token
+    public let tokenType: String?
+    /// When the access_token expires
+    public let expiresIn: Date?
+    /// If the API allows you to request new access tokens and the scope `offline_access` was included on Auth
     public let refreshToken: String?
 
-    required public init(accessToken: String, tokenType: String, idToken: String? = nil, refreshToken: String? = nil) {
+    // Token that details the user identity after authentication
+    public let idToken: String?
+
+    public init(accessToken: String? = nil, tokenType: String? = nil, idToken: String? = nil, refreshToken: String? = nil, expiresIn: Date? = nil) {
         self.accessToken = accessToken
         self.tokenType = tokenType
         self.idToken = idToken
         self.refreshToken = refreshToken
+        self.expiresIn = expiresIn
     }
 
-    convenience required public init?(json: [String: Any]) {
-        guard
-            let token = json["access_token"] as? String,
-            let type = json["token_type"] as? String
-            else { return nil }
-        self.init(accessToken: token, tokenType: type, idToken: json["id_token"] as? String, refreshToken: json["refresh_token"] as? String)
+    convenience required public init(json: [String: Any]) {
+        var expiresIn: Date?
+        switch json["expires_in"] {
+        case let string as String:
+            guard let double = Double(string) else { break }
+            expiresIn = Date(timeIntervalSinceNow: double)
+        case let int as Int:
+            expiresIn = Date(timeIntervalSinceNow: Double(int))
+        case let double as Double:
+            expiresIn = Date(timeIntervalSinceNow: double)
+        default:
+            expiresIn = nil
+        }
+        self.init(accessToken: json["access_token"] as? String, tokenType: json["token_type"] as? String, idToken: json["id_token"] as? String, refreshToken: json["refresh_token"] as? String, expiresIn: expiresIn)
     }
 
 }

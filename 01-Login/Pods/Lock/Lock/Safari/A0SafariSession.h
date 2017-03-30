@@ -1,6 +1,6 @@
-// SessionStorage.swift
+// A0SafariSession.h
 //
-// Copyright (c) 2016 Auth0 (http://auth0.com)
+// Copyright (c) 2015 Auth0 (http://auth0.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,31 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
+#import <Foundation/Foundation.h>
+#import "A0AuthenticationProvider.h"
 
-/// Keeps track of current Auth session (e.g. OAuth2)
-class SessionStorage {
-    static let sharedInstance = SessionStorage()
+@class A0Lock, A0Token;
 
-    fileprivate var current: OAuth2Session? = nil
+typedef void(^A0SafariSessionAuthentication)(NSError *error, A0Token *token);
 
-    func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
-        let resumed = self.current?.resume(url, options: options) ?? false
-        if resumed {
-            self.current = nil
-        }
-        return resumed
-    }
+@interface A0SafariSession : NSObject
 
-    func store(_ session: OAuth2Session) {
-        self.current?.cancel()
-        self.current = session
-    }
+@property (readonly, copy, nonatomic) NSString *connectionName;
+@property (readonly, strong, nonatomic) NSURL *callbackURL;
 
-    func cancel(_ session: OAuth2Session) {
-        session.cancel()
-        if self.current?.state == session.state {
-            self.current = nil
-        }
-    }
-}
+- (instancetype)initWithLock:(A0Lock *)lock connectionName:(NSString *)connectionName usePKCE:(BOOL)usePKCE;
+- (instancetype)initWithLock:(A0Lock *)lock connectionName:(NSString *)connectionName useUniversalLink:(BOOL)useUniversalLink usePKCE:(BOOL)usePKCE;
+
+- (NSURL *)authorizeURLWithParameters:(NSDictionary *)parameters;
+- (A0SafariSessionAuthentication)authenticationBlockWithSuccess:(A0IdPAuthenticationBlock)success
+                                                        failure:(A0IdPAuthenticationErrorBlock)failure;
+- (void)tokenFromURL:(NSURL *)url callback:(void(^)(NSError *error, A0Token *token))callback;
+@end

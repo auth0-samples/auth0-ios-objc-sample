@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7D2F869C1D1DBDE70075C09B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F869B1D1DBDE70075C09B /* LoginViewController.m */; };
 		7D2F869E1D1DBED80075C09B /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D2F869D1D1DBED80075C09B /* Auth0.plist */; };
-		7D2F86A31D1DBFE80075C09B /* Auth0InfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F86A21D1DBFE80075C09B /* Auth0InfoHelper.m */; };
 		7D2F86AC1D1DC2FA0075C09B /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F86A81D1DC2FA0075C09B /* SignUpViewController.m */; };
 		7D2F86B01D1DC47E0075C09B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F86AF1D1DC47E0075C09B /* ProfileViewController.m */; };
 		7D2F86B31D1DCE240075C09B /* UIViewController_Dismiss.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F86B21D1DCE240075C09B /* UIViewController_Dismiss.m */; };
@@ -34,8 +33,6 @@
 		7D2F869A1D1DBDE70075C09B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		7D2F869B1D1DBDE70075C09B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		7D2F869D1D1DBED80075C09B /* Auth0.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
-		7D2F86A21D1DBFE80075C09B /* Auth0InfoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Auth0InfoHelper.m; sourceTree = "<group>"; };
-		7D2F86A41D1DBFF30075C09B /* Auth0InfoHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Auth0InfoHelper.h; sourceTree = "<group>"; };
 		7D2F86A71D1DC2FA0075C09B /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
 		7D2F86A81D1DC2FA0075C09B /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
 		7D2F86AE1D1DC47E0075C09B /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
@@ -78,8 +75,6 @@
 		7D2F86A11D1DBFD10075C09B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				7D2F86A21D1DBFE80075C09B /* Auth0InfoHelper.m */,
-				7D2F86A41D1DBFF30075C09B /* Auth0InfoHelper.h */,
 				7D2F86B11D1DCDFE0075C09B /* UIViewController_Dismiss.h */,
 				7D2F86B21D1DCE240075C09B /* UIViewController_Dismiss.m */,
 				7D2F86B41D1DD26E0075C09B /* UIStoryboardSegueWithCompletion.m */,
@@ -286,7 +281,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D2F86A31D1DBFE80075C09B /* Auth0InfoHelper.m in Sources */,
 				7D2F869C1D1DBDE70075C09B /* LoginViewController.m in Sources */,
 				7D2F86B31D1DCE240075C09B /* UIViewController_Dismiss.m in Sources */,
 				7D2F86B01D1DC47E0075C09B /* ProfileViewController.m in Sources */,

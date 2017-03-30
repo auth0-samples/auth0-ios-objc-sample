@@ -1,4 +1,4 @@
-# Custom Login 
+# Custom Login
 
 [Full Tutorial](https://auth0.com/docs/quickstart/native/ios-objc/02-custom-login)
 
@@ -16,26 +16,31 @@ In `LoginViewController.m`:
 
 ```objective-c
 - (IBAction)performLogin:(id)sender {
-    
-    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
-    
+    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] init];
+
     [self.spinner startAnimating];
-    [authApi loginWithUsername:self.loginEmailText.text password:self.loginPasswordText.text connection:@"Username-Password-Authentication" scope:@"openid" parameters:@{} callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
-        if(error) {
-            NSLog(error.localizedDescription);
-        } else {
-            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.spinner stopAnimating];
-                    if(error) {
-                        NSLog(@"%@", error.localizedDescription);
-                    } else {
-                        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                    }
-                });
-            }];
-        }
-    }];
+    [authApi loginWithUsernameOrEmail:self.emailTextField.text
+                             password:self.passwordTextField.text
+                           connection:@"Username-Password-Authentication"
+                                scope:@"openid"
+                           parameters:nil
+                             callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+                                 if(error) {
+                                     [self showErrorAlertWithMessage:error.localizedDescription];
+                                 } else {
+                                     [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             [self.spinner stopAnimating];
+                                             if(error) {
+                                                 [self showErrorAlertWithMessage: error.localizedDescription];
+                                             } else {
+                                                 [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                                             }
+                                         });
+                                     }];
+                                 }
+                             }];
+
 }
 ```
 
@@ -61,10 +66,11 @@ In `ProfileViewController.m`:
 ```objective-c
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.navigationItem.hidesBackButton = YES;
     self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
-    
+    self.userMetadataTextView.text =  [self.userProfile.userMetadata description];
+
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.pictureURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.avatarImageView.image = [UIImage imageWithData:data];
@@ -81,22 +87,22 @@ In `SignUpViewController.m`:
 ```objective-c
 - (IBAction)signUpAction:(id)sender {
     [self.spinner startAnimating];
-    
-    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] initWithClientId:[Auth0InfoHelper Auth0ClientID] url:[Auth0InfoHelper Auth0Domain]];
+
+    A0AuthenticationAPI *authApi = [[A0AuthenticationAPI alloc] init];
 
     [authApi signUpWithEmail:self.emailTextField.text
                     username:nil
                     password:self.passwordTextField.text
                   connection:@"Username-Password-Authentication"
-                userMetadata:nil
+                userMetadata:@{@"first_name": self.firstNameTextField.text,
+                               @"last_name": self.lastNameTextField.text}
                        scope:@"openid"
                   parameters:nil
                     callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                
                 [self.spinner stopAnimating];
                 if(error) {
-                    NSLog(error.localizedDescription);
+                    [self showErrorAlertWithMessage:error.localizedDescription];
                 } else {
                     self.retrievedCredentials = credentials;
                     [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
@@ -115,29 +121,50 @@ Once someone has signed up, the `SignUpViewController` is dismissed, and the `Lo
 In `LoginViewController.m`:
 
 ```objective-c
-- (IBAction)unwindToLogin:(id)sender {
+- (IBAction)unwindToLogin:(UIStoryboardSegue*)sender {
     if([sender isKindOfClass:[UIStoryboardSegueWithCompletion class]]) {
-        UIStoryboardSegueWithCompletion *segue = sender;
-        
-        if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
-            [self.spinner startAnimating];
+        UIStoryboardSegueWithCompletion *segue = (UIStoryboardSegueWithCompletion*) sender;
 
+        if([segue.sourceViewController isKindOfClass:[SignUpViewController class]]) {
             SignUpViewController *source = segue.sourceViewController;
             A0Credentials *credentials = source.retrievedCredentials;
-            
-            segue.completion = ^{
-            [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0UserProfile * _Nullable profile) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.spinner stopAnimating];
-                        if(error) {
-                            NSLog(@"%@", error.localizedDescription);
-                        } else {
-                            [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                        }
-                    });
-                }];
-            };
+
+            if(credentials){
+                [self.spinner startAnimating];
+
+                segue.completion = ^{
+                    [self loadUserWithCredentials:credentials callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.spinner stopAnimating];
+                            if(error) {
+                                [self showErrorAlertWithMessage: error.localizedDescription];
+                            } else {
+                                [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                            }
+                        });
+                    }];
+                };
+            }
         }
     }
 }
 ```
+
+##### 6. Perform web authentication with social connection
+
+You can now perform webAuth authentication by specifying the social connection name, for example with Facebook.
+
+```objc
+A0WebAuth *webAuth = [[A0WebAuth alloc] init];
+[webAuth setConnection:@"facebook"];
+[webAuth setScope:@"openid"];
+[webAuth start:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+    if (error) {
+      // Handle Error
+    } else {
+      // You've got your credentials
+    }
+}];
+```
+
+Once you obtain the `credentials` object upon a successful authentication, you can deal with them as usual.
