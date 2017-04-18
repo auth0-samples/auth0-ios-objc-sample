@@ -36,7 +36,7 @@
 - (IBAction)showLoginController:(id)sender {
     A0Lock *lock = [A0Lock sharedLock];
 
-    A0SafariAuthenticator *safari = [[A0SafariAuthenticator alloc] initWithLock:lock connectionName:@"google-oauth2"];
+    A0SafariAuthenticator *safari = [[A0SafariAuthenticator alloc] initWithLock:lock connectionName:@"google-oauth2" useUniversalLink:NO];
     [lock registerAuthenticators:@[safari]];
     
     A0LockViewController *controller = [lock newLockViewController];
