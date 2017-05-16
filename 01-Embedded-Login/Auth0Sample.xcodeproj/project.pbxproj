@@ -62,7 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				5B6747EA1EC06774002DBB12 /* HybridLock.swift */,
-				5B6747E91EC06774002DBB12 /* Auth0Sample-Bridging-Header.h */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -106,6 +105,7 @@
 		7D57F0661D1B20AA0015BFC1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5B6747E91EC06774002DBB12 /* Auth0Sample-Bridging-Header.h */,
 				7D57F0671D1B20AA0015BFC1 /* main.m */,
 			);
 			name = "Supporting Files";

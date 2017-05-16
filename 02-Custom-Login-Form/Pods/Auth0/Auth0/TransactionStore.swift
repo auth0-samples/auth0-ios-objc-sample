@@ -1,8 +1,6 @@
+// TransactionStore.swift
 //
-//  HybridLock.swift
-//  Auth0Sample
-//
-// Copyright (c) 2017 Auth0 (http://auth0.com)
+// Copyright (c) 2016 Auth0 (http://auth0.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
-import Lock
-import Auth0
+import UIKit
 
-@objc class HybridLock: NSObject {
+/// Keeps track of current Auth Transaction
+class TransactionStore {
+    static let shared = TransactionStore()
 
-    private let lock = Lock.classic()
+    private(set) var current: AuthTransaction?
 
-    static func resumeAuth(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
-        return Lock.resumeAuth(url, options: options)
+    func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+        let resumed = self.current?.resume(url, options: options) ?? false
+        if resumed {
+            self.current = nil
+        }
+        return resumed
     }
 
-    func showLock(from controller: UIViewController, callback: @escaping (Error?, Credentials?) -> ()) {
-        self.lock
-            .withOptions {
-                $0.oidcConformant = true
-            }.onAuth {
-                callback(nil, $0)
-            }.onError {
-                callback($0, nil)
-            }.present(from: controller)
+    func store(_ transaction: AuthTransaction) {
+        self.current?.cancel()
+        self.current = transaction
+    }
+
+    func cancel(_ transaction: AuthTransaction) {
+        transaction.cancel()
+        if self.current?.state == transaction.state {
+            self.current = nil
+        }
     }
 }

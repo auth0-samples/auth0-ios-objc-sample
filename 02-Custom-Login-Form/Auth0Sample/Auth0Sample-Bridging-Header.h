@@ -1,6 +1,6 @@
 //
-//  HybridLock.swift
-//  Auth0Sample
+// Auth0Sample-Bridging-Header.h
+// Auth0Sample
 //
 // Copyright (c) 2017 Auth0 (http://auth0.com)
 //
@@ -22,26 +22,3 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
-import Lock
-import Auth0
-
-@objc class HybridLock: NSObject {
-
-    private let lock = Lock.classic()
-
-    static func resumeAuth(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
-        return Lock.resumeAuth(url, options: options)
-    }
-
-    func showLock(from controller: UIViewController, callback: @escaping (Error?, Credentials?) -> ()) {
-        self.lock
-            .withOptions {
-                $0.oidcConformant = true
-            }.onAuth {
-                callback(nil, $0)
-            }.onError {
-                callback($0, nil)
-            }.present(from: controller)
-    }
-}

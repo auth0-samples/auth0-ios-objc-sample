@@ -1,8 +1,6 @@
+// Auth0Error.swift
 //
-//  HybridLock.swift
-//  Auth0Sample
-//
-// Copyright (c) 2017 Auth0 (http://auth0.com)
+// Copyright (c) 2016 Auth0 (http://auth0.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +21,20 @@
 // THE SOFTWARE.
 
 import Foundation
-import Lock
-import Auth0
 
-@objc class HybridLock: NSObject {
+let unknownError = "a0.sdk.internal_error.unknown"
+let nonJSONError = "a0.sdk.internal_error.plain"
+let emptyBodyError = "a0.sdk.internal_error.empty"
 
-    private let lock = Lock.classic()
+/**
+   Generic representation of Auth0 API errors
+   - note: It's recommended to use either `AuthenticationError` or `ManagementError` for better error handling
+ */
+public protocol Auth0Error: Error {
 
-    static func resumeAuth(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
-        return Lock.resumeAuth(url, options: options)
-    }
+    init(string: String?, statusCode: Int)
+    init(info: [String: Any], statusCode: Int)
 
-    func showLock(from controller: UIViewController, callback: @escaping (Error?, Credentials?) -> ()) {
-        self.lock
-            .withOptions {
-                $0.oidcConformant = true
-            }.onAuth {
-                callback(nil, $0)
-            }.onError {
-                callback($0, nil)
-            }.present(from: controller)
-    }
+    /// The code of the error as a String
+    var code: String { get }
 }

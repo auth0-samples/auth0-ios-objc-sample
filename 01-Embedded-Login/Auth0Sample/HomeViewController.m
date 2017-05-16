@@ -36,7 +36,7 @@
 
     HybridLock *lock = [[HybridLock alloc] init];
 
-    [lock showLockFrom:self callback:^(NSError *error, A0Credentials *credentials) {
+    [lock showLockFrom:self callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 NSLog(@"Error: %@", error);

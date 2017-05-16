@@ -35,9 +35,11 @@
 - (IBAction)showLoginController:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
 
-    [auth showLogin:^(NSError *error, A0Credentials *credentials) {
+    [auth showLogin:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (credentials) {
+            if (error) {
+                NSLog(@"Error: %@", error);
+            } else if (credentials) {
                 [self showAlertWithMessage:[NSString stringWithFormat:@"Success, Access Token: %@", [credentials accessToken]]];
             }
         });

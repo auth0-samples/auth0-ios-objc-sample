@@ -32,7 +32,7 @@ import Auth0
         return Auth0.resumeAuth(url, options: options)
     }
 
-    func showLogin(_ callback: @escaping (Error?, Credentials?) -> Swift.Void) {
+    func showLogin(_ callback: @escaping (Error?, Credentials?) -> ()) {
         Auth0
             .webAuth()
             .start {
