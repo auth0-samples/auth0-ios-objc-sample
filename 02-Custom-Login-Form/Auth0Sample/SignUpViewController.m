@@ -115,10 +115,14 @@
                 [self showErrorAlertWithMessage:error.localizedDescription];
             } else {
                 [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        self.retrievedCredentials = credentials;
-                        [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
-                    });
+                    if (error) {
+                        NSLog(@"Error: %@", error.localizedDescription);
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            self.retrievedCredentials = credentials;
+                            [self performSegueWithIdentifier:@"DismissSignUp" sender:nil];
+                        });
+                    }
                 }];
             }
         });

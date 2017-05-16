@@ -53,10 +53,14 @@
                 } else {
                     [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [self saveCredentials:credentials];
-                            [loadingAlert dismissViewControllerAnimated:NO completion:^{
-                                [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                            }];
+                            if (error) {
+                                NSLog(@"Error: %@", error.localizedDescription);
+                            } else {
+                                [self saveCredentials:credentials];
+                                [loadingAlert dismissViewControllerAnimated:NO completion:^{
+                                    [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                                }];
+                            }
                         });
                     }];
                 }
@@ -83,10 +87,14 @@
             NSLog(@"Error: %@", error.localizedDescription);
         } else {
             [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self saveCredentials:credentials];
-                    [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
-                });
+                if (error) {
+                    NSLog(@"Error: %@", error.localizedDescription);
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self saveCredentials:credentials];
+                        [self performSegueWithIdentifier:@"ShowProfile" sender:profile];
+                    });
+                }
             }];
         }
     }];
