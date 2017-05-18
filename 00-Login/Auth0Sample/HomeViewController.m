@@ -35,7 +35,7 @@
 - (IBAction)showLoginController:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
 
-    [auth showLogin:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+    [auth showLoginWithScope:@"openid" connection:nil callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 NSLog(@"Error: %@", error);

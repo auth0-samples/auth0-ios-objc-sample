@@ -34,9 +34,15 @@ import Auth0
         return Auth0.resumeAuth(url, options: options)
     }
 
-    func showLogin(withScope scope: String, callback: @escaping (Error?, Credentials?) -> ()) {
-        Auth0
-            .webAuth()
+    func showLogin(withScope scope: String, connection: String?, callback: @escaping (Error?, Credentials?) -> ()) {
+
+        let webAuth = Auth0.webAuth()
+
+        if let connection = connection {
+            _ = webAuth.connection(connection)
+        }
+
+        webAuth
             .scope(scope)
             .start {
                 switch $0 {
@@ -91,4 +97,56 @@ import Auth0
             }
         }
     }
+
+    func userRoles(withIdToken idToken: String, userId: String, callback: @escaping (Error?, [String]?) -> ()) {
+        Auth0
+            .users(token: idToken)
+            .get(userId, fields: [], include: true)
+            .start {
+                switch $0 {
+                case .success(let user):
+                    guard
+                        let appMetadata = user["app_metadata"] as? [String: Any],
+                        let roles = appMetadata["roles"] as? [String]
+                        else {
+                            return callback(nil, nil)
+                    }
+                    callback(nil, roles)
+                    break
+                case .failure(let error):
+                    callback(error, nil)
+                    break
+                }
+        }
+
+    }
+
+    func linkUserAccount(withIdToken idToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
+        Auth0
+            .users(token: idToken)
+            .link(userId, withOtherUserToken: otherAccountToken)
+            .start {
+                switch $0 {
+                case .success(let payload):
+                    callback(nil, payload)
+                case .failure(let error):
+                    callback(error, nil)
+            }
+        }
+    }
+
+    func unlinkUserAccount(withIdToken idToken: String, userId: String, identity: Identity, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
+        Auth0
+            .users(token: idToken)
+            .unlink(identityId: identity.identifier, provider: identity.provider, fromUserId: userId)
+            .start {
+                switch $0 {
+                case .success(let payload):
+                    callback(nil, payload)
+                case .failure(let error):
+                    callback(error, nil)
+                }
+        }
+    }
+
 }
