@@ -75,7 +75,6 @@
 
 - (void)saveCredentials:(A0Credentials *) credentials {
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-
     [keychain setString:[credentials accessToken] forKey:@"access_token"];
     [keychain setString:[credentials refreshToken] forKey:@"refresh_token"];
 }

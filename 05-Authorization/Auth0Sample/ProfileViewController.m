@@ -54,21 +54,26 @@
 - (IBAction) checkAdminStatus:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    [auth userRolesWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id callback:^(NSError * _Nullable error, NSArray<NSString *> * _Nullable roles) {
+    [auth userProfileWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id callback:^(NSError * _Nullable error, NSDictionary<NSString *, id> * _Nullable user) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (![roles containsObject:@"admin"]) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Access denied" message:@"You do not have privileges to access the admin panel" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {}];
-                [alert addAction:defaultAction];
-                [self presentViewController:alert animated:YES completion:nil];
+            if (error) {
+                NSLog(@"Error: %@", error.localizedDescription);
             } else {
-                [self performSegueWithIdentifier:@"AdminSegue" sender:nil];
+                NSDictionary *metaData = [user objectForKey:@"app_metadata"];
+                NSArray *roles = [metaData objectForKey:@"roles"];
+                if (![roles containsObject:@"admin"]) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Access denied" message:@"You do not have privileges to access the admin panel" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                            style:UIAlertActionStyleDefault
+                                                                          handler:^(UIAlertAction * action) {}];
+                    [alert addAction:defaultAction];
+                    [self presentViewController:alert animated:YES completion:nil];
+                } else {
+                    [self performSegueWithIdentifier:@"AdminSegue" sender:nil];
+                }
             }
         });
     }];
-
 }
 
 @end

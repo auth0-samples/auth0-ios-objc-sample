@@ -54,48 +54,48 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.navigationItem.hidesBackButton = YES;
     self.nameLabel.text = self.userProfile.name;
-    
+
     [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.pictureURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.avatarImageView.image = [UIImage imageWithData:data];
         });
 
     }] resume];
-    
+
     self.identities = self.userProfile.identities;
-    
+
     [self updateSocialAccounts];
 }
 
 - (void)updateSocialAccounts {
-        [self.facebookLinkButton setEnabled:YES];
-        [self.facebookNameLabel setHidden:YES];
-        [self.facebookUnlinkButton setHidden:YES];
+    [self.facebookLinkButton setEnabled:YES];
+    [self.facebookNameLabel setHidden:YES];
+    [self.facebookUnlinkButton setHidden:YES];
 
-        [self.googleLinkButton setEnabled:YES];
-        [self.googleNameLabel setHidden:YES];
-        [self.googleUnlinkButton setHidden:YES];
-        
-        [self.twitterLinkButton setEnabled:YES];
-        [self.twitterNameLabel setHidden:YES];
-        [self.twitterUnlinkButton setHidden:YES];
-        
-        for (A0Identity *identity in self.identities) {
-            if ([identity.connection isEqualToString:@"facebook"]) {
-                [self.facebookLinkButton setEnabled:NO];
-                [self.facebookNameLabel setHidden:NO];
-                [self.facebookUnlinkButton setHidden:NO];
-                [self.facebookNameLabel setText:identity.profileData[@"name"]];
-            } else if ([identity.connection isEqualToString:@"google-oauth2"]) {
-                [self.googleLinkButton setEnabled:NO];
-                [self.googleNameLabel setHidden:NO];
-                [self.googleUnlinkButton setHidden:NO];
-                [self.googleNameLabel setText:identity.profileData[@"email"]];
-            }
+    [self.googleLinkButton setEnabled:YES];
+    [self.googleNameLabel setHidden:YES];
+    [self.googleUnlinkButton setHidden:YES];
+
+    [self.twitterLinkButton setEnabled:YES];
+    [self.twitterNameLabel setHidden:YES];
+    [self.twitterUnlinkButton setHidden:YES];
+
+    for (A0Identity *identity in self.identities) {
+        if ([identity.connection isEqualToString:@"facebook"]) {
+            [self.facebookLinkButton setEnabled:NO];
+            [self.facebookNameLabel setHidden:NO];
+            [self.facebookUnlinkButton setHidden:NO];
+            [self.facebookNameLabel setText:identity.profileData[@"name"]];
+        } else if ([identity.connection isEqualToString:@"google-oauth2"]) {
+            [self.googleLinkButton setEnabled:NO];
+            [self.googleNameLabel setHidden:NO];
+            [self.googleUnlinkButton setHidden:NO];
+            [self.googleNameLabel setText:identity.profileData[@"email"]];
         }
+    }
 }
 
 - (void)updateIdentitiesWithArray:(NSArray*)jsonIdentities {
@@ -121,31 +121,30 @@
 
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
+
     [auth showLoginWithScope:@"openid profile" connection:connection callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-             [self showErrorAlertWithMessage:error.localizedDescription];
-                  });
+                [self showErrorAlertWithMessage:error.localizedDescription];
+            });
         } else {
-            [auth linkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id otherAccountToken: credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+            [auth linkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id otherAccountToken:credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                if (error) {
-                    [self showErrorAlertWithMessage:error.localizedDescription];
-                } else {
-                    [self updateIdentitiesWithArray:payload];
-                }
-                    });
+                    if (error) {
+                        [self showErrorAlertWithMessage:error.localizedDescription];
+                    } else {
+                        [self updateIdentitiesWithArray:payload];
+                    }
+                });
             }];
         }
-
     }];
 }
 
 - (IBAction)unlinkAccount:(id)sender {
     NSString *connection;
     A0Identity *identity;
-    
+
     if (sender == self.googleUnlinkButton) {
         connection = @"google-oauth2";
     } else if (sender == self.twitterUnlinkButton) {
@@ -155,22 +154,22 @@
     } else {
         return;
     }
-    
+
     for (A0Identity* userId in self.identities) {
         if([userId.connection isEqualToString:connection]) {
             identity = userId;
         }
     }
-    
+
     if (!identity) {
         return;
     }
-    
+
     UIAlertController *loadingAlert = [UIAlertController loadingAlert];
     [loadingAlert presentInViewController:self];
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    
+
     [auth unlinkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id identity:identity  callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [loadingAlert dismiss];
@@ -184,14 +183,14 @@
 }
 
 - (void)showErrorAlertWithMessage:(NSString*)message {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

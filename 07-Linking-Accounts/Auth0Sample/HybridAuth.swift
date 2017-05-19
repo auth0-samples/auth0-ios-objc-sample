@@ -98,27 +98,34 @@ import Auth0
         }
     }
 
-    func userRoles(withIdToken idToken: String, userId: String, callback: @escaping (Error?, [String]?) -> ()) {
+    func userProfile(withIdToken idToken: String, userId: String, callback: @escaping (Error?, [String: Any]?) -> ()) {
         Auth0
             .users(token: idToken)
             .get(userId, fields: [], include: true)
             .start {
                 switch $0 {
                 case .success(let user):
-                    guard
-                        let appMetadata = user["app_metadata"] as? [String: Any],
-                        let roles = appMetadata["roles"] as? [String]
-                        else {
-                            return callback(nil, nil)
-                    }
-                    callback(nil, roles)
+                    callback(nil, user)
                     break
                 case .failure(let error):
                     callback(error, nil)
                     break
                 }
         }
+    }
 
+    func patchProfile(withIdToken idToken: String, userId: String, metaData: [String: Any], callback: @escaping (Error?, [String: Any]?) -> ()) {
+        Auth0
+            .users(token: idToken)
+            .patch(userId, userMetadata: metaData)
+            .start {
+                switch $0 {
+                case .success(let user):
+                    callback(nil, user)
+                case .failure(let error):
+                    callback(error, nil)
+                }
+        }
     }
 
     func linkUserAccount(withIdToken idToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
@@ -131,7 +138,7 @@ import Auth0
                     callback(nil, payload)
                 case .failure(let error):
                     callback(error, nil)
-            }
+                }
         }
     }
 
@@ -148,5 +155,5 @@ import Auth0
                 }
         }
     }
-
+    
 }
