@@ -43,7 +43,7 @@
     self.navigationItem.hidesBackButton = YES;
     self.welcomeLabel.text = [NSString stringWithFormat:@"Welcome, %@", self.userProfile.name];
 
-    [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.pictureURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.avatarImageView.image = [UIImage imageWithData:data];
         });
@@ -54,7 +54,7 @@
 - (IBAction) checkAdminStatus:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    [auth userProfileWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id callback:^(NSError * _Nullable error, NSDictionary<NSString *, id> * _Nullable user) {
+    [auth userProfileWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.sub callback:^(NSError * _Nullable error, NSDictionary<NSString *, id> * _Nullable user) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 NSLog(@"Error: %@", error.localizedDescription);
