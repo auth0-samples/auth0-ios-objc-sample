@@ -33,6 +33,11 @@ class DatabaseOnlyView: UIView, DatabaseView {
     weak var secondaryStrut: UIView?
     weak var ssoBar: InfoBarView?
     weak var spacer: UIView?
+    private var style: Style?
+    weak var passwordManagerButton: IconButton?
+
+    weak var identityField: InputField?
+    weak var passwordField: InputField?
 
     // FIXME: Remove this from the view since it should not even know it exists
     var navigator: Navigable?
@@ -85,7 +90,7 @@ class DatabaseOnlyView: UIView, DatabaseView {
     private let separatorIndex = 2
     private let socialIndex = 1
 
-    func showLogin(withIdentifierStyle style: DatabaseIdentifierStyle, identifier: String? = nil, authCollectionView: AuthCollectionView? = nil) {
+    func showLogin(withIdentifierStyle style: DatabaseIdentifierStyle, identifier: String? = nil, authCollectionView: AuthCollectionView? = nil, showPassswordManager: Bool) {
         let form = CredentialView()
 
         let type: InputField.InputType
@@ -107,10 +112,16 @@ class DatabaseOnlyView: UIView, DatabaseView {
         layoutInStack(form, authCollectionView: authCollectionView)
         self.layoutSecondaryButton(self.allowedModes.contains(.ResetPassword))
         self.form = form
+        self.identityField = form.identityField
+        self.passwordField = form.passwordField
+
+        if showPassswordManager {
+            self.passwordManagerButton = form.passwordField.addFieldButton(withIcon: "ic_onepassword", color: Style.Auth0.onePasswordIconColor)
+        }
 
     }
 
-    func showSignUp(withUsername showUsername: Bool, username: String?, email: String?, authCollectionView: AuthCollectionView? = nil, additionalFields: [CustomTextField], passwordPolicyValidator: PasswordPolicyValidator? = nil) {
+    func showSignUp(withUsername showUsername: Bool, username: String?, email: String?, authCollectionView: AuthCollectionView? = nil, additionalFields: [CustomTextField], passwordPolicyValidator: PasswordPolicyValidator? = nil, showPassswordManager: Bool) {
         let form = SignUpView(additionalFields: additionalFields)
         form.showUsername = showUsername
         form.emailField.text = email
@@ -124,6 +135,9 @@ class DatabaseOnlyView: UIView, DatabaseView {
         layoutInStack(form, authCollectionView: authCollectionView)
         self.layoutSecondaryButton(true)
         self.form = form
+
+        self.identityField = showUsername ? form.usernameField : form.emailField
+        self.passwordField = form.passwordField
 
         if let passwordPolicyValidator = passwordPolicyValidator {
             let passwordPolicyView = PolicyView(rules: passwordPolicyValidator.policy.rules)
@@ -145,6 +159,10 @@ class DatabaseOnlyView: UIView, DatabaseView {
                 guard let view = passwordPolicyView else { return }
                 view.isHidden = true
             }
+        }
+
+        if showPassswordManager {
+            self.passwordManagerButton = form.passwordField.addFieldButton(withIcon: "ic_onepassword", color: Style.Auth0.onePasswordIconColor)
         }
     }
 
@@ -226,7 +244,6 @@ class DatabaseOnlyView: UIView, DatabaseView {
             let label = UILabel()
             label.text = "or".i18n(key: "com.auth0.lock.database.separator", comment: "Social separator")
             label.font = mediumSystemFont(size: 13.75)
-            label.textColor = UIColor ( red: 0.0, green: 0.0, blue: 0.0, alpha: 0.54 )
             label.textAlignment = .center
             self.container?.insertArrangedSubview(social, at: socialIndex)
             self.container?.insertArrangedSubview(label, at: separatorIndex)
@@ -236,11 +253,15 @@ class DatabaseOnlyView: UIView, DatabaseView {
         } else {
             self.container?.insertArrangedSubview(view, at: formOnlyIndex)
         }
+        if let style = self.style {
+            self.separator?.textColor = style.seperatorTextColor
+            self.container?.styleSubViews(style: style)
+        }
     }
 
-    // MARK: - Styling
-
     func apply(style: Style) {
-        primaryButton?.apply(style: style)
+        self.style = style
+        self.separator?.textColor = style.seperatorTextColor
+        self.passwordManagerButton?.color = style.onePasswordIconColor
     }
 }

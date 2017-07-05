@@ -109,12 +109,12 @@
     }
 
     HybridAuth *auth = [[HybridAuth alloc] init];
-    [auth showLoginWithConnection:connection scope:@"openid profile" callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+    [auth showLoginWithScope:@"openid profile" connection:connection callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 [self showErrorAlertWithMessage:error.localizedDescription];
             } else {
-                [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, A0Profile * _Nullable profile) {
+                [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, UserInfo * _Nullable profile) {
                     if (error) {
                         NSLog(@"Error: %@", error.localizedDescription);
                     } else {
