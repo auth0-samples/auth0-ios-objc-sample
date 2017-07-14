@@ -29,7 +29,7 @@ Need help migrating from v1? Please check our [Migration Guide](MIGRATION.md)
  Add the following line to your Podfile:
 
  ```ruby
- pod "Lock", "~> 2.2"
+ pod "Lock", "~> 2.3"
  ```
 
 ### Carthage
@@ -37,7 +37,7 @@ Need help migrating from v1? Please check our [Migration Guide](MIGRATION.md)
 In your `Cartfile` add
 
 ```ruby
-github "auth0/Lock.swift" ~> 2.2
+github "auth0/Lock.swift" ~> 2.3
 ```
 
 ## Usage
@@ -209,7 +209,9 @@ Lock
     .present(from: self)
 ```
 
-Passwordless can only be used with a single connection and will prioritize the use of email connections over sms.
+**Notes:**
+- Passwordless can only be used with a single connection and will prioritize the use of email connections over sms.  
+- The `audience` option is not available in Passwordless.
 
 #### Passwordless Method
 
@@ -237,7 +239,7 @@ func application(_ application: UIApplication, continue userActivity: NSUserActi
 
 ```swift
 .withConnections {
-    $0.sms(name: "custom-sms")
+    $0.sms(name: "sms")
 }
 ```
 
@@ -245,7 +247,7 @@ func application(_ application: UIApplication, continue userActivity: NSUserActi
 
 ```swift
 .withConnections {
-    $0.email(name: "custom-email")
+    $0.email(name: "email")
 }
 ```
 
@@ -361,6 +363,34 @@ When signing up the default information requirements are the user's *email* and 
 ```
 
 *Note: You must specify the icon to use with your custom text field and store it in your App's bundle.*
+
+#### Password Manager
+
+By default password manager support using [1Password](https://1password.com/) is enabled for database connections, although you will still need to have the 1Password app installed for the option to be visible in the login and signup screens. You can disable 1Password support using the `enabled` property of the `passwordManager`.
+
+```swift
+.withOptions {
+    $0.passwordManager.enabled = false
+}
+```
+
+By default the `appIdentifier` will be set to the app's bundle identifier and the `displayName` will be set to the app's display name. You can customize these as follows:
+
+```swift
+.withOptions {
+    $0.passwordManager.appIdentifier = "www.myapp.com"
+    $0.passwordManager.displayName = "My App"
+}
+```
+
+You will need to add the following to your app's `info.plist`:
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>org-appextension-feature-password-management</string>
+</array>
+```
 
 #### Enterprise
 
