@@ -58,16 +58,25 @@
     self.navigationItem.hidesBackButton = YES;
     self.nameLabel.text = self.userProfile.name;
 
-    [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.pictureURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[[NSURLSession sharedSession] dataTaskWithURL:self.userProfile.picture completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.avatarImageView.image = [UIImage imageWithData:data];
         });
 
     }] resume];
 
-    self.identities = self.userProfile.identities;
 
-    [self updateSocialAccounts];
+    // Retrieve Identities
+    HybridAuth *auth = [[HybridAuth alloc] init];
+    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+    [auth userProfileWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.sub callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable payload) {
+        NSArray *identities = [[NSArray alloc] init];
+        for (NSDictionary *identity in  [payload valueForKey:@"identities"]) {
+            identities = [identities arrayByAddingObject:[[A0Identity alloc] initWithJson:identity]];
+        }
+        self.identities = identities;
+        [self updateSocialAccounts];
+    }];
 }
 
 - (void)updateSocialAccounts {
@@ -128,7 +137,7 @@
                 [self showErrorAlertWithMessage:error.localizedDescription];
             });
         } else {
-            [auth linkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id otherAccountToken:credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+            [auth linkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.sub otherAccountToken:credentials.idToken callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (error) {
                         [self showErrorAlertWithMessage:error.localizedDescription];
@@ -170,7 +179,7 @@
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain* keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
 
-    [auth unlinkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.id identity:identity  callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
+    [auth unlinkUserAccountWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.sub identity:identity  callback:^(NSError * _Nullable error, NSArray<NSDictionary<NSString *,id> *> * _Nullable payload) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [loadingAlert dismiss];
             if (error) {

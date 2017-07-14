@@ -35,7 +35,7 @@ import Auth0
     }
 
     func showLogin(withScope scope: String, connection: String?, callback: @escaping (Error?, Credentials?) -> ()) {
-
+        guard let clientInfo = plistValues(bundle: Bundle.main) else { return }
         let webAuth = Auth0.webAuth()
 
         if let connection = connection {
@@ -44,6 +44,7 @@ import Auth0
 
         webAuth
             .scope(scope)
+            .audience("https://" + clientInfo.domain + "/userinfo")
             .start {
                 switch $0 {
                 case .failure(let error):
@@ -54,8 +55,8 @@ import Auth0
         }
     }
 
-    func userInfo(accessToken: String, callback: @escaping (Error?, Profile?) -> ()) {
-        self.authentication.userInfo(token: accessToken).start {
+    func userInfo(accessToken: String, callback: @escaping (Error?, UserInfo?) -> ()) {
+        self.authentication.userInfo(withAccessToken: accessToken).start {
             switch $0 {
             case .success(let profile):
                 callback(nil, profile)
@@ -155,5 +156,26 @@ import Auth0
                 }
         }
     }
-    
+
 }
+
+func plistValues(bundle: Bundle) -> (clientId: String, domain: String)? {
+    guard
+        let path = bundle.path(forResource: "Auth0", ofType: "plist"),
+        let values = NSDictionary(contentsOfFile: path) as? [String: Any]
+        else {
+            print("Missing Auth0.plist file with 'ClientId' and 'Domain' entries in main bundle!")
+            return nil
+    }
+
+    guard
+        let clientId = values["ClientId"] as? String,
+        let domain = values["Domain"] as? String
+        else {
+            print("Auth0.plist file at \(path) is missing 'ClientId' and/or 'Domain' entries!")
+            print("File currently has the following entries: \(values)")
+            return nil
+    }
+    return (clientId: clientId, domain: domain)
+}
+
