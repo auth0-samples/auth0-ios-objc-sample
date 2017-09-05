@@ -28,7 +28,7 @@ import Auth0
 
 @objc class HybridAuth: NSObject {
 
-    private let authentication = Auth0.authentication()
+    private var authentication = Auth0.authentication()
 
     static func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
         return Auth0.resumeAuth(url, options: options)
@@ -67,6 +67,7 @@ import Auth0
     }
 
     func login(withUsernameOrEmail username: String, password: String, realm: String, audience: String? = nil, scope: String?, callback: @escaping (Error?, Credentials?) -> ()) {
+        self.authentication.logging(enabled: true)
         self.authentication.login(usernameOrEmail: username, password: password, realm: realm, audience: audience, scope: scope).start {
             switch $0 {
             case .failure(let error):

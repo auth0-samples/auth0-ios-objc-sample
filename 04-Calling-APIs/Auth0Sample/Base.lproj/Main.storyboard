@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o2u-JV-6ys">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o2u-JV-6ys">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -134,11 +134,17 @@
                                     <action selector="callAPIWithoutAuthentication:" destination="Wx9-md-nxp" eventType="touchUpInside" id="Z0i-Ij-xV5"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zMv-AP-o8p">
+                                <rect key="frame" x="311" y="72" width="48" height="30"/>
+                                <state key="normal" title="Logout"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="xwZ-6c-NXu" firstAttribute="top" secondItem="zMv-AP-o8p" secondAttribute="bottom" constant="565" id="2Pq-l1-uWI"/>
                             <constraint firstItem="lV6-Ob-gUG" firstAttribute="centerX" secondItem="vd7-Qy-c6C" secondAttribute="centerX" id="EgB-PU-nPl"/>
                             <constraint firstItem="VVg-sp-234" firstAttribute="top" secondItem="tYw-v0-XcE" secondAttribute="bottom" constant="24" id="F1W-Ml-UCj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="zMv-AP-o8p" secondAttribute="trailing" id="KLw-A8-lwb"/>
                             <constraint firstItem="lV6-Ob-gUG" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vd7-Qy-c6C" secondAttribute="leadingMargin" constant="20" id="Pa7-cy-CL2"/>
                             <constraint firstItem="jLT-s9-Fck" firstAttribute="top" secondItem="uaQ-6g-cN9" secondAttribute="bottom" constant="8" id="W5s-52-ODo"/>
                             <constraint firstItem="jLT-s9-Fck" firstAttribute="centerX" secondItem="vd7-Qy-c6C" secondAttribute="centerX" id="XGD-LL-rFb"/>
