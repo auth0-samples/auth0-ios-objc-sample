@@ -35,8 +35,10 @@
 
 - (IBAction)showLoginController:(id)sender {
 
+    NSString* identifier = nil; // Set to your API_IDENTIFIER value
+
     HybridAuth *auth = [[HybridAuth alloc] init];
-    [auth showLoginWithScope:@"openid profile" connection: nil callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+    [auth showLoginWithScope:@"openid profile" connection:nil audience:identifier callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if (error) {
             NSLog(@"Error: %@", error.localizedDescription);
         } else {
