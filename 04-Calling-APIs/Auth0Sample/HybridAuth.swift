@@ -34,7 +34,7 @@ import Auth0
         return Auth0.resumeAuth(url, options: options)
     }
 
-    func showLogin(withScope scope: String, connection: String?, callback: @escaping (Error?, Credentials?) -> ()) {
+    func showLogin(withScope scope: String, connection: String?, audience: String?, callback: @escaping (Error?, Credentials?) -> ()) {
         guard let clientInfo = plistValues(bundle: Bundle.main) else { return }
         let webAuth = Auth0.webAuth()
 
@@ -42,9 +42,14 @@ import Auth0
             _ = webAuth.connection(connection)
         }
 
+        if let audience = audience {
+            _ = webAuth.audience(audience)
+        } else {
+            _ = webAuth.audience("https://" + clientInfo.domain + "/userinfo")
+        }
+
         webAuth
             .scope(scope)
-            .audience("https://" + clientInfo.domain + "/userinfo")
             .start {
                 switch $0 {
                 case .failure(let error):
