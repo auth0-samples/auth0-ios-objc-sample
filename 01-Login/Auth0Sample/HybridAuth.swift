@@ -77,6 +77,13 @@ import Auth0
             }
         }
     }
+    func userLogout(){
+        
+        Auth0
+            .webAuth()            
+            .clearSession(federated: true) { print($0) }
+        
+    }
 
     func signUp(withEmail email: String, username: String?, password: String, connection: String, userMetadata: [String: Any]?, scope: String, parameters: [String: Any], callback: @escaping (Error?, Credentials?) -> ()) {
         self.authentication.signUp(email: email, username: username, password: password, connection: connection, userMetadata: userMetadata, scope: scope, parameters: parameters).start {
