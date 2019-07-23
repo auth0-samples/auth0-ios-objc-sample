@@ -42,6 +42,7 @@ public enum WebAuthError: CustomNSError {
     case missingResponseParam(String)
     case invalidIdTokenNonce
     case missingAccessToken
+    case unknownError
 
     static let genericFoundationCode = 1
     static let cancelledFoundationCode = 0
@@ -58,7 +59,7 @@ public enum WebAuthError: CustomNSError {
         }
     }
 
-    public var errorUserInfo: [String : Any] {
+    public var errorUserInfo: [String: Any] {
         switch self {
         case .userCancelled:
             return [

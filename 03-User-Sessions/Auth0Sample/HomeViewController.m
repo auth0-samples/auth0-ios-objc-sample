@@ -51,7 +51,7 @@
                         [self showLoginController:nil];
                     }];
                 } else {
-                    [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, UserInfo * _Nullable profile) {
+                    [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, A0UserInfo * _Nullable profile) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (error) {
                                 NSLog(@"Error: %@", error.localizedDescription);
@@ -85,7 +85,7 @@
         if (error) {
             NSLog(@"Error: %@", error.localizedDescription);
         } else {
-            [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, UserInfo * _Nullable profile) {
+            [auth userInfoWithAccessToken:[credentials accessToken] callback:^(NSError * _Nullable error, A0UserInfo * _Nullable profile) {
                 if (error) {
                     NSLog(@"Error: %@", error.localizedDescription);
                 } else {

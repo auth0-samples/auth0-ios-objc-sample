@@ -22,6 +22,12 @@
 
 import UIKit
 
+#if swift(>=4.2)
+public typealias A0URLOptionsKey = UIApplication.OpenURLOptionsKey
+#else
+public typealias A0URLOptionsKey = UIApplicationOpenURLOptionsKey
+#endif
+
 /**
  Auth0 iOS component for authenticating with web-based flow
 
@@ -78,7 +84,7 @@ public func webAuth(clientId: String, domain: String) -> WebAuth {
 
  - returns: if the url was handled by an on going session or not.
  */
-public func resumeAuth(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+public func resumeAuth(_ url: URL, options: [A0URLOptionsKey: Any]) -> Bool {
     return TransactionStore.shared.resume(url, options: options)
 }
 
@@ -179,10 +185,11 @@ public protocol WebAuth: Trackable, Loggable {
      Use `SFSafariViewController` instead of `SFAuthenticationSession` for WebAuth
      in iOS 11.0+.
 
+     - Parameter style: modal presentation style
      - returns: the same WebAuth instance to allow method chaining
      */
     @available(iOS 11, *)
-    func useLegacyAuthentication() -> Self
+    func useLegacyAuthentication(withStyle style: UIModalPresentationStyle) -> Self
 
     /**
      Starts the WebAuth flow by modally presenting a ViewController in the top-most controller.
@@ -215,7 +222,7 @@ public protocol WebAuth: Trackable, Loggable {
      - seeAlso: [Auth0 Logout docs](https://auth0.com/docs/logout)
 
      For iOS 11+ you will need to ensure that the **Callback URL** has been added
-     to the **Allowed Logout URLs** section of your client in the [Auth0 Dashboard](https://manage.auth0.com/#/clients/).
+     to the **Allowed Logout URLs** section of your application in the [Auth0 Dashboard](https://manage.auth0.com/#/applications/).
 
 
      ```
@@ -236,4 +243,19 @@ public protocol WebAuth: Trackable, Loggable {
      - parameter callback: callback called with bool outcome of the call
      */
     func clearSession(federated: Bool, callback: @escaping (Bool) -> Void)
+}
+
+public extension WebAuth {
+
+    /**
+     Use `SFSafariViewController` instead of `SFAuthenticationSession` for WebAuth
+     in iOS 11.0+.
+     Defaults to .fullScreen modal presentation style.
+     
+     - returns: the same WebAuth instance to allow method chaining
+     */
+    @available(iOS 11, *)
+    func useLegacyAuthentication() -> Self {
+        return useLegacyAuthentication(withStyle: .fullScreen)
+    }
 }
