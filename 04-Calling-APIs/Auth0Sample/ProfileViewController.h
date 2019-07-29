@@ -23,12 +23,11 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-
-@class UserInfo, A0Credentials;
+@import Auth0;
 
 @interface ProfileViewController: UIViewController
 
-@property (nonatomic, strong) UserInfo *userProfile;
+@property (nonatomic, strong) A0UserInfo *userProfile;
 @property (nonatomic, strong) A0Credentials *credentials;
 
 @end

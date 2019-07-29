@@ -28,12 +28,14 @@ import Auth0
 
 @objc class HybridAuth: NSObject {
 
-    private let authentication = Auth0.authentication()
+    private var authentication = Auth0.authentication()
 
-    static func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+    @objc
+    static func resume(_ url: URL, options: [A0URLOptionsKey: Any]) -> Bool {
         return Auth0.resumeAuth(url, options: options)
     }
 
+    @objc
     func showLogin(withScope scope: String, connection: String?, callback: @escaping (Error?, Credentials?) -> ()) {
         guard let clientInfo = plistValues(bundle: Bundle.main) else { return }
         let webAuth = Auth0.webAuth()
@@ -55,6 +57,7 @@ import Auth0
         }
     }
 
+    @objc
     func userInfo(accessToken: String, callback: @escaping (Error?, UserInfo?) -> ()) {
         self.authentication.userInfo(withAccessToken: accessToken).start {
             switch $0 {
@@ -66,7 +69,9 @@ import Auth0
         }
     }
 
+    @objc
     func login(withUsernameOrEmail username: String, password: String, realm: String, audience: String? = nil, scope: String?, callback: @escaping (Error?, Credentials?) -> ()) {
+        _ = self.authentication.logging(enabled: true)
         self.authentication.login(usernameOrEmail: username, password: password, realm: realm, audience: audience, scope: scope).start {
             switch $0 {
             case .failure(let error):
@@ -77,6 +82,7 @@ import Auth0
         }
     }
 
+    @objc
     func signUp(withEmail email: String, username: String?, password: String, connection: String, userMetadata: [String: Any]?, scope: String, parameters: [String: Any], callback: @escaping (Error?, Credentials?) -> ()) {
         self.authentication.signUp(email: email, username: username, password: password, connection: connection, userMetadata: userMetadata, scope: scope, parameters: parameters).start {
             switch $0 {
@@ -88,6 +94,7 @@ import Auth0
         }
     }
 
+    @objc
     func renew(withRefreshToken refreshToken: String, scope: String?, callback: @escaping (Error?, Credentials?) -> ()) {
         self.authentication.renew(withRefreshToken: refreshToken, scope: scope).start {
             switch $0 {
@@ -99,6 +106,7 @@ import Auth0
         }
     }
 
+    @objc
     func userProfile(withIdToken idToken: String, userId: String, callback: @escaping (Error?, [String: Any]?) -> ()) {
         Auth0
             .users(token: idToken)
@@ -115,6 +123,7 @@ import Auth0
         }
     }
 
+    @objc
     func patchProfile(withIdToken idToken: String, userId: String, metaData: [String: Any], callback: @escaping (Error?, [String: Any]?) -> ()) {
         Auth0
             .users(token: idToken)
@@ -129,6 +138,7 @@ import Auth0
         }
     }
 
+    @objc
     func linkUserAccount(withIdToken idToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
         Auth0
             .users(token: idToken)
@@ -143,6 +153,7 @@ import Auth0
         }
     }
 
+    @objc
     func unlinkUserAccount(withIdToken idToken: String, userId: String, identity: Identity, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
         Auth0
             .users(token: idToken)

@@ -28,7 +28,7 @@ import Foundation
  - seeAlso: [Normalized User Profile](https://auth0.com/docs/user-profile/normalized)
  */
 @objc(A0Profile)
-public class Profile: NSObject, JSONObjectPayload {
+@objcMembers public class Profile: NSObject, JSONObjectPayload {
 
     public let id: String
     public let name: String
@@ -60,7 +60,6 @@ public class Profile: NSObject, JSONObjectPayload {
         return self["app_metadata"] as? [String: Any] ?? [:]
     }
 
-    // swiftlint:disable:next function_parameter_count
     required public init(id: String, name: String, nickname: String, pictureURL: URL, createdAt: Date, email: String?, emailVerified: Bool, givenName: String?, familyName: String?, attributes: [String: Any], identities: [Identity]) {
         self.id = id
         self.name = name
@@ -90,7 +89,11 @@ public class Profile: NSObject, JSONObjectPayload {
         let givenName = json["given_name"] as? String
         let familyName = json["family_name"] as? String
         let identityValues = json["identities"] as? [[String: Any]] ?? []
+        #if swift(>=4.1)
+        let identities = identityValues.compactMap { Identity(json: $0) }
+        #else
         let identities = identityValues.flatMap { Identity(json: $0) }
+        #endif
         let keys = Set(["user_id", "name", "nickname", "picture", "created_at", "email", "email_verified", "given_name", "family_name", "identities"])
         var values: [String: Any] = [:]
         json.forEach { key, value in

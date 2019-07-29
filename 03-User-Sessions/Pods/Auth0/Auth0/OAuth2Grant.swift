@@ -30,7 +30,7 @@ protocol OAuth2Grant {
 
 struct ImplicitGrant: OAuth2Grant {
 
-    let defaults: [String : String]
+    let defaults: [String: String]
     let responseType: [ResponseType]
 
     init(responseType: [ResponseType] = [.token], nonce: String? = nil) {
@@ -42,7 +42,7 @@ struct ImplicitGrant: OAuth2Grant {
         }
     }
 
-    func credentials(from values: [String : String], callback: @escaping (Result<Credentials>) -> Void) {
+    func credentials(from values: [String: String], callback: @escaping (Result<Credentials>) -> Void) {
         guard validate(responseType: self.responseType, token: values["id_token"], nonce: self.defaults["nonce"]) else {
             return callback(.failure(error: WebAuthError.invalidIdTokenNonce))
         }
@@ -51,10 +51,10 @@ struct ImplicitGrant: OAuth2Grant {
             return callback(.failure(error: WebAuthError.missingAccessToken))
         }
 
-        callback(.success(result: Credentials(json: values as [String : Any])))
+        callback(.success(result: Credentials(json: values as [String: Any])))
     }
 
-    func values(fromComponents components: URLComponents) -> [String : String] {
+    func values(fromComponents components: URLComponents) -> [String: String] {
         return components.a0_fragmentValues
     }
 
@@ -64,7 +64,7 @@ struct PKCE: OAuth2Grant {
 
     let authentication: Authentication
     let redirectURL: URL
-    let defaults: [String : String]
+    let defaults: [String: String]
     let verifier: String
     let responseType: [ResponseType]
 
@@ -72,7 +72,6 @@ struct PKCE: OAuth2Grant {
         self.init(authentication: authentication, redirectURL: redirectURL, verifier: generator.verifier, challenge: generator.challenge, method: generator.method, responseType: reponseType, nonce: nonce)
     }
 
-    // swiftlint:disable:next function_parameter_count
     init(authentication: Authentication, redirectURL: URL, verifier: String, challenge: String, method: String, responseType: [ResponseType], nonce: String? = nil) {
         self.authentication = authentication
         self.redirectURL = redirectURL
@@ -107,7 +106,7 @@ struct PKCE: OAuth2Grant {
             .start { result in
                 // Special case for PKCE when the correct method for token endpoint authentication is not set (it should be None)
                 if case .failure(let cause as AuthenticationError) = result, cause.description == "Unauthorized" {
-                    let error = WebAuthError.pkceNotAllowed("Please go to 'https://manage.auth0.com/#/applications/\(clientId)/settings' and make sure 'Client Type' is 'Native' to enable PKCE.")
+                    let error = WebAuthError.pkceNotAllowed("Unable to complete authentication with PKCE. PKCE support can be enabled by setting Application Type to 'Native' and Token Endpoint Authentication Method to 'None' for this app at 'https://manage.auth0.com/#/applications/\(clientId)/settings'.")
                     callback(Result.failure(error: error))
                 } else {
                     callback(result)
@@ -115,7 +114,7 @@ struct PKCE: OAuth2Grant {
         }
     }
 
-    func values(fromComponents components: URLComponents) -> [String : String] {
+    func values(fromComponents components: URLComponents) -> [String: String] {
         var items = components.a0_fragmentValues
         components.a0_queryValues.forEach { items[$0] = $1 }
         return items
