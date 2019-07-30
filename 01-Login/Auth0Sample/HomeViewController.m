@@ -32,18 +32,39 @@
 
 @implementation HomeViewController
 
+static bool logged = false;
+
 - (IBAction)showLoginController:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
 
-    [auth showLoginWithScope:@"openid" connection:nil callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (error) {
-                NSLog(@"Error: %@", error);
-            } else if (credentials) {
-                [self showAlertWithMessage:[NSString stringWithFormat:@"Success, Access Token: %@", [credentials accessToken]]];
+    if (!logged) {
+        [auth showLoginWithScope:@"openid"
+                      connection:nil callback:^(NSError * _Nullable error,
+                                                A0Credentials * _Nullable credentials) {
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                              if (error) {
+                                  NSLog(@"Error: %@", error);
+                              } else if (credentials) {
+                                  [self showAlertWithMessage:[NSString stringWithFormat:@"Success, Access Token: %@", [credentials accessToken]]];
+                                  [sender setTitle:@"Log out" forState:UIControlStateNormal];
+                                  logged = true;
+                              }
+                          });
+                      }];
+        
+    }else{
+        [auth logOutUserWithCallback:^(BOOL response, NSString * _Nonnull message) {
+            if(response){
+                [self showAlertWithMessage:[NSString stringWithFormat:@"%@", message]];
+                logged = false;
+                [sender setTitle:@"Sign in" forState:UIControlStateNormal];
             }
-        });
-    }];
+            else {
+                [self showAlertWithMessage:[NSString stringWithFormat:@"%@", message]];
+            }
+        }];
+
+    }
 }
 
 - (void)showAlertWithMessage:(NSString*)message {

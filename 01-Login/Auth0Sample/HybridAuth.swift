@@ -167,6 +167,20 @@ import Auth0
                 }
         }
     }
+    
+    @objc
+    func logOutUser(callback: @escaping(Bool, String) -> Void){
+        Auth0
+            .webAuth()
+            .clearSession(federated: true){
+                switch $0 {
+                case true:
+                    callback($0, "User logout successfuly")
+                case false:
+                    callback($0, "Logout was not successfull, Checkout logs for more information")
+                }
+            }
+    }
 
 }
 
