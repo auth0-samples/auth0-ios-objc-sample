@@ -175,9 +175,9 @@ import Auth0
             .clearSession(federated: true){
                 switch $0 {
                 case true:
-                    callback($0, "User logout successfuly")
+                    callback($0, "Logged out successfully")
                 case false:
-                    callback($0, "Logout was not successfull, Checkout logs for more information")
+                    callback($0, "An error occurred")
                 }
             }
     }
