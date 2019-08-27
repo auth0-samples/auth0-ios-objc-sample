@@ -53,14 +53,10 @@ static bool logged = false;
                       }];
         
     }else{
-        [auth logOutUserWithCallback:^(BOOL response, NSString * _Nonnull message) {
+        [auth logOutUserWithCallback:^(BOOL response) {
             if(response){
-                [self showAlertWithMessage:[NSString stringWithFormat:@"%@", message]];
                 logged = false;
                 [sender setTitle:@"Sign in" forState:UIControlStateNormal];
-            }
-            else {
-                [self showAlertWithMessage:[NSString stringWithFormat:@"%@", message]];
             }
         }];
 
