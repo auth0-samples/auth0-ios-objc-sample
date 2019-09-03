@@ -172,7 +172,7 @@ import Auth0
     func logOutUser(callback: @escaping(Bool) -> Void){
         Auth0
             .webAuth()
-            .clearSession(federated: true){
+            .clearSession(federated:false){
                 callback($0)
             }
     }

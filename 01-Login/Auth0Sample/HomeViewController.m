@@ -58,6 +58,9 @@ static bool logged = false;
                 logged = false;
                 [sender setTitle:@"Sign in" forState:UIControlStateNormal];
             }
+            else{
+                [self showAlertWithMessage:[NSString stringWithFormat:@"An error occurred"]];
+            }
         }];
 
     }
