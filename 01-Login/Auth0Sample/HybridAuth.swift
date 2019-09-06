@@ -167,6 +167,15 @@ import Auth0
                 }
         }
     }
+    
+    @objc
+    func logOutUser(callback: @escaping(Bool) -> Void){
+        Auth0
+            .webAuth()
+            .clearSession(federated:false){
+                callback($0)
+            }
+    }
 
 }
 
