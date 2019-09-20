@@ -13,8 +13,11 @@ Swift toolkit that lets you communicate efficiently with many of the [Auth0 API]
 ## Requirements
 
 - iOS 9+ / macOS 10.11+ / tvOS 9.0+ / watchOS 2.0+
-- Xcode 10.x
+- Xcode 10.x/11.x
 - Swift 4.x/5.x
+
+## Important Notice
+Behaviour changes in iOS 13 related to Web Authentication require that developers using Xcode 11 with this library **must** compile using Swift 5.x. This *should* be the default setting applied when updating, unless it has been manually set. However, we recommend checking that this value is set correctly.
 
 ## Installation
 
@@ -23,7 +26,7 @@ Swift toolkit that lets you communicate efficiently with many of the [Auth0 API]
 If you are using Carthage, add the following lines to your `Cartfile`:
 
 ```ruby
-github "auth0/Auth0.swift" ~> 1.16
+github "auth0/Auth0.swift" ~> 1.18
 ```
 
 Then run `carthage bootstrap`.
@@ -36,7 +39,7 @@ If you are using [Cocoapods](https://cocoapods.org/), add these lines to your `P
 
 ```ruby
 use_frameworks!
-pod 'Auth0', '~> 1.16'
+pod 'Auth0', '~> 1.18'
 ```
 
 Then run `pod install`.
@@ -44,9 +47,7 @@ Then run `pod install`.
 > For further reference on Cocoapods, check [their official documentation](http://guides.cocoapods.org/using/getting-started.html).
 
 > ### Upgrade Notes
-> If you are using the [clearSession](https://github.com/auth0/Auth0.swift/blob/master/Auth0/WebAuth.swift#L235) method in iOS 11+, you will need to ensure that the **Callback URL** has been added to the **Allowed Logout URLs** section of your application in the [Auth0 Dashboard](https://manage.auth0.com/#/applications/).
-
-
+> If you are using the [clearSession](https://github.com/auth0/Auth0.swift/blob/master/Auth0/WebAuth.swift#L248) method in iOS 11+, you will need to ensure that the **Callback URL** has been added to the **Allowed Logout URLs** section of your application in the [Auth0 Dashboard](https://manage.auth0.com/#/applications/).
 
 ## Getting started
 
@@ -85,7 +86,7 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpe
 
 In order to use Auth0 you need to provide your Auth0 **ClientId** and **Domain**.
 
-> Auth0 ClientId & Domain can be found in your [Auth0 Dashboard](https://manage.auth0.com)
+> Auth0 ClientId & Domain can be found in your [Auth0 Dashboard](https://manage.auth0.com/#/applications/)
 
 #### Adding Auth0 Credentials
 
@@ -97,16 +98,16 @@ In your application bundle add a `plist` file named `Auth0.plist` with the follo
 <plist version="1.0">
 <dict>
   <key>ClientId</key>
-  <string>{YOUR_CLIENT_ID}</string>
+  <string>YOUR_AUTH0_CLIENT_ID</string>
   <key>Domain</key>
-  <string>{YOUR_DOMAIN}</string>
+  <string>YOUR_AUTH0_DOMAIN</string>
 </dict>
 </plist>
 ```
 
 #### Configure Callback URLs (iOS Only)
 
-Callback URLs are the URLs that Auth0 invokes after the authentication process. Auth0 routes your application back to this URL and appends additional parameters to it, including a token. Since callback URLs can be manipulated, you will need to add your application's URL to your client's **Allowed Callback URLs** for security. This will enable Auth0 to recognize these URLs as valid. If omitted, authentication will not be successful.
+Callback URLs are the URLs that Auth0 invokes after the authentication process. Auth0 routes your application back to this URL and appends additional parameters to it, including a token. Since callback URLs can be manipulated, you will need to add your callback URL to the **Allowed Callback URLs** field in the [Auth0 Dashboard](https://manage.auth0.com/#/applications/). This will enable Auth0 to recognize these URLs as valid. If omitted, authentication will not be successful.
 
 In your application's `Info.plist` file, register your iOS Bundle Identifer as a custom scheme:
 
@@ -122,7 +123,7 @@ In your application's `Info.plist` file, register your iOS Bundle Identifer as a
         <string>auth0</string>
         <key>CFBundleURLSchemes</key>
         <array>
-            <string>$(YOUR_BUNDLE_IDENTIFIER)</string>
+            <string>YOUR_BUNDLE_IDENTIFIER</string>
         </array>
     </dict>
 </array>
@@ -130,13 +131,13 @@ In your application's `Info.plist` file, register your iOS Bundle Identifer as a
 
 > If your `Info.plist` is not shown in this format, you can **Right Click** on `Info.plist` in Xcode and then select **Open As / Source Code**.
 
-Finally, go to your [Auth0 Dashboard](${manage_url}/#/applications/${account.clientId}/settings) and make sure that **Allowed Callback URLs** contains the following entry:
+Finally, go to your [Auth0 Dashboard](https://manage.auth0.com) and make sure that your application's **Allowed Callback URLs** field contains the following entry:
 
 ```text
-{YOUR_BUNDLE_IDENTIFIER}://${YOUR_AUTH0_DOMAIN}/ios/{YOUR_BUNDLE_IDENTIFIER}/callback
+YOUR_BUNDLE_IDENTIFIER://YOUR_AUTH0_DOMAIN/ios/YOUR_BUNDLE_IDENTIFIER/callback
 ```
 
-e.g. If your bundle identifier was `com.company.myapp` and your domain was `company.auth0.com` then this value would be
+e.g. If your bundle identifier was `com.company.myapp` and your Auth0 domain was `company.auth0.com` then this value would be
 
 ```text
 com.company.myapp://company.auth0.com/ios/com.company.myapp/callback
@@ -220,6 +221,26 @@ You can enable an additional level of user authentication before retrieving cred
 ```swift
 credentialsManager.enableBiometrics(withTitle: "Touch to Login")
 ```
+
+### Sign in With Apple
+
+If you've added [the Sign In with Apple Flow to Your App](https://developer.apple.com/documentation/authenticationservices/adding_the_sign_in_with_apple_flow_to_your_app) you can use the string value from the  `authorizationCode` property obtained after a successful Apple authentication to perform a token exchange for Auth0 tokens.
+
+```swift
+Auth0
+    .authentication()
+    .tokenExchange(withAppleAuthorizationCode: authCode)
+    .start { result in
+        switch result {
+        case .success(let credentials):
+            print("Obtained credentials: \(credentials)")
+        case .failure(let error):
+            print("Failed with \(error)")
+        }
+}
+```
+
+Find out more about [Setting up Sign in with Apple](https://auth0.com/docs/connections/apple-setup) with Auth0.
 
 ### Authentication API (iOS / macOS / tvOS)
 

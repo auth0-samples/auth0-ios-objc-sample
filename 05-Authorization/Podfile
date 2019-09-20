@@ -6,5 +6,5 @@ target 'Auth0Sample' do
   use_frameworks!
 
   # Pods for Auth0Sample
-  pod 'Auth0', '~> 1.6'
+  pod 'Auth0', '~> 1.18'
 end
