@@ -1,10 +1,10 @@
 PODS:
-  - Auth0 (1.16.1):
+  - Auth0 (1.18.0):
     - SimpleKeychain
   - SimpleKeychain (0.9.0)
 
 DEPENDENCIES:
-  - Auth0 (~> 1.6)
+  - Auth0 (~> 1.18)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -12,9 +12,9 @@ SPEC REPOS:
     - SimpleKeychain
 
 SPEC CHECKSUMS:
-  Auth0: dd9125f16147639d8e8c58d338402fb085b4e125
+  Auth0: 0874a17d1ed7aefa54de2003244be65cad347fcb
   SimpleKeychain: 3be49072fd2d82de8fa83d847ef1e548622f8fc5
 
-PODFILE CHECKSUM: 61bea99023262483b84150300d8349a61be89ee8
+PODFILE CHECKSUM: a7b1f0dc6b3cfda43a559c9d15cd1aac14af08fe
 
 COCOAPODS: 1.7.5

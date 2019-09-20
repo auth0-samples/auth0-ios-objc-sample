@@ -22,6 +22,9 @@
 
 import UIKit
 import SafariServices
+#if canImport(AuthenticationServices)
+import AuthenticationServices
+#endif
 
 class SafariWebAuth: WebAuth {
 
@@ -147,6 +150,11 @@ class SafariWebAuth: WebAuth {
     func newSafari(_ authorizeURL: URL, callback: @escaping (Result<Credentials>) -> Void) -> (SFSafariViewController, (Result<Credentials>) -> Void) {
         let controller = SFSafariViewController(url: authorizeURL)
         controller.modalPresentationStyle = safariPresentationStyle
+        
+        if #available(iOS 11.0, *) {
+            controller.dismissButtonStyle = .cancel
+        }
+        
         let finish: (Result<Credentials>) -> Void = { [weak controller] (result: Result<Credentials>) -> Void in
             guard let presenting = controller?.presentingViewController else {
                 return callback(Result.failure(error: WebAuthError.cannotDismissWebAuthController))
@@ -236,7 +244,7 @@ class SafariWebAuth: WebAuth {
 }
 
 private func generateDefaultState() -> String? {
-    var data = Data(count: 32)
+    let data = Data(count: 32)
     var tempData = data
 
     let result = tempData.withUnsafeMutableBytes {
