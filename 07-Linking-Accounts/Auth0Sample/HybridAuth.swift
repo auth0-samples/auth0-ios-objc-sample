@@ -139,9 +139,9 @@ import Auth0
     }
 
     @objc
-    func linkUserAccount(withIdToken idToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
+    func linkUserAccount(withAccessToken accessToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
         Auth0
-            .users(token: idToken)
+            .users(token: accessToken)
             .link(userId, withOtherUserToken: otherAccountToken)
             .start {
                 switch $0 {
@@ -154,9 +154,9 @@ import Auth0
     }
 
     @objc
-    func unlinkUserAccount(withIdToken idToken: String, userId: String, identity: Identity, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
+    func unlinkUserAccount(withAccessToken accessToken: String, userId: String, identity: Identity, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
         Auth0
-            .users(token: idToken)
+            .users(token: accessToken)
             .unlink(identityId: identity.identifier, provider: identity.provider, fromUserId: userId)
             .start {
                 switch $0 {
