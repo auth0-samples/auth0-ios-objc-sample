@@ -69,13 +69,15 @@
     // Retrieve Identities
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    [auth userProfileWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.sub callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable payload) {
+    [auth userProfileWithAccessToken:[keychain stringForKey:@"access_token"] userId:self.userProfile.sub callback:^(NSError * _Nullable error, NSDictionary<NSString *,id> * _Nullable payload) {
         NSArray *identities = [[NSArray alloc] init];
         for (NSDictionary *identity in  [payload valueForKey:@"identities"]) {
             identities = [identities arrayByAddingObject:[[A0Identity alloc] initWithJson:identity]];
         }
         self.identities = identities;
-        [self updateSocialAccounts];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateSocialAccounts];
+        });
     }];
 }
 

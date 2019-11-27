@@ -47,7 +47,7 @@ import Auth0
         if let audience = audience {
             _ = webAuth.audience(audience)
         } else {
-            _ = webAuth.audience("https://" + clientInfo.domain + "/userinfo")
+            _ = webAuth.audience("https://" + clientInfo.domain + "/api/v2/")
         }
 
         webAuth
@@ -111,9 +111,9 @@ import Auth0
     }
 
     @objc
-    func userProfile(withIdToken idToken: String, userId: String, callback: @escaping (Error?, [String: Any]?) -> ()) {
+    func userProfile(withAccessToken accessToken: String, userId: String, callback: @escaping (Error?, [String: Any]?) -> ()) {
         Auth0
-            .users(token: idToken)
+            .users(token: accessToken)
             .get(userId, fields: [], include: true)
             .start {
                 switch $0 {
@@ -128,9 +128,9 @@ import Auth0
     }
 
     @objc
-    func patchProfile(withIdToken idToken: String, userId: String, metaData: [String: Any], callback: @escaping (Error?, [String: Any]?) -> ()) {
+    func patchProfile(withAccessToken accessToken: String, userId: String, metaData: [String: Any], callback: @escaping (Error?, [String: Any]?) -> ()) {
         Auth0
-            .users(token: idToken)
+            .users(token: accessToken)
             .patch(userId, userMetadata: metaData)
             .start {
                 switch $0 {
@@ -143,9 +143,9 @@ import Auth0
     }
 
     @objc
-    func linkUserAccount(withIdToken idToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
+    func linkUserAccount(withAccessToken accessToken: String, userId: String, otherAccountToken: String, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
         Auth0
-            .users(token: idToken)
+            .users(token: accessToken)
             .link(userId, withOtherUserToken: otherAccountToken)
             .start {
                 switch $0 {
@@ -156,11 +156,11 @@ import Auth0
                 }
         }
     }
-    
+
     @objc
-    func unlinkUserAccount(withIdToken idToken: String, userId: String, identity: Identity, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
+    func unlinkUserAccount(withAccessToken accessToken: String, userId: String, identity: Identity, callback: @escaping (Error?, [[String: Any]]?) -> ()) {
         Auth0
-            .users(token: idToken)
+            .users(token: accessToken)
             .unlink(identityId: identity.identifier, provider: identity.provider, fromUserId: userId)
             .start {
                 switch $0 {
@@ -170,6 +170,15 @@ import Auth0
                     callback(error, nil)
                 }
         }
+    }
+
+    @objc
+    func logOutUser(callback: @escaping(Bool) -> Void){
+        Auth0
+            .webAuth()
+            .clearSession(federated:false){
+                callback($0)
+            }
     }
 
 }
@@ -193,4 +202,3 @@ func plistValues(bundle: Bundle) -> (clientId: String, domain: String)? {
     }
     return (clientId: clientId, domain: domain)
 }
-

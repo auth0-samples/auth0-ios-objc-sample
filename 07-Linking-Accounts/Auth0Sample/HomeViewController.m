@@ -82,7 +82,7 @@
 
 - (IBAction)showLoginController:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
-    [auth showLoginWithScope:@"openid profile offline_access" connection:nil callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
+    [auth showLoginWithScope:@"openid profile offline_access update:current_user_identities" connection:nil callback:^(NSError * _Nullable error, A0Credentials * _Nullable credentials) {
         if (error) {
             NSLog(@"Error: %@", error.localizedDescription);
         } else {
@@ -108,8 +108,13 @@
 }
 
 - (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue {
-    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    [keychain clearAll];
+    HybridAuth *auth = [[HybridAuth alloc] init];
+    [auth logOutUserWithCallback:^(BOOL response) {
+        if (response) {
+            A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+            [keychain clearAll];
+        }
+    }];
 }
 
 @end

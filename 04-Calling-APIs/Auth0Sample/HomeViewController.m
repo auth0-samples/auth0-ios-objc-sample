@@ -64,6 +64,8 @@
 }
 
 - (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue {
+    HybridAuth *auth = [[HybridAuth alloc] init];
+    [auth logOutUserWithCallback:^(BOOL response) {}];
 }
 
 
