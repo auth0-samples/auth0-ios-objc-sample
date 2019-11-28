@@ -107,8 +107,13 @@
 }
 
 - (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue {
-    A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    [keychain clearAll];
+    HybridAuth *auth = [[HybridAuth alloc] init];
+    [auth logOutUserWithCallback:^(BOOL response) {
+        if (response) {
+            A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
+            [keychain clearAll];
+        }
+    }];
 }
 
 @end

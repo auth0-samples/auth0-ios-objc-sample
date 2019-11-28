@@ -54,7 +54,7 @@
 - (IBAction) checkAdminStatus:(id)sender {
     HybridAuth *auth = [[HybridAuth alloc] init];
     A0SimpleKeychain *keychain = [[A0SimpleKeychain alloc] initWithService:@"Auth0"];
-    [auth userProfileWithIdToken:[keychain stringForKey:@"id_token"] userId:self.userProfile.sub callback:^(NSError * _Nullable error, NSDictionary<NSString *, id> * _Nullable user) {
+    [auth userProfileWithAccessToken:[keychain stringForKey:@"access_token"] userId:self.userProfile.sub callback:^(NSError * _Nullable error, NSDictionary<NSString *, id> * _Nullable user) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 NSLog(@"Error: %@", error.localizedDescription);
