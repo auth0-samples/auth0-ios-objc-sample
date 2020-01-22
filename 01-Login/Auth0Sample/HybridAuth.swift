@@ -50,7 +50,7 @@ import Auth0
             .start {
                 switch $0 {
                 case .failure(let error):
-                    callback(error, nil)
+                    callback(wrapError(error), nil)
                 case .success(let credentials):
                     callback(nil, credentials)
                 }
@@ -64,7 +64,7 @@ import Auth0
             case .success(let profile):
                 callback(nil, profile)
             case .failure(let error):
-                callback(error, nil)
+                callback(wrapError(error), nil)
             }
         }
     }
@@ -75,7 +75,7 @@ import Auth0
         self.authentication.login(usernameOrEmail: username, password: password, realm: realm, audience: audience, scope: scope).start {
             switch $0 {
             case .failure(let error):
-                callback(error, nil)
+                callback(wrapError(error), nil)
             case .success(let credentials):
                 callback(nil, credentials)
             }
@@ -87,7 +87,7 @@ import Auth0
         self.authentication.signUp(email: email, username: username, password: password, connection: connection, userMetadata: userMetadata, scope: scope, parameters: parameters).start {
             switch $0 {
             case .failure(let error):
-                callback(error, nil)
+                callback(wrapError(error), nil)
             case .success(let credentials):
                 callback(nil, credentials)
             }
@@ -99,7 +99,7 @@ import Auth0
         self.authentication.renew(withRefreshToken: refreshToken, scope: scope).start {
             switch $0 {
             case .failure(let error):
-                callback(error, nil)
+                callback(wrapError(error), nil)
             case .success(let credentials):
                 callback(nil, credentials)
             }
@@ -117,7 +117,7 @@ import Auth0
                     callback(nil, user)
                     break
                 case .failure(let error):
-                    callback(error, nil)
+                    callback(wrapError(error), nil)
                     break
                 }
         }
@@ -133,7 +133,7 @@ import Auth0
                 case .success(let user):
                     callback(nil, user)
                 case .failure(let error):
-                    callback(error, nil)
+                    callback(wrapError(error), nil)
                 }
         }
     }
@@ -148,7 +148,7 @@ import Auth0
                 case .success(let payload):
                     callback(nil, payload)
                 case .failure(let error):
-                    callback(error, nil)
+                    callback(wrapError(error), nil)
                 }
         }
     }
@@ -163,7 +163,7 @@ import Auth0
                 case .success(let payload):
                     callback(nil, payload)
                 case .failure(let error):
-                    callback(error, nil)
+                    callback(wrapError(error), nil)
                 }
         }
     }
@@ -177,6 +177,13 @@ import Auth0
             }
     }
 
+}
+
+func wrapError(_ error: Error?) -> NSError? {
+    guard let error = error else { return nil }
+    let nsError = error as NSError
+    let cleanUserInfo: [String: Any] = [NSLocalizedDescriptionKey: error.localizedDescription]
+    return NSError(domain: nsError.domain, code: nsError.code, userInfo: cleanUserInfo)
 }
 
 func plistValues(bundle: Bundle) -> (clientId: String, domain: String)? {
