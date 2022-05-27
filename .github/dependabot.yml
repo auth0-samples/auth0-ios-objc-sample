@@ -1,8 +1,7 @@
-# version: 2
-
 # Cocoapods are currently not supported. Update this file when they become available:
 # https://github.com/dependabot/dependabot-core/issues/416
 
+# version: 2
 # updates:
 
   # - package-ecosystem: "cocoapods" 
