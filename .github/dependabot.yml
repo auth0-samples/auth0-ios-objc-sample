@@ -1,0 +1,45 @@
+version: 2
+updates:
+
+  # Cocoapods are currently not supported. Update this file when they become available:
+  # https://github.com/dependabot/dependabot-core/issues/416
+  
+  # - package-ecosystem: "cocoapods" 
+  #   directory: "/01-Login" 
+  #   schedule:
+  #     interval: "daily"
+  #   ignore:
+  #     - dependency-name: "*"
+  #       update-types: ["version-update:semver-major"]
+
+  # - package-ecosystem: "cocoapods" 
+  #   directory: "/03-User-Sessions" 
+  #   schedule:
+  #     interval: "daily"
+  #   ignore:
+  #     - dependency-name: "*"
+  #       update-types: ["version-update:semver-major"]
+
+  # - package-ecosystem: "cocoapods" 
+  #   directory: "/04-Calling-APIs" 
+  #   schedule:
+  #     interval: "daily"
+  #   ignore:
+  #     - dependency-name: "*"
+  #       update-types: ["version-update:semver-major"]
+
+  # - package-ecosystem: "cocoapods" 
+  #   directory: "/05-Authorization" 
+  #   schedule:
+  #     interval: "daily"
+  #   ignore:
+  #     - dependency-name: "*"
+  #       update-types: ["version-update:semver-major"]
+
+  # - package-ecosystem: "cocoapods" 
+  #   directory: "/07-Linking-Accounts" 
+  #   schedule:
+  #     interval: "daily"
+  #   ignore:
+  #     - dependency-name: "*"
+  #       update-types: ["version-update:semver-major"]
